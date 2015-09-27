@@ -50,10 +50,10 @@ struct PIXEL
 };
 
 // Pour ecrire une ligne de séparation dans le terminal
-void ligne_separation(char separateur);
+void ligne_separation(const char separateur);
 
 // Pour ouvrir le fichier image
-FILE* ouverture_image(int argc, char const *argv[]);
+FILE* ouverture_image(const int *argc, char const *argv[]);
 
 //Pour effacer l'ecran selon l'OS
 void effacer_ecran();
@@ -63,6 +63,7 @@ int test_validite_fichier(FILE *file_image);
 
 
 int lecture_fichier(FILE* file_image,PIXEL **tab_pixels,int *nb_col, int *nb_lig, int *max_val);
-void afficher_tab_pixels(PIXEL **tab_pixels, int nb_col, int nb_lig);
+void afficher_tab_pixels(PIXEL **tab_pixels, const int *nb_col, const int *nb_lig);
+void vider_tab_pixels(PIXEL **tab, const int *nb_lig);
 
 #endif
