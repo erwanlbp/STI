@@ -1,6 +1,13 @@
 #ifndef DEF_HEADER
 #define DEF_HEADER
 
+/**
+ * \file header.h
+ * \brief Header du main
+ * \author Le Batard--Polès Erwan
+ * \version 12
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -24,12 +31,22 @@ P3
 
 
 
+/**
+ * \struct PIXEL 
+ * \brief Représentation d'un pixel
+ *
+ * PIXEL est une structure composée de 3 entiers.
+ * Les 3 entiers représentent les 3 couleurs primaires.
+ * r : Rouge
+ * v : Vert
+ * b : Bleu
+ */
 typedef struct PIXEL PIXEL;
 struct PIXEL
 {
-	int r;
-	int g;
-	int b;
+	int r; /*!< Rouge */
+	int g; /*!< Vert */
+	int b; /*!< Bleu */
 };
 
 // Pour ecrire une ligne de séparation dans le terminal
