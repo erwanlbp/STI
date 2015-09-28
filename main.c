@@ -13,16 +13,18 @@ int main(int argc, char const *argv[])
 		int nb_col,nb_lig,max_val;
 		PIXEL **tab_pixels = NULL;
 		if(lecture_fichier(file_image,tab_pixels,&nb_col,&nb_lig,&max_val)){
-			printf("[O]\tLecture du fichier image reussie\n");
-			printf("\tNombre de Colonnes: %d\n\tNombre de Lignes: %d\n\tValeur Maximal: %d\n",nb_col,nb_lig,max_val );
+			printf("[O]\tLecture du fichier image reussie");
+			printf("\tNombre de Colonnes: %d ; Nombre de Lignes: %d ; Valeur Maximal: %d\n",nb_col,nb_lig,max_val );
 		}
 		else{
 			printf("[X]\tProbleme de lecture du fichier image\n");
 			return 1;
 		}
 
+		if(tab_pixels == NULL)
+			printf("Probleme là\n");
 		printf("##%d##\n", tab_pixels[0][0].r);
-
+return 0;
 		afficher_tab_pixels(tab_pixels,&nb_col,&nb_lig);
 
 		vider_tab_pixels(tab_pixels,&nb_lig);
@@ -51,11 +53,10 @@ void vider_tab_pixels(PIXEL **tab, const int *nb_lig){
 	free(tab);
 }
 
-int lecture_fichier(FILE* file_image,PIXEL **tab_pixels,int *nb_col, int *nb_lig, int *max_val){
+int lecture_fichier(FILE* file_image,PIXEL** tab_pixels,int *nb_col, int *nb_lig, int *max_val){
 	char char_tmp[80] = "";
 	int continuer = 1;
 	int col=0;
-	PIXEL pix_tmp;
 	int i = 0;
 	int j = 0;
 
@@ -75,16 +76,11 @@ int lecture_fichier(FILE* file_image,PIXEL **tab_pixels,int *nb_col, int *nb_lig
 
 	i=0;
 	j=0;
-
 	do{
-		fscanf(file_image, "%d %d %d", &pix_tmp.r, &pix_tmp.g, &pix_tmp.b);
+		fscanf(file_image, "%d %d %d", &tab_pixels[i][j].r, &tab_pixels[i][j].g, &tab_pixels[i][j].b);
 
 		if(feof(file_image)) 
 			continuer = 0;
-
-		tab_pixels[i][j].r = pix_tmp.r;
-		tab_pixels[i][j].g = pix_tmp.g;
-		tab_pixels[i][j].b = pix_tmp.b;		
 
 		j++;  
 		if(j==col-1){

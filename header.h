@@ -11,25 +11,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-/*Format fichiers image PPM : 
------------------------
-P3
-# Le P3 signifie que les couleurs sont en ASCII, 
-# par 3 colonnes et 2 lignes,
- 3 2
-# ayant 255 pour valeur maximum, et qu'elles sont en RGB. 
-255
-255   0   0     0 255   0     0   0 255
-255 255   0   255 255 255     0   0   0
-*/
-
-
 // Format lancement programme : 
 // ./STI [chemin image = img_test.ppm] [transformation = Aucune]
 // Donc si on met pas d'argument au programme il chargera l'image de test et fera rien
-
-
 
 /**
  * \struct PIXEL 
@@ -62,7 +46,7 @@ void effacer_ecran();
 int test_validite_fichier(FILE *file_image);
 
 
-int lecture_fichier(FILE* file_image,PIXEL **tab_pixels,int *nb_col, int *nb_lig, int *max_val);
+int lecture_fichier(FILE* file_image,PIXEL** tab_pixels,int *nb_col, int *nb_lig, int *max_val);
 void afficher_tab_pixels(PIXEL **tab_pixels, const int *nb_col, const int *nb_lig);
 void vider_tab_pixels(PIXEL **tab, const int *nb_lig);
 
