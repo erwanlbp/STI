@@ -23,16 +23,13 @@ int main(int argc, char const *argv[])
 			printf("\tNombre de Colonnes: %d ; Nombre de Lignes: %d ; Valeur Maximal: %d\n",nb_col,nb_lig,max_val );
 		}
 
-		afficher_tab_pixels(tab_pixels,&nb_col,&nb_lig);
-
-
 
 		// ########################################	
 		//  Appels des fonctions de transformation
 		// ########################################	
 
 		// On libère le tableau de pixels
-		//vider_tab_pixels(tab_pixels,&nb_lig);
+//		vider_tab_pixels(&tab_pixels,&nb_lig);
 
 		// On ferme le fichier quand on a finit de travailler dessus
 		fclose(file_image);
@@ -43,15 +40,19 @@ int main(int argc, char const *argv[])
 	return 0;
 } 
 
-void vider_tab_pixels(PIXEL **tab, const int *nb_lig){
+void vider_tab_pixels(PIXEL *** tab, const int *nb_lig){
 	int i;
 	// Pour chaque case de la matrice
 	for (i=0; i<*nb_lig; i++){
 		// On libere la memoire allouee dynamiquement
 		free(tab[i]);
+	printf("ok2\n");
+
 	}
+		printf("ok3\n");
+
 	// Puis on libere la memoire allouee pour la premiere dimension de la matrice
-	free(tab);
+	free(*tab);
 }
 
 PIXEL ** lecture_fichier(FILE* file_image, int *nb_col, int *nb_lig, int *max_val){
