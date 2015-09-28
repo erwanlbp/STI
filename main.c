@@ -25,15 +25,14 @@ int main(int argc, char const *argv[])
 
 		afficher_tab_pixels(tab_pixels,&nb_col,&nb_lig);
 
-		vider_tab_pixels(tab_pixels,&nb_lig);
-
-
-		ligne_separation('#');
 
 
 		// ########################################	
 		//  Appels des fonctions de transformation
 		// ########################################	
+
+		// On libère le tableau de pixels
+		//vider_tab_pixels(tab_pixels,&nb_lig);
 
 		// On ferme le fichier quand on a finit de travailler dessus
 		fclose(file_image);
