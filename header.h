@@ -46,7 +46,7 @@ void effacer_ecran();
 int test_validite_fichier(FILE *file_image);
 
 
-int lecture_fichier(FILE* file_image,PIXEL** tab_pixels,int *nb_col, int *nb_lig, int *max_val);
+PIXEL ** lecture_fichier(FILE* file_image, int *nb_col, int *nb_lig, int *max_val);
 void afficher_tab_pixels(PIXEL **tab_pixels, const int *nb_col, const int *nb_lig);
 void vider_tab_pixels(PIXEL **tab, const int *nb_lig);
 
