@@ -1,4 +1,5 @@
 #include "header.h"
+#include "inOutFichiers.h"
 
 int main(int argc, char const *argv[])
 {
@@ -13,8 +14,8 @@ int main(int argc, char const *argv[])
 		
 		MATRICE tab_pixels;
 		if(lecture_fichier(file_image, &tab_pixels)){
-						printf("[O]\tLecture du fichier image reussie");
 			printf("\tNombre de Colonnes: %d ; Nombre de Lignes: %d ; Valeur Maximal: %d\n",tab_pixels.nb_col,tab_pixels.nb_lig,tab_pixels.max_val);
+			printf("[O]\tLecture complete du fichier image reussie");
 		}
 		else{
 			printf("[X]\tProbleme de lecture du fichier image\n");
@@ -36,7 +37,7 @@ int main(int argc, char const *argv[])
 
 	ligne_separation('=');
 
-	return 0; 
+	return 0;  
 } 
 
 void vider_tab_pixels(MATRICE * tab){
@@ -46,26 +47,23 @@ void vider_tab_pixels(MATRICE * tab){
 	for (i=0; i<tab->nb_lig; i++){
 		// On libere la memoire allouee dynamiquement
 		free(tab->mat[i]);
-	printf("ligne %d ok\n",i);
+		printf("ligne %d ok\n",i);
 
 	}
-		printf("1D finie\n");
+	printf("1D finie\n");
 
 	// Puis on libere la memoire allouee pour la premiere dimension de la matrice
 	free(tab->mat);
-		printf("2D finie\nFin vidage");
+	printf("2D finie\nFin vidage");
 
 }
 
 int lecture_fichier(FILE* file_image, MATRICE * tab_pixels){
-	char char_tmp[80] = "";
-	int continuer = 1;
-	int col=0;
+	char nbMagique[5] = "";
 	int i = 0;
-	int j = 0;
-	PIXEL pix_tmp;
 
-	fscanf(file_image,"%s",char_tmp);
+	fscanf(file_image,"%s",nbMagique);
+
 	fscanf(file_image,"%d %d",&tab_pixels->nb_col,&tab_pixels->nb_lig);
 
 	tab_pixels->mat = malloc(tab_pixels->nb_lig * sizeof(PIXEL));
@@ -87,29 +85,38 @@ int lecture_fichier(FILE* file_image, MATRICE * tab_pixels){
 
 	fscanf(file_image,"%d",&tab_pixels->max_val);
 
-	i=0;
-	j=0;
-	do{
-		fscanf(file_image, "%d %d %d", &pix_tmp.r, &pix_tmp.g, &pix_tmp.b);
-
-		tab_pixels->mat[i][j].r = pix_tmp.r;
-		tab_pixels->mat[i][j].g = pix_tmp.g;
-		tab_pixels->mat[i][j].b = pix_tmp.b;
-
-		if(feof(file_image)) 
-			continuer = 0;
-
-		j++;  
-		if(j==col-1){
-			j = 0;
-			i++;
-		}
-
-	}while(continuer);
+	if(strcmp(nbMagique,"P1") == 0){
+		printf("\tFichier P1 : COMPLETE\n");
+		lecture_P1(file_image, tab_pixels);
+	}
+	else if(strcmp(nbMagique,"P2") == 0){
+		printf("\tFichier P2 : COMPLETE\n");
+		lecture_P2(file_image, tab_pixels);
+	}
+	else if(strcmp(nbMagique,"P3") == 0){
+		printf("\tFichier P3 : texte\n");
+		lecture_P3(file_image, tab_pixels);
+	}
+	else if(strcmp(nbMagique,"P4") == 0){
+		printf("\tFichier P4 : COMPLETE\n");
+		lecture_P4(file_image, tab_pixels);
+	}
+	else if(strcmp(nbMagique,"P5") == 0){
+		printf("\tFichier P5 : texte\n");
+		lecture_P5(file_image, tab_pixels);
+	}
+	else if(strcmp(nbMagique,"P6") == 0){
+		printf("\tFichier P6 : texte\n");
+		lecture_P6(file_image, tab_pixels);
+	}
+	else{
+		printf("[X]\tNombre magique du fichier image non trouve\n");
+		return 0;
+	}
 
 	return 1;
 }
-
+  
 void afficher_tab_pixels(MATRICE * tab){
 	ligne_separation('-');
 	int lig,col;

@@ -1,7 +1,7 @@
 #ifndef DEF_HEADER
 #define DEF_HEADER
 
-/**
+/**  
  * \file header.h
  * \brief Header du main
  * \author Le Batard--Polès Erwan
@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Format lancement programme : 
 // ./STI [chemin image = img_test.ppm] [transformation = Aucune]
