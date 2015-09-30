@@ -35,32 +35,32 @@ int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
 // A completer Avec : https://fr.wikipedia.org/wiki/Portable_pixmap
 	switch(tab_pixels->type){
 		case 1:
-		printf("\tFichier P1 : COMPLETE\n");
+		printf("\tFichier P1 : PBM ASCII\n");
 		lecture_P1(file_image, tab_pixels);
 		break;
 
 		case 2:
-		printf("\tFichier P2 : COMPLETE\n");
+		printf("\tFichier P2 : PGM ASCII\n");
 		lecture_P2(file_image, tab_pixels);
 		break;
 
 		case 3:
-		printf("\tFichier P3 : COMPLETE\n");
+		printf("\tFichier P3 : PPM ASCII\n");
 		lecture_P3(file_image, tab_pixels);
 		break;
 
 		case 4:
-		printf("\tFichier P4 : COMPLETE\n");
+		printf("\tFichier P4 : PBM Binaire\n");
 		lecture_P4(file_image, tab_pixels);
 		break;
 
 		case 5:
-		printf("\tFichier P5 : COMPLETE\n");
+		printf("\tFichier P5 : PGM Binaire\n");
 		lecture_P5(file_image, tab_pixels);
 		break;
 
 		case 6:
-		printf("\tFichier P6 : COMPLETE\n");
+		printf("\tFichier P6 : PPM Binaire\n");
 		lecture_P6(file_image, tab_pixels);
 		break;
 

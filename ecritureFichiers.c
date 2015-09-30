@@ -5,32 +5,32 @@ int ecriture_fichier(FILE* file_image, const IMAGE * tab_pixels, const char chem
 
 	switch(tab_pixels->type){
 		case 1:
-		printf("\tFichier P1 : COMPLETE\n");
+		printf("\tFichier P1 : PBM ASCII\n");
 		ecriture_P1(file_image, tab_pixels, cheminImage, transformation);
 		break;
 
 		case 2:
-		printf("\tFichier P2 : COMPLETE\n");
+		printf("\tFichier P2 : PGM ASCII\n");
 		ecriture_P2(file_image, tab_pixels, cheminImage, transformation);
 		break;
 
 		case 3:
-		printf("\tFichier P3 : COMPLETE\n");
+		printf("\tFichier P3 : PPM ASCII\n");
 		ecriture_P3(file_image, tab_pixels, cheminImage, transformation);
 		break;
 
 		case 4:
-		printf("\tFichier P4 : COMPLETE\n");
+		printf("\tFichier P4 : PBM Binaire\n");
 		ecriture_P4(file_image, tab_pixels, cheminImage, transformation);
 		break;
 
 		case 5:
-		printf("\tFichier P5 : COMPLETE\n");
+		printf("\tFichier P5 : PGM Binaire\n");
 		ecriture_P5(file_image, tab_pixels, cheminImage, transformation);
 		break;
 
 		case 6:
-		printf("\tFichier P6 : COMPLETE\n");
+		printf("\tFichier P6 : PPM Binaire\n");
 		ecriture_P6(file_image, tab_pixels, cheminImage, transformation);
 		break;
 
