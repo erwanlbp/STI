@@ -35,8 +35,10 @@ int main(int argc, char const *argv[])
 	//  Appels des fonctions de transformation
 	// ########################################	
 
-
-
+	if(ecriture_fichier(&tab_pixels,cheminImage,transformation))
+		printf("[O]\tEcriture du fichier reussie, transformation sauvegardee\n");
+	else
+		printf("[X]\tEcriture du fichier rate, transformation non sauvegardee\n");
 
 	// On libère le tableau de pixels
 	//vider_tab_pixels(&tab_pixels);
@@ -67,12 +69,17 @@ void vider_tab_pixels(IMAGE * tab){
 void afficher_tab_pixels(IMAGE * tab){
 	ligne_separation('-');
 	int lig,col;
+
 	for (lig=0; lig<tab->nb_lig; lig++){
 		for (col=0; col<tab->nb_lig; col++){
-			printf("%d %d %d\t",tab->mat[lig][col].r,tab->mat[lig][col].g,tab->mat[lig][col].b);
+			if(tab->type == 3 || tab->type == 6)
+				printf("%d %d %d\t",tab->mat[lig][col].r,tab->mat[lig][col].g,tab->mat[lig][col].b);
+			else
+				printf("%d ", tab->mat[lig][col].r);
 		}	
 		printf("\n");
 	}
+
 	ligne_separation('-');
 }
 
