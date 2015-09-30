@@ -3,10 +3,16 @@
 
 int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
 	int i = 0;
+	
+	// On lit le 'P' mais on le garde pas
+	fgetc(file_image);
 
-	fscanf(file_image,"%s",tab_pixels->type);
+	// On lit le code ASCII du chiffre, donc moins 48 nous donne le chiffre
+	tab_pixels->type = fgetc(file_image) - 48;
 
 	fscanf(file_image,"%d %d",&tab_pixels->nb_col,&tab_pixels->nb_lig);
+
+	fscanf(file_image,"%d",&tab_pixels->max_val);
 
 	tab_pixels->mat = malloc(tab_pixels->nb_lig * sizeof(PIXEL));
 	if(tab_pixels->mat == NULL){
@@ -26,36 +32,41 @@ int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
 		}
 	}
 
-	fscanf(file_image,"%d",&tab_pixels->max_val);
-
 // A completer Avec : https://fr.wikipedia.org/wiki/Portable_pixmap
-	if(strcmp(tab_pixels->type,"P1") == 0){
+	switch(tab_pixels->type){
+		case 1:
 		printf("\tFichier P1 : COMPLETE\n");
 		lecture_P1(file_image, tab_pixels);
-	}
-	else if(strcmp(tab_pixels->type,"P2") == 0){
+		break;
+
+		case 2:
 		printf("\tFichier P2 : COMPLETE\n");
 		lecture_P2(file_image, tab_pixels);
-	}
-	else if(strcmp(tab_pixels->type,"P3") == 0){
-		printf("\tFichier P3 : texte\n");
+		break;
+
+		case 3:
+		printf("\tFichier P3 : COMPLETE\n");
 		lecture_P3(file_image, tab_pixels);
-	}
-	else if(strcmp(tab_pixels->type,"P4") == 0){
+		break;
+
+		case 4:
 		printf("\tFichier P4 : COMPLETE\n");
 		lecture_P4(file_image, tab_pixels);
-	}
-	else if(strcmp(tab_pixels->type,"P5") == 0){
+		break;
+
+		case 5:
 		printf("\tFichier P5 : COMPLETE\n");
 		lecture_P5(file_image, tab_pixels);
-	}
-	else if(strcmp(tab_pixels->type,"P6") == 0){
+		break;
+
+		case 6:
 		printf("\tFichier P6 : COMPLETE\n");
 		lecture_P6(file_image, tab_pixels);
-	}
-	else{
+		break;
+
+		default: 
 		printf("[X]\tNombre magique du fichier image non trouve\n");
-		return 0;
+		break;
 	}
 
 	return 1;

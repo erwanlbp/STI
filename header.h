@@ -46,7 +46,7 @@ typedef struct IMAGE IMAGE;
 struct IMAGE
 {
 	PIXEL ** mat;
-	char type[5];
+	int type;
 	int nb_lig;
 	int nb_col;
 	int max_val;

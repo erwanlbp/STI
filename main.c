@@ -13,30 +13,30 @@ int main(int argc, char const *argv[])
 
 	// On ouvre le fichier de l'image
 	FILE* file_image = ouverture_image(&argc,argv,cheminImage,transformation);
-	if(file_image != NULL){
-		
-		IMAGE tab_pixels;
-		if(lecture_fichier(file_image, &tab_pixels)){
-			printf("\tNombre de Colonnes: %d ; Nombre de Lignes: %d ; Valeur Maximal: %d\n",tab_pixels.nb_col,tab_pixels.nb_lig,tab_pixels.max_val);
-			printf("[O]\tLecture complete du fichier image reussie");
-		}
-		else{
-			printf("[X]\tProbleme de lecture du fichier image\n");
-			return 1;
-		}
-
-		afficher_tab_pixels(&tab_pixels);
-
-		// ########################################	
-		//  Appels des fonctions de transformation
-		// ########################################	
-
-		// On libère le tableau de pixels
-		//vider_tab_pixels(&tab_pixels);
-
-		// On ferme le fichier quand on a finit de travailler dessus
-		fclose(file_image);
+	if(file_image == NULL)
+		return 1;
+	
+	IMAGE tab_pixels;
+	if(lecture_fichier(file_image, &tab_pixels)){
+		printf("\tNombre de Colonnes: %d ; Nombre de Lignes: %d ; Valeur Maximal: %d\n",tab_pixels.nb_col,tab_pixels.nb_lig,tab_pixels.max_val);
+		printf("[O]\tLecture complete du fichier image reussie");
 	}
+	else{
+		printf("[X]\tProbleme de lecture du fichier image\n");
+		return 1;
+	}
+
+	// On ferme le fichier quand on a finit de travailler dessus
+	fclose(file_image);
+
+	afficher_tab_pixels(&tab_pixels);
+
+	// ########################################	
+	//  Appels des fonctions de transformation
+	// ########################################	
+
+	// On libère le tableau de pixels
+	//vider_tab_pixels(&tab_pixels);
 
 	ligne_separation('=');
 
