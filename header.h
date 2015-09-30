@@ -33,6 +33,16 @@ struct PIXEL
 	int b; /*!< Bleu */
 };
 
+
+typedef struct MATRICE MATRICE;
+struct MATRICE
+{
+	PIXEL ** mat;
+	int nb_lig;
+	int nb_col;
+	int max_val;
+};
+
 // Pour ecrire une ligne de séparation dans le terminal
 void ligne_separation(const char separateur);
 
@@ -46,8 +56,8 @@ void effacer_ecran();
 int test_validite_fichier(FILE *file_image);
 
 
-PIXEL ** lecture_fichier(FILE* file_image, int *nb_col, int *nb_lig, int *max_val);
-void afficher_tab_pixels(PIXEL **tab_pixels, const int *nb_col, const int *nb_lig);
-void vider_tab_pixels(PIXEL *** tab, const int *nb_lig);
+int lecture_fichier(FILE* file_image, MATRICE * tab_pixels);
+void afficher_tab_pixels(MATRICE * tab);
+void vider_tab_pixels(MATRICE * tab);
 
 #endif

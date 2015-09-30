@@ -11,25 +11,24 @@ int main(int argc, char const *argv[])
 	FILE* file_image = ouverture_image(&argc,argv);
 	if(file_image != NULL){
 		
-		int nb_col,nb_lig,max_val;
-		PIXEL ** tab_pixels = lecture_fichier(file_image, &nb_col, &nb_lig, &max_val);
-
-		if(tab_pixels == NULL){
+		MATRICE tab_pixels;
+		if(lecture_fichier(file_image, &tab_pixels)){
+						printf("[O]\tLecture du fichier image reussie");
+			printf("\tNombre de Colonnes: %d ; Nombre de Lignes: %d ; Valeur Maximal: %d\n",tab_pixels.nb_col,tab_pixels.nb_lig,tab_pixels.max_val);
+		}
+		else{
 			printf("[X]\tProbleme de lecture du fichier image\n");
 			return 1;
 		}
-		else{
-			printf("[O]\tLecture du fichier image reussie");
-			printf("\tNombre de Colonnes: %d ; Nombre de Lignes: %d ; Valeur Maximal: %d\n",nb_col,nb_lig,max_val );
-		}
 
+		afficher_tab_pixels(&tab_pixels);
 
 		// ########################################	
 		//  Appels des fonctions de transformation
 		// ########################################	
 
 		// On libère le tableau de pixels
-//		vider_tab_pixels(&tab_pixels,&nb_lig);
+		vider_tab_pixels(&tab_pixels);
 
 		// On ferme le fichier quand on a finit de travailler dessus
 		fclose(file_image);
@@ -37,25 +36,25 @@ int main(int argc, char const *argv[])
 
 	ligne_separation('=');
 
-	return 0;
+	return 0; 
 } 
 
-void vider_tab_pixels(PIXEL *** tab, const int *nb_lig){
+void vider_tab_pixels(MATRICE * tab){
 	int i;
 	// Pour chaque case de la matrice
-	for (i=0; i<*nb_lig; i++){
+	for (i=0; i<tab->nb_lig; i++){
 		// On libere la memoire allouee dynamiquement
-		free(tab[i]);
+		free(tab->mat[i]);
 	printf("ok2\n");
 
 	}
 		printf("ok3\n");
 
 	// Puis on libere la memoire allouee pour la premiere dimension de la matrice
-	free(*tab);
+	free(tab->mat);
 }
 
-PIXEL ** lecture_fichier(FILE* file_image, int *nb_col, int *nb_lig, int *max_val){
+int lecture_fichier(FILE* file_image, MATRICE * tab_pixels){
 	char char_tmp[80] = "";
 	int continuer = 1;
 	int col=0;
@@ -65,26 +64,26 @@ PIXEL ** lecture_fichier(FILE* file_image, int *nb_col, int *nb_lig, int *max_va
 	PIXEL ** ptr_tab;
 
 	fscanf(file_image,"%s",char_tmp);
-	fscanf(file_image,"%d %d",nb_col,nb_lig);
+	fscanf(file_image,"%d %d",&tab_pixels->nb_col,&tab_pixels->nb_lig);
 
-	ptr_tab = malloc(*nb_lig * sizeof(PIXEL));
+	ptr_tab = malloc(tab_pixels->nb_lig * sizeof(PIXEL));
 	if(ptr_tab == NULL){
 		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau de pixels\n");
-		return NULL;
+		return 0;
 	}
 
-	for (i=0; i<*nb_lig; i++){
-		ptr_tab[i] = malloc(*nb_col * sizeof(PIXEL));
+	for (i=0; i<tab_pixels->nb_lig; i++){
+		ptr_tab[i] = malloc(tab_pixels->nb_col * sizeof(PIXEL));
 		if(ptr_tab[i] == NULL){
 			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau de pixels\n");
 			for(i=i-1; i>=0; i--)
 				free(ptr_tab[i]);
 			free(ptr_tab);
-			return NULL;
+			return 0;
 		}
 	}
 
-	fscanf(file_image,"%d",max_val);
+	fscanf(file_image,"%d",&tab_pixels->max_val);
 
 	i=0;
 	j=0;
@@ -106,15 +105,16 @@ PIXEL ** lecture_fichier(FILE* file_image, int *nb_col, int *nb_lig, int *max_va
 
 	}while(continuer);
 
-	return ptr_tab;
+	tab_pixels->mat = ptr_tab;
+	return 1;
 }
 
-void afficher_tab_pixels(PIXEL **tab_pixels, const int *nb_col, const int *nb_lig){
+void afficher_tab_pixels(MATRICE * tab){
 	ligne_separation('-');
 	int lig,col;
-	for (lig=0; lig<*nb_lig; lig++){
-		for (col=0; col<*nb_col; col++){
-			printf("%d %d %d\t",tab_pixels[lig][col].r,tab_pixels[lig][col].g,tab_pixels[lig][col].b);
+	for (lig=0; lig<tab->nb_lig; lig++){
+		for (col=0; col<tab->nb_lig; col++){
+			printf("%d %d %d\t",tab->mat[lig][col].r,tab->mat[lig][col].g,tab->mat[lig][col].b);
 		}	
 		printf("\n");
 	}
