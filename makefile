@@ -16,5 +16,3 @@ ecritureFichiers.o: ecritureFichiers.c
 
 clean:
 	rm *.o
-
-all: clean

@@ -12,6 +12,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+//Idees de plus : 
+// Fonction de test si le fichier image est valide, bien forme
+
+
+
+
 // Format lancement programme : 
 // ./STI [chemin image = img_test.ppm] [transformation = Aucune]
 // Donc si on met pas d'argument au programme il chargera l'image de test et fera rien
@@ -35,10 +42,11 @@ struct PIXEL
 };
 
 
-typedef struct MATRICE MATRICE;
-struct MATRICE
+typedef struct IMAGE IMAGE;
+struct IMAGE
 {
 	PIXEL ** mat;
+	char type[5];
 	int nb_lig;
 	int nb_col;
 	int max_val;
@@ -48,17 +56,12 @@ struct MATRICE
 void ligne_separation(const char separateur);
 
 // Pour ouvrir le fichier image
-FILE* ouverture_image(const int *argc, char const *argv[]);
+FILE* ouverture_image(const int *argc, char const *argv[], char cheminImage[255], char transformation[255]);
 
 //Pour effacer l'ecran selon l'OS
 void effacer_ecran();
 
-// Regarde si le fichier est bien constitue
-int test_validite_fichier(FILE *file_image);
-
-
-int lecture_fichier(FILE* file_image, MATRICE * tab_pixels);
-void afficher_tab_pixels(MATRICE * tab);
-void vider_tab_pixels(MATRICE * tab);
+void afficher_tab_pixels(IMAGE * tab);
+void vider_tab_pixels(IMAGE * tab);
 
 #endif
