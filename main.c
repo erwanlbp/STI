@@ -41,17 +41,20 @@ int main(int argc, char const *argv[])
 
 void vider_tab_pixels(MATRICE * tab){
 	int i;
+	printf("Entree vidage\n");
 	// Pour chaque case de la matrice
 	for (i=0; i<tab->nb_lig; i++){
 		// On libere la memoire allouee dynamiquement
 		free(tab->mat[i]);
-	printf("ok2\n");
+	printf("ligne %d ok\n",i);
 
 	}
-		printf("ok3\n");
+		printf("1D finie\n");
 
 	// Puis on libere la memoire allouee pour la premiere dimension de la matrice
 	free(tab->mat);
+		printf("2D finie\nFin vidage");
+
 }
 
 int lecture_fichier(FILE* file_image, MATRICE * tab_pixels){
@@ -61,24 +64,23 @@ int lecture_fichier(FILE* file_image, MATRICE * tab_pixels){
 	int i = 0;
 	int j = 0;
 	PIXEL pix_tmp;
-	PIXEL ** ptr_tab;
 
 	fscanf(file_image,"%s",char_tmp);
 	fscanf(file_image,"%d %d",&tab_pixels->nb_col,&tab_pixels->nb_lig);
 
-	ptr_tab = malloc(tab_pixels->nb_lig * sizeof(PIXEL));
-	if(ptr_tab == NULL){
+	tab_pixels->mat = malloc(tab_pixels->nb_lig * sizeof(PIXEL));
+	if(tab_pixels->mat == NULL){
 		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau de pixels\n");
 		return 0;
 	}
 
 	for (i=0; i<tab_pixels->nb_lig; i++){
-		ptr_tab[i] = malloc(tab_pixels->nb_col * sizeof(PIXEL));
-		if(ptr_tab[i] == NULL){
+		tab_pixels->mat[i] = malloc(tab_pixels->nb_col * sizeof(PIXEL));
+		if(tab_pixels->mat[i] == NULL){
 			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau de pixels\n");
 			for(i=i-1; i>=0; i--)
-				free(ptr_tab[i]);
-			free(ptr_tab);
+				free(tab_pixels->mat[i]);
+			free(tab_pixels->mat);
 			return 0;
 		}
 	}
@@ -90,9 +92,9 @@ int lecture_fichier(FILE* file_image, MATRICE * tab_pixels){
 	do{
 		fscanf(file_image, "%d %d %d", &pix_tmp.r, &pix_tmp.g, &pix_tmp.b);
 
-		ptr_tab[i][j].r = pix_tmp.r;
-		ptr_tab[i][j].g = pix_tmp.g;
-		ptr_tab[i][j].b = pix_tmp.b;
+		tab_pixels->mat[i][j].r = pix_tmp.r;
+		tab_pixels->mat[i][j].g = pix_tmp.g;
+		tab_pixels->mat[i][j].b = pix_tmp.b;
 
 		if(feof(file_image)) 
 			continuer = 0;
@@ -105,7 +107,6 @@ int lecture_fichier(FILE* file_image, MATRICE * tab_pixels){
 
 	}while(continuer);
 
-	tab_pixels->mat = ptr_tab;
 	return 1;
 }
 
