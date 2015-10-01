@@ -3,7 +3,7 @@
 #include "transformations.h"
 
 int main(int argc, char const *argv[])
-{
+{ 
 	//Pour effacer l'ecran
 	effacer_ecran();
 
@@ -37,9 +37,6 @@ int main(int argc, char const *argv[])
 	//  Appels des fonctions de transformation
 	// ########################################	
 
-	binarisation(&tab_pixels);
-	
-	afficher_tab_pixels(&tab_pixels);
 	
 
 	file_image = ouverture_ecriture_fichier_image(cheminImage,transformation);

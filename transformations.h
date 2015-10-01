@@ -3,7 +3,7 @@
 
 void binarisation (IMAGE *imageATransfo);
 
-
+void negatif(IMAGE *copieImage);
 
 
 

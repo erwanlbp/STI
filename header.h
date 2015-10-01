@@ -1,6 +1,6 @@
 #ifndef DEF_HEADER
 #define DEF_HEADER
-
+ 
 /**  
  * \file header.h
  * \brief Header principale

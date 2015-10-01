@@ -1,7 +1,7 @@
 #ifndef DEF_INOUTFICHIERS
 #define DEF_INOUTFICHIERS
 
-/**  
+/**   
  * \file inOutFichiers.h
  * \brief Header des fichiers lectureFichiers.c et ecritureFichiers.c
  * \author Le Batard--Polès Erwan
