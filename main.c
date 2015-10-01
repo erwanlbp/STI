@@ -37,6 +37,8 @@ int main(int argc, char const *argv[])
 	//  Appels des fonctions de transformation
 	// ########################################	
 
+	
+
 	file_image = ouverture_ecriture_fichier_image(cheminImage,transformation);
 	if(file_image == NULL)
 		return 1;
