@@ -3,11 +3,8 @@
 
 void binarisation (IMAGE *imageATransfo);
 
-void negatif(IMAGE *copieImage);
+void negatif(IMAGE *image);
 
-void niveauGris(IMAGE *copieImage);
-
-
-
+void niveauGris(IMAGE *image);
 
 #endif
