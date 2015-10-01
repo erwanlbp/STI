@@ -3,7 +3,7 @@
 
 /**  
  * \file header.h
- * \brief Header du main
+ * \brief Header principale
  * \author Le Batard--Polès Erwan
  * \version 12
  */
@@ -40,7 +40,6 @@ struct PIXEL
 	int g; /*!< Vert */
 	int b; /*!< Bleu */
 };
-
 
 typedef struct IMAGE IMAGE;
 struct IMAGE

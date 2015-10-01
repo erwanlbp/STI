@@ -74,7 +74,6 @@ int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
 		}
 	}
 
-// A completer Avec : https://fr.wikipedia.org/wiki/Portable_pixmap
 	switch(tab_pixels->type){
 		case 1:
 		printf("\tFichier P1 : PBM ASCII\n");
