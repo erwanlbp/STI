@@ -2,7 +2,7 @@
 #include "inOutFichiers.h"
 
 int main(int argc, char const *argv[])
-{
+{ 
 	//Pour effacer l'ecran
 	effacer_ecran();
 
