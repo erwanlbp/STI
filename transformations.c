@@ -3,14 +3,13 @@
 #include "transformations.h"
 
 
-IMAGE negatif(IMAGE image){
+void negatif(IMAGE *copieImage){
 	int lig,col;
-	for(lig=0;lig<image->nb_lig;lig++){
-		for(col=0;col<image->nb_col;col++){
-			image->mat[lig][col].r = 255 - image->mat[lig][col].r;
-			image->mat[lig][col].g = 255 - image->mat[lig][col].g;
-			image->mat[lig][col].b = 255 - image->mat[lig][col].b;
+	for(lig=0;lig<copieImage->nb_lig;lig++){
+		for(col=0;col<copieImage->nb_col;col++){
+			copieImage->mat[lig][col].r = 255 - (copieImage->mat[lig][col].r);
+			copieImage->mat[lig][col].g = 255 - (copieImage->mat[lig][col].g);
+			copieImage->mat[lig][col].b = 255 - (copieImage->mat[lig][col].b);
 		}
 	}
-	return image;
 }
