@@ -32,7 +32,8 @@ int main(int argc, char const *argv[])
 	file_image = NULL;
 
 	afficher_tab_pixels(&tab_pixels);
-
+	symetrie_horizontale(&tab_pixels);
+	afficher_tab_pixels(&tab_pixels);
 	// ########################################	
 	//  Appels des fonctions de transformation
 	// ########################################	

@@ -37,3 +37,17 @@ void negatif(IMAGE *copieImage){
 		}
 	}
 }
+
+int symetrie_horizontale(IMAGE *image){
+	int lig, col;
+	PIXEL tmp;
+	for(lig=0;lig<image->nb_lig;lig++){
+		for(col=0;col< image->nb_col /2;col++){
+
+			tmp=image->mat[lig][col];
+			image->mat[lig][col] = image->mat[lig][image->nb_col -col-1];
+			image->mat[lig][ image->nb_col -col-1]	=tmp;
+		}
+	}
+	return 1;
+}
