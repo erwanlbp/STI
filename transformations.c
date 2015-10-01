@@ -65,6 +65,7 @@ void negatif(IMAGE *image){
 	}
 }
 
+
 void niveauGris(IMAGE *image){
 	if(image->type == 3 || image->type == 6){
 		int gris, lig, col;
@@ -77,4 +78,22 @@ void niveauGris(IMAGE *image){
 			}
 		}
 	}
+
+// Fonction qui fait la symétrie horizontale par rapport à l'axe central vertical
+int symetrie_horizontale(IMAGE *image){
+	int lig, col;
+	PIXEL tmp;
+	//Double boucle for pour parcourir le tableau
+	for(lig=0;lig<image->nb_lig;lig++){
+		for(col=0;col< image->nb_col /2;col++){
+			// On met dans une variable temporaire
+			tmp=image->mat[lig][col];
+			// On met dans le pixel actuel le pixel symétrique par raport à l'axe central vertical
+			image->mat[lig][col] = image->mat[lig][image->nb_col -col-1];
+			// On met dans le pixel symétrique les valeurs dans le pixel temporaire
+			image->mat[lig][ image->nb_col -col-1]	=tmp;
+		}
+	}
+	return 1;
+
 }
