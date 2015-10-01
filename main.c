@@ -37,7 +37,8 @@ int main(int argc, char const *argv[])
 	//  Appels des fonctions de transformation
 	// ########################################	
 
-	
+	symetrie_verticale(&tab_pixels);
+	afficher_tab_pixels(&tab_pixels);
 
 	file_image = ouverture_ecriture_fichier_image(cheminImage,transformation);
 	if(file_image == NULL)
