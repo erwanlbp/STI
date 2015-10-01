@@ -37,7 +37,6 @@ int main(int argc, char const *argv[])
 	//  Appels des fonctions de transformation
 	// ########################################	
 
-	
 
 	file_image = ouverture_ecriture_fichier_image(cheminImage,transformation);
 	if(file_image == NULL)
@@ -79,7 +78,7 @@ void afficher_tab_pixels(IMAGE * tab){
 	int lig,col;
 
 	for (lig=0; lig<tab->nb_lig; lig++){
-		for (col=0; col<tab->nb_lig; col++){
+		for (col=0; col<tab->nb_col; col++){
 			if(tab->type == 3 || tab->type == 6)
 				printf("%d %d %d\t",tab->mat[lig][col].r,tab->mat[lig][col].g,tab->mat[lig][col].b);
 			else

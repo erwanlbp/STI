@@ -4,17 +4,14 @@
 FILE* ouverture_lecture_fichier_image(const int *argc, char const *argv[], char cheminImage[255], char transformation[255]){
 
 	// Variable contenant le chemin du fichier, par defaut "test.ppm"
-	cheminImage = "./test.ppm";
-	transformation = "base";
+	sprintf(cheminImage,"%s","test.ppm");
+	sprintf(transformation,"%s","base");
 
 	// On teste si on a recu un chemin de fichier
 	if (*argc >= 2){
 
-		// On rajoute le "./" au debut du chemin si c'est pas fait
-		if(argv[1][0] != '.')
-			sprintf(cheminImage,"./%s",argv[1]);
-		else
-			sprintf(cheminImage,"%s",argv[1]);
+		// On sauvegarde le chemin de l'image	
+		sprintf(cheminImage,"%s",argv[1]);
 
 		//On affiche le chemin qu'on a recu
 		printf("[O]\tUn chemin de fichier a ete trouve : %s\n",cheminImage);
@@ -125,6 +122,7 @@ int lecture_P2(FILE* file_image, IMAGE * tab_pixels){
 
 int lecture_P3(FILE* file_image, IMAGE * tab_pixels){
 	int continuer = 1, lig=0, col=0;
+		printf("\nlecture:\n");
 
 	do{
 		fscanf(file_image, "%d %d %d", &tab_pixels->mat[lig][col].r, &tab_pixels->mat[lig][col].g, &tab_pixels->mat[lig][col].b);
@@ -137,6 +135,8 @@ int lecture_P3(FILE* file_image, IMAGE * tab_pixels){
 			col = 0;
 			lig++;
 		}
+		if(lig == tab_pixels->nb_lig)
+			continuer = 0;
 
 	}while(continuer);
 
