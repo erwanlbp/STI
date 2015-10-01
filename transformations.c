@@ -78,6 +78,8 @@ void niveauGris(IMAGE *image){
 			}
 		}
 	}
+}
+
 
 // Fonction qui fait la symétrie horizontale par rapport à l'axe central vertical
 int symetrie_horizontale(IMAGE *image){
