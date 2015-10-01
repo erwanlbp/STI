@@ -6,7 +6,6 @@ FILE* ouverture_ecriture_fichier_image(char cheminImage[255], char transformatio
 
 	sprintf(chemin,"%s_%s",transformation,cheminImage);
  
- printf("chemin:%s\n", chemin);
 	FILE* fichier = fopen(chemin,"w");
 	if(fichier == NULL){
 		printf("[X]\tErreur ouverture fichier ecriture\n");
