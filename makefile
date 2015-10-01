@@ -20,3 +20,5 @@ transformations.o: transformations.c
 clean:
 	rm *.o
 
+cleanImg:
+	rm Images/*_*
