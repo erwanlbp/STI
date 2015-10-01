@@ -37,3 +37,17 @@ void negatif(IMAGE *copieImage){
 		}
 	}
 }
+
+
+
+void niveauGris(IMAGE *copieImage){
+	int gris, lig, col;
+	for(lig=0;lig<copieImage->nb_lig;lig++){
+		for(col=0;col<copieImage->nb_col;col++){
+			gris = (0.3*(copieImage->mat[lig][col].r)) + (0.59*(copieImage->mat[lig][col].g))+(0.11*(copieImage->mat[lig][col].b));
+			copieImage->mat[lig][col].r = gris;
+			copieImage->mat[lig][col].g = gris;
+			copieImage->mat[lig][col].b = gris;
+		}
+	}
+}
