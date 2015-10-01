@@ -19,31 +19,18 @@ void binarisation (IMAGE *imageATransfo){
 			//Si la valeur est en dessous du seuil il prend la valeur 0
 			if (imageATransfo->mat[i][j].r < seuil)
 			{
-				(imageATransfo->mat[i][j].r) = 0;
-				(imageATransfo->mat[i][j].g) = 0;
-				(imageATransfo->mat[i][j].b) = 0;
+				imageATransfo->mat[i][j].r = 0;
+				imageATransfo->mat[i][j].g = 0;
+				imageATransfo->mat[i][j].b = 0;
 			}
 			//Si la valeur est en dessous du seuil il prend la valeur 255
 			else {
-				(imageATransfo->mat[i][j].r) = 255;
-				(imageATransfo->mat[i][j].g) = 255;
-				(imageATransfo->mat[i][j].b) = 255;
+				imageATransfo->mat[i][j].r = 255;
+				imageATransfo->mat[i][j].g = 255;
+				imageATransfo->mat[i][j].b = 255;
 			}
 
-			for (j = 0; j < imageATransfo->nb_col; j++)
-			{
-				if (imageATransfo->mat[i][j].r < seuil)
-				{
-					(imageATransfo->mat[i][j].r) = 0;
-					(imageATransfo->mat[i][j].g) = 0;
-					(imageATransfo->mat[i][j].b) = 0;
-				}
-				else {
-					(imageATransfo->mat[i][j].r) = 255;
-					(imageATransfo->mat[i][j].g) = 255;
-					(imageATransfo->mat[i][j].b) = 255;
-				}
-			}
+			
 		}
 	}
 }
