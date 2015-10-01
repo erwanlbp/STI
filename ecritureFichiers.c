@@ -1,10 +1,10 @@
 #include "header.h"
 #include "inOutFichiers.h"
 
-FILE* ouverture_ecriture_fichier_image(char cheminImage[255], char transformation[255]){
+FILE* ouverture_ecriture_fichier_image(char nomImage[255], char transformation[255]){
 	char chemin[255] = "";
 
-	sprintf(chemin,"%s_%s",transformation,cheminImage);
+	sprintf(chemin,"Images/%s_%s",transformation,nomImage);
  
 	FILE* fichier = fopen(chemin,"w");
 	if(fichier == NULL){
@@ -19,17 +19,17 @@ FILE* ouverture_ecriture_fichier_image(char cheminImage[255], char transformatio
 	return fichier;
 }
 
-int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char cheminImage[255], const char transformation[255]){
+int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[255]){
 	 
 	fprintf(fichier, "P%d\n%d %d\n%d\n", tab_pixels->type, tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
 
 	switch(tab_pixels->type){
-		case 1:	ecriture_P1(fichier, tab_pixels, cheminImage, transformation); break;
-		case 2:	ecriture_P2(fichier, tab_pixels, cheminImage, transformation); break;
-		case 3:	ecriture_P3(fichier, tab_pixels, cheminImage, transformation); break;
-		case 4:	ecriture_P4(fichier, tab_pixels, cheminImage, transformation); break;
-		case 5:	ecriture_P5(fichier, tab_pixels, cheminImage, transformation); break;
-		case 6:	ecriture_P6(fichier, tab_pixels, cheminImage, transformation); break;
+		case 1:	ecriture_P1(fichier, tab_pixels, nomImage, transformation); break;
+		case 2:	ecriture_P2(fichier, tab_pixels, nomImage, transformation); break;
+		case 3:	ecriture_P3(fichier, tab_pixels, nomImage, transformation); break;
+		case 4:	ecriture_P4(fichier, tab_pixels, nomImage, transformation); break;
+		case 5:	ecriture_P5(fichier, tab_pixels, nomImage, transformation); break;
+		case 6:	ecriture_P6(fichier, tab_pixels, nomImage, transformation); break;
 		default: 
 		printf("[X]\tNombre magique du fichier image inconnu\n");
 		break;
@@ -38,17 +38,17 @@ int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char cheminI
 	return 1;
 } 
 
-int ecriture_P1(FILE* fichier, const IMAGE * tab_pixels, const char cheminImage[255], const char transformation[100]){
+int ecriture_P1(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
 	return 1;
 }
 
-int ecriture_P2(FILE* fichier, const IMAGE * tab_pixels, const char cheminImage[255], const char transformation[100]){
+int ecriture_P2(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
 	return 1;
 }
 
-int ecriture_P3(FILE* fichier, const IMAGE * tab_pixels, const char cheminImage[255], const char transformation[100]){
+int ecriture_P3(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 	int lig,col;
 	for(lig=0; lig<tab_pixels->nb_lig; lig++){
 		for(col=0; col<tab_pixels->nb_col; col++){ 			
@@ -66,17 +66,17 @@ int ecriture_P3(FILE* fichier, const IMAGE * tab_pixels, const char cheminImage[
 	return 1; 
 }
 
-int ecriture_P4(FILE* fichier, const IMAGE * tab_pixels, const char cheminImage[255], const char transformation[100]){
+int ecriture_P4(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
 	return 1;
 }
 
-int ecriture_P5(FILE* fichier, const IMAGE * tab_pixels, const char cheminImage[255], const char transformation[100]){
+int ecriture_P5(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
 	return 1;
 }
 
-int ecriture_P6(FILE* fichier, const IMAGE * tab_pixels, const char cheminImage[255], const char transformation[100]){
+int ecriture_P6(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
 	return 1;
 }

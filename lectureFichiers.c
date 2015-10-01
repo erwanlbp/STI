@@ -1,17 +1,26 @@
 #include "header.h"
 #include "inOutFichiers.h"
 
-FILE* ouverture_lecture_fichier_image(const int *argc, char const *argv[], char cheminImage[255], char transformation[255]){
+FILE* ouverture_lecture_fichier_image(const int *argc, char const *argv[], char nomImage[255], char transformation[255]){
+
+	char cheminImage[255] = "";
+
+	sprintf(nomImage,"test.ppm");
 
 	// Variable contenant le chemin du fichier, par defaut "test.ppm"
-	sprintf(cheminImage,"%s","test.ppm");
+	sprintf(cheminImage,"Images/%s","test.ppm");
+
+	// Variable contenant la transformation recue en argument, par defaut "base"	
 	sprintf(transformation,"%s","base");
 
 	// On teste si on a recu un chemin de fichier
 	if (*argc >= 2){
 
 		// On sauvegarde le chemin de l'image	
-		sprintf(cheminImage,"%s",argv[1]);
+		sprintf(nomImage,"%s",argv[1]);
+
+		// On va chercher l'image
+		sprintf(cheminImage,"Images/%s",nomImage);
 
 		//On affiche le chemin qu'on a recu
 		printf("[O]\tUn chemin de fichier a ete trouve : %s\n",cheminImage);

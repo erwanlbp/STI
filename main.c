@@ -9,11 +9,11 @@ int main(int argc, char const *argv[])
 
 	ligne_separation('=');
 
-	char cheminImage[255] = "";
+	char nomImage[255] = "";
 	char transformation[255] = "";
 
 	// On ouvre le fichier de l'image
-	FILE* file_image = ouverture_lecture_fichier_image(&argc,argv,cheminImage,transformation);
+	FILE* file_image = ouverture_lecture_fichier_image(&argc,argv,nomImage,transformation);
 	if(file_image == NULL)
 		return 1;
 	
@@ -31,18 +31,13 @@ int main(int argc, char const *argv[])
 	fclose(file_image);
 	file_image = NULL;
 
-	printf("Avant\n");
-	afficher_tab_pixels(&tab_pixels);
+	negatif(&tab_pixels);
 
-	symetrie_horizontale(&tab_pixels);
-	printf("Après\n");
-	afficher_tab_pixels(&tab_pixels);
-
-	file_image = ouverture_ecriture_fichier_image(cheminImage,transformation);
+	file_image = ouverture_ecriture_fichier_image(nomImage,transformation);
 	if(file_image == NULL)
 		return 1;
 
-	if(ecriture_fichier(file_image,&tab_pixels,cheminImage,transformation))
+	if(ecriture_fichier(file_image,&tab_pixels,nomImage,transformation))
 		printf("[O]\tEcriture du fichier reussie, transformation sauvegardee\n");
 	else
 		printf("[X]\tEcriture du fichier rate, transformation non sauvegardee\n");
