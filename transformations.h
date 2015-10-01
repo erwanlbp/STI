@@ -8,6 +8,8 @@ void negatif(IMAGE *copieImage);
 int symetrie_verticale (IMAGE *imageATransfo);
 
 
+void niveauGris(IMAGE *copieImage);
+
 
 
 
