@@ -1,14 +1,14 @@
 #ifndef TRANSFORMATION
 #define TRANSFORMATION
 
-void binarisation (IMAGE *imageATransfo);
+int binarisation (IMAGE *imageATransfo);
 
-void negatif(IMAGE *image);
+int negatif(IMAGE *image);
 
 int symetrie_horizontale(IMAGE *copieImage);
 
 int symetrie_verticale (IMAGE *imageATransfo);
 
-void niveauGris(IMAGE *image);
+int niveauGris(IMAGE *image);
 
 #endif

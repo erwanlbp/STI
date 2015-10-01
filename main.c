@@ -19,8 +19,8 @@ int main(int argc, char const *argv[])
 	
 	IMAGE tab_pixels;
 	if(lecture_fichier(file_image, &tab_pixels)){
-		printf("\tNombre de Colonnes: %d ; Nombre de Lignes: %d ; Valeur Maximal: %d\n",tab_pixels.nb_col,tab_pixels.nb_lig,tab_pixels.max_val);
-		printf("[O]\tLecture complete du fichier image reussie");
+		printf("\tNombre de Colonnes:\t%d\n\tNombre de Lignes:\t%d\n\tValeur Maximal:\t\t%d\n",tab_pixels.nb_col,tab_pixels.nb_lig,tab_pixels.max_val);
+		printf("[O]\tLecture complete du fichier image reussie\n");
 	}
 	else{
 		printf("[X]\tProbleme de lecture du fichier image\n");
@@ -31,12 +31,12 @@ int main(int argc, char const *argv[])
 	fclose(file_image);
 	file_image = NULL;
 
+	printf("Avant\n");
 	afficher_tab_pixels(&tab_pixels);
 
-	// ########################################	
-	//  Appels des fonctions de transformation
-	// ########################################	
-
+	symetrie_horizontale(&tab_pixels);
+	printf("Après\n");
+	afficher_tab_pixels(&tab_pixels);
 
 	file_image = ouverture_ecriture_fichier_image(cheminImage,transformation);
 	if(file_image == NULL)

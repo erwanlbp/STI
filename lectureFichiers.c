@@ -122,7 +122,6 @@ int lecture_P2(FILE* file_image, IMAGE * tab_pixels){
 
 int lecture_P3(FILE* file_image, IMAGE * tab_pixels){
 	int continuer = 1, lig=0, col=0;
-		printf("\nlecture:\n");
 
 	do{
 		fscanf(file_image, "%d %d %d", &tab_pixels->mat[lig][col].r, &tab_pixels->mat[lig][col].g, &tab_pixels->mat[lig][col].b);

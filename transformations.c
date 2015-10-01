@@ -3,36 +3,37 @@
 #include "transformations.h"
 
 
-void binarisation (IMAGE *imageATransfo){
+int binarisation (IMAGE *imageATransfo){
 
 	if(imageATransfo->type == 3 || imageATransfo->type == 6){
 		niveauGris(imageATransfo);
 	}
 
 	if(imageATransfo->type != 1 && imageATransfo->type != 4){
-		int i, j, seuil = 127;
+		int lig, col, seuil = 127;
 
 		//Double boucle pour parcourir tout le tableau
-		for (i = 0; i < imageATransfo->nb_lig; i++)
+		for(lig = 0; lig<imageATransfo->nb_lig; lig++)
 		{
-
-			//Si la valeur est en dessous du seuil il prend la valeur 0
-			if (imageATransfo->mat[i][j].r < seuil)
-			{
-				imageATransfo->mat[i][j].r = 0;
-				imageATransfo->mat[i][j].g = 0;
-				imageATransfo->mat[i][j].b = 0;
+			for(col=0; col<imageATransfo->nb_col; col++){
+				//Si la valeur est en dessous du seuil il prend la valeur 0
+				if (imageATransfo->mat[lig][col].r < seuil)
+				{
+					imageATransfo->mat[lig][col].r = 0;
+					imageATransfo->mat[lig][col].g = 0;
+					imageATransfo->mat[lig][col].b = 0;
+				}
+				//Si la valeur est en dessous du seuil il prend la valeur 255
+				else {
+					imageATransfo->mat[lig][col].r = 255;
+					imageATransfo->mat[lig][col].g = 255;
+					imageATransfo->mat[lig][col].b = 255;
+				}
 			}
-			//Si la valeur est en dessous du seuil il prend la valeur 255
-			else {
-				imageATransfo->mat[i][j].r = 255;
-				imageATransfo->mat[i][j].g = 255;
-				imageATransfo->mat[i][j].b = 255;
-			}
-
 			
 		}
 	}
+	return 1;
 }
 
 int symetrie_verticale (IMAGE *imageATransfo){
@@ -54,7 +55,7 @@ int symetrie_verticale (IMAGE *imageATransfo){
 	return 1;
 }
 
-void negatif(IMAGE *image){
+int negatif(IMAGE *image){
 	int lig,col;
 	for(lig=0;lig<image->nb_lig;lig++){
 		for(col=0;col<image->nb_col;col++){
@@ -63,10 +64,11 @@ void negatif(IMAGE *image){
 			image->mat[lig][col].b = 255 - (image->mat[lig][col].b);
 		}
 	}
+	return 1;
 }
 
 
-void niveauGris(IMAGE *image){
+int niveauGris(IMAGE *image){
 	if(image->type == 3 || image->type == 6){
 		int gris, lig, col;
 		for(lig=0;lig<image->nb_lig;lig++){
@@ -78,6 +80,7 @@ void niveauGris(IMAGE *image){
 			}
 		}
 	}
+	return 1;
 }
 
 
@@ -97,5 +100,4 @@ int symetrie_horizontale(IMAGE *image){
 		}
 	}
 	return 1;
-
 }
