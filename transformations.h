@@ -7,6 +7,9 @@ void negatif(IMAGE *copieImage);
 
 int symetrie_horizontale(IMAGE *copieImage);
 
+int symetrie_verticale (IMAGE *imageATransfo);
+
+
 
 
 
