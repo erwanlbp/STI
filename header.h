@@ -55,9 +55,6 @@ struct IMAGE
 // Pour ecrire une ligne de séparation dans le terminal
 void ligne_separation(const char separateur);
 
-// Pour ouvrir le fichier image
-FILE* ouverture_image(const int *argc, char const *argv[], char cheminImage[255], char transformation[255]);
-
 //Pour effacer l'ecran selon l'OS
 void effacer_ecran();
 
