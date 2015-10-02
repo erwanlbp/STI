@@ -119,7 +119,7 @@ int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
 
 int lecture_P1(FILE* file_image, IMAGE * tab_pixels){
 
-	fscanf(file_image,"%d",&tab_pixels->max_val);
+	tab_pixels->max_val = 1;
 
 	int continuer = 1, lig=0, col=0;
 
@@ -150,6 +150,9 @@ int lecture_P2(FILE* file_image, IMAGE * tab_pixels){
 }
 
 int lecture_P3(FILE* file_image, IMAGE * tab_pixels){
+
+	fscanf(file_image,"%d",&tab_pixels->max_val);
+
 	int continuer = 1, lig=0, col=0;
 
 	do{

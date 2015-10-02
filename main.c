@@ -35,7 +35,6 @@ int main(int argc, char const *argv[])
 	//  Travail des fonctions des transformations
 	// ###########################################
 	
-	afficher_tab_pixels(&tab_pixels);
 
 	// ###########################################
 
