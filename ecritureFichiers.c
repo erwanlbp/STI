@@ -21,8 +21,6 @@ FILE* ouverture_ecriture_fichier_image(char nomImage[255], char transformation[2
 
 int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[255]){
 	 
-	fprintf(fichier, "P%d\n%d %d\n%d\n", tab_pixels->type, tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
-
 	switch(tab_pixels->type){
 		case 1:	ecriture_P1(fichier, tab_pixels, nomImage, transformation); break;
 		case 2:	ecriture_P2(fichier, tab_pixels, nomImage, transformation); break;
@@ -40,15 +38,49 @@ int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char nomImag
 
 int ecriture_P1(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
+	fprintf(fichier, "P1\n%d %d\n", tab_pixels->nb_col, tab_pixels->nb_lig); 
+
+	int lig,col;
+	for(lig=0; lig<tab_pixels->nb_lig; lig++){
+		for(col=0; col<tab_pixels->nb_col; col++){ 			
+			fprintf(fichier, "%d", tab_pixels->mat[lig][col].r);
+			if(col % 70 > 60)
+				fprintf(fichier,"\n");
+			else
+				fprintf(fichier," ");
+		}
+		fprintf(fichier,"\n");
+	}
+
+	fclose(fichier);
 	return 1;
 }
 
 int ecriture_P2(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
+	fprintf(fichier, "P2\n%d %d\n%d\n", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
+
+	int lig,col;
+	for(lig=0; lig<tab_pixels->nb_lig; lig++){
+		for(col=0; col<tab_pixels->nb_col; col++){ 			
+			fprintf(fichier, "%d", tab_pixels->mat[lig][col].r);
+			if(col % 70 > 60)
+				fprintf(fichier,"\n");
+			else
+				fprintf(fichier," ");
+		}
+		fprintf(fichier,"\n");
+	}
+
+	fclose(fichier);
+
 	return 1;
 }
 
 int ecriture_P3(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
+		
+	fprintf(fichier, "P3\n%d %d\n%d\n", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
+
 	int lig,col;
 	for(lig=0; lig<tab_pixels->nb_lig; lig++){
 		for(col=0; col<tab_pixels->nb_col; col++){ 			

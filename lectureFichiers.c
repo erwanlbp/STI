@@ -60,8 +60,6 @@ int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
 
 	fscanf(file_image,"%d %d",&tab_pixels->nb_col,&tab_pixels->nb_lig);
 
-	fscanf(file_image,"%d",&tab_pixels->max_val);
-
 	tab_pixels->mat = malloc(tab_pixels->nb_lig * sizeof(PIXEL));
 	if(tab_pixels->mat == NULL){
 		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau de pixels\n");
@@ -121,15 +119,62 @@ int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
 
 int lecture_P1(FILE* file_image, IMAGE * tab_pixels){
 
+	tab_pixels->max_val = 1;
+
+	int continuer = 1, lig=0, col=0;
+
+	do{
+		fscanf(file_image, "%d", &tab_pixels->mat[lig][col].r);
+		tab_pixels->mat[lig][col].g = tab_pixels->mat[lig][col].r;
+		tab_pixels->mat[lig][col].b = tab_pixels->mat[lig][col].r;
+
+		if(feof(file_image)) 
+			continuer = 0;
+
+		col++;  
+		if(col == tab_pixels->nb_col){
+			col = 0;
+			lig++;
+		}
+		if(lig == tab_pixels->nb_lig)
+			continuer = 0;
+		
+	}while(continuer);
+
 	return 1;
 }
 
 int lecture_P2(FILE* file_image, IMAGE * tab_pixels){
 
+	fscanf(file_image,"%d",&tab_pixels->max_val);
+
+	int continuer = 1, lig=0, col=0;
+
+	do{
+		fscanf(file_image, "%d", &tab_pixels->mat[lig][col].r);
+		tab_pixels->mat[lig][col].g = tab_pixels->mat[lig][col].r;
+		tab_pixels->mat[lig][col].b = tab_pixels->mat[lig][col].r;
+
+		if(feof(file_image)) 
+			continuer = 0;
+
+		col++;  
+		if(col == tab_pixels->nb_col){
+			col = 0;
+			lig++;
+		}
+		if(lig == tab_pixels->nb_lig)
+			continuer = 0;
+
+	}while(continuer);
+
 	return 1;
 }
 
 int lecture_P3(FILE* file_image, IMAGE * tab_pixels){
+
+	fscanf(file_image,"%d",&tab_pixels->max_val);
+
 	int continuer = 1, lig=0, col=0;
 
 	do{

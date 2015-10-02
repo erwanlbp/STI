@@ -31,7 +31,24 @@ int main(int argc, char const *argv[])
 	fclose(file_image);
 	file_image = NULL;
 
-	//negatif(&tab_pixels);
+	// ###########################################
+	//  Travail des fonctions des transformations
+	// ###########################################
+	
+	if(strcmp(transformation, "niveauGris") == 0)
+		niveauGris(&tab_pixels);
+	else if(strcmp(transformation, "binarisation") == 0)
+		binarisation(&tab_pixels);
+	else if(strcmp(transformation, "symetrieH") == 0)
+		symetrie_horizontale(&tab_pixels);
+	else if(strcmp(transformation, "symetrieV") == 0)
+		symetrie_verticale(&tab_pixels);
+	else if(strcmp(transformation, "negatif") == 0)
+		negatif(&tab_pixels);
+	else if(strcmp(transformation, "redimensionnement") == 0)
+		redimensionnement(&tab_pixels, argc, argv);
+
+	// ###########################################
 
 	file_image = ouverture_ecriture_fichier_image(nomImage,transformation);
 
@@ -61,8 +78,11 @@ void vider_tab_pixels(IMAGE * tab){
 
 	// Puis on libere la memoire allouee pour la premiere dimension de la IMAGE
 	free(tab->mat);
+<<<<<<< HEAD
 	printf("[O]\tFin vidage");
 
+=======
+>>>>>>> dd48b249b7ee8eb4e9f9a2da6b847ec59d996509
 }
 
 void afficher_tab_pixels(IMAGE * tab){

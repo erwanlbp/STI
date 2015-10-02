@@ -5,6 +5,7 @@
 
 int binarisation (IMAGE *imageATransfo){
 
+	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
 	if(imageATransfo->type == 3 || imageATransfo->type == 6){
 		niveauGris(imageATransfo);
 	}
@@ -36,29 +37,13 @@ int binarisation (IMAGE *imageATransfo){
 	return 1;
 }
 
-int symetrie_verticale (IMAGE *imageATransfo){
-	int i, j;
-	PIXEL tmp;
-
-
-	//Double boucle pour parcourir tout le tableau
-	for (i = 0; i < imageATransfo->nb_col / 2; i++)
-	{
-		for (j = 0; j < imageATransfo->nb_lig; j++)
-		{
-			//On créer une variable temporaire pour échanger les valeurs des pixels
-			tmp = imageATransfo->mat[i][j];
-			imageATransfo->mat[i][j] = imageATransfo->mat[imageATransfo->nb_col - i + 1][j];
-			imageATransfo->mat[imageATransfo->nb_col - i + 1][j] = tmp;
-		}
-	}
-	return 1;
-}
-
 int negatif(IMAGE *image){
 	int lig,col;
+
+	//Double boucle pour parcourir le tableau
 	for(lig=0;lig<image->nb_lig;lig++){
 		for(col=0;col<image->nb_col;col++){
+			//On applique la formule pour changer la valeur de chaque composante
 			image->mat[lig][col].r = 255 - (image->mat[lig][col].r);
 			image->mat[lig][col].g = 255 - (image->mat[lig][col].g);
 			image->mat[lig][col].b = 255 - (image->mat[lig][col].b);
@@ -67,8 +52,8 @@ int negatif(IMAGE *image){
 	return 1;
 }
 
-
 int niveauGris(IMAGE *image){
+	//On effectue la transformation seulement si l'image est en couleur
 	if(image->type == 3 || image->type == 6){
 		int gris, lig, col;
 		for(lig=0;lig<image->nb_lig;lig++){
@@ -83,8 +68,24 @@ int niveauGris(IMAGE *image){
 	return 1;
 }
 
+int symetrie_verticale (IMAGE *imageATransfo){
+	int lig, col;
+	PIXEL tmp;
 
-// Fonction qui fait la symétrie horizontale par rapport à l'axe central vertical
+	//Double boucle pour parcourir tout le tableau
+	for (lig = 0; lig < imageATransfo->nb_lig / 2; lig++)
+	{
+		for (col = 0; col < imageATransfo->nb_col; col++)
+		{
+			//On créer une variable temporaire pour échanger les valeurs des pixels
+			tmp = imageATransfo->mat[lig][col];
+			imageATransfo->mat[lig][col] = imageATransfo->mat[imageATransfo->nb_lig - lig - 1][col];
+			imageATransfo->mat[imageATransfo->nb_lig - lig - 1][col] = tmp;
+		}
+	}
+	return 1;
+}
+
 int symetrie_horizontale(IMAGE *image){
 	int lig, col;
 	PIXEL tmp;
@@ -103,40 +104,42 @@ int symetrie_horizontale(IMAGE *image){
 }
 
 
-int redimensionnement(IMAGE *image, int absEntree, int ordEntree, int absSortie, int ordSortie){
+int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
+	int absEntree=0, int ordEntree=0, int absSortie=image->nb_col-1, int ordSortie=image->nb_lig-1;
+
 	int lig, col, tmp;
+	if(argc>=3) 
+		absEntree = argv[3];
+	if(argc>=4) 
+		ordEntree = argv[4];
+	if(argc>=5) 
+		absSortie = argv[5];
+	if(argc>=6) 
+		ordSortie = argv[6];
 
 	//Vérification de l'abscisse d'entrée
-	if (absEntree<0){
+	if (absEntree<0)
 		absEntree = 0;
-	}
-	if(absEntree>image->nb_col){
+	if(absEntree>image->nb_col)
 		absEntree = image->nb_col;
-	}
 
 	//Vérification de l'ordonnée d'entrée
-	if (ordEntree<0){
+	if (ordEntree<0)
 		ordEntree = 0;
-	}
-	if(ordEntree>image->nb_lig){
+	if(ordEntree>image->nb_lig)
 		ordEntree = image->nb_lig;
-	}
 
 	//Vérification de l'abscisse de sortie
-	if (absSortie<0){
+	if (absSortie<0)
 		absSortie = 0;
-	}
-	if(absSortie>image->nb_col){
+	if(absSortie>image->nb_col)
 		absSortie = image->nb_col;
-	}
 
 	//Vérification de l'ordonnée de sortie
-	if (ordSortie<0){
+	if (ordSortie<0)
 		ordSortie = 0;
-	}
-	if(ordSortie>image->nb_lig){
+	if(ordSortie>image->nb_lig)
 		ordSortie = image->nb_lig;
-	}
 
 	//Remet les valeurs comme si on faisait un "crop" de en haut à gauche vers en bas à droite
 	if(absSortie<absEntree){
@@ -231,6 +234,111 @@ int redimensionnement(IMAGE *image, int absEntree, int ordEntree, int absSortie,
 
 	//Vidage copieImage
 	vider_tab_pixels(&copieImage);
-	return 0;
+	return 1;
+}
 
+int amelioration_du_contraste (IMAGE *imageATransfo){
+	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
+	if(imageATransfo->type == 3 || imageATransfo->type == 6){
+		niveauGris(imageATransfo);
+	}
+
+	if(imageATransfo->type != 1 && imageATransfo->type != 4){
+		int i,j, min = imageATransfo->mat[0][0].r, max = imageATransfo->mat[0][0].r;
+
+		//Recherche du Min et du Max
+		for (i = 0; i < imageATransfo->nb_lig; i++)
+		{
+			for (j = 0; j < imageATransfo->nb_col; j++)
+			{
+				if (imageATransfo->mat[i][j].r < min)
+					min = imageATransfo->mat[i][j].r;
+				if (imageATransfo->mat[i][j].r > max)
+					max = imageATransfo->mat[i][j].r;			
+			}
+		}
+
+		//Double boucle pour parcourir tout le tableau
+		for (i = 0; i < imageATransfo->nb_lig; i++)
+		{
+			for (j = 0; j < imageATransfo->nb_col; j++)
+			{
+				//On change toutes les composantes avec la formules trouvés dans l'etude theorique
+				imageATransfo->mat[i][j].r = (255/(max-min)) * (imageATransfo->mat[i][j].r - min);
+				imageATransfo->mat[i][j].g = (255/(max-min)) * (imageATransfo->mat[i][j].g - min);
+				imageATransfo->mat[i][j].b = (255/(max-min)) * (imageATransfo->mat[i][j].b - min);
+			}
+		}
+	}
+
+	return 1;
+}
+
+int lissage (IMAGE *imageATransfo){
+	int lig, col;
+	IMAGE copie;
+	copie.nb_lig = imageATransfo->nb_lig;
+	copie.nb_col = imageATransfo->nb_col;
+
+	//Allocation dynamique de la copie de l'image 
+	copie.mat = malloc(copie.nb_lig * sizeof(PIXEL));
+	if(copie.mat == NULL){
+		printf("[X]\tErreur d'allocation sur la premiere dimension de la copie du tableau de pixels\n");
+		return 0;
+	}
+	for (lig=0; lig<copie.nb_lig; lig++){
+		copie.mat[lig] = malloc(copie.nb_col * sizeof(PIXEL));
+		
+		if(copie.mat[lig] == NULL){
+			printf("[X]\tErreur d'allocation sur la deuxieme dimension de la copie du tableau de pixels\n");
+			for(lig=lig-1; lig>=0; lig--)
+				free(copie.mat[lig]);
+			free(copie.mat);
+			return 0;
+		}
+	}
+
+	//On copie l'image de base dans la copie allouée dynamiquement
+	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
+	{
+		for (col = 0; col < imageATransfo->nb_col; col++)
+		{
+			copie.mat[lig][col] = imageATransfo->mat[lig][col];
+		}
+	}
+
+	//On commence les choses sérieuses on fait le lissage
+	for (lig = 1; lig < imageATransfo->nb_lig - 2; lig++)
+	{
+		for (col = 1; col < imageATransfo->nb_col - 2; col++)
+		{
+
+			imageATransfo->mat[lig][col].r = (  //1ere ligne
+												(imageATransfo->mat[lig-1][col-1].r)+(imageATransfo->mat[lig-1][col].r)+(imageATransfo->mat[lig-1][col+1].r)+
+												//2eme ligne
+												(imageATransfo->mat[lig][col-1].r)+(imageATransfo->mat[lig][col].r)+(imageATransfo->mat[lig][col+1].r)+
+												//3eme ligne
+												(imageATransfo->mat[lig+1][col-1].r)+(imageATransfo->mat[lig+1][col].r)+(imageATransfo->mat[lig+1][col+1].r))/ 9;
+
+			imageATransfo->mat[lig][col].g = (  //1ere ligne
+												(imageATransfo->mat[lig-1][col-1].g)+(imageATransfo->mat[lig-1][col].g)+(imageATransfo->mat[lig-1][col+1].g)+
+												//2eme ligne
+												(imageATransfo->mat[lig][col-1].g)+(imageATransfo->mat[lig][col].g)+(imageATransfo->mat[lig][col+1].g)+
+												//3eme ligne
+												(imageATransfo->mat[lig+1][col-1].g)+(imageATransfo->mat[lig+1][col].g)+(imageATransfo->mat[lig+1][col+1].g))/ 9;
+
+			imageATransfo->mat[lig][col].r = (  //1ere ligne
+												(imageATransfo->mat[lig-1][col-1].r)+(imageATransfo->mat[lig-1][col].r)+(imageATransfo->mat[lig-1][col+1].r)+
+												//2eme ligne
+												(imageATransfo->mat[lig][col-1].r)+(imageATransfo->mat[lig][col].r)+(imageATransfo->mat[lig][col+1].r)+
+												//3eme ligne
+												(imageATransfo->mat[lig+1][col-1].r)+(imageATransfo->mat[lig+1][col].r)+(imageATransfo->mat[lig+1][col+1].r))/ 9;
+		}
+	}
+
+	//Il faut éventuellement normaliser on sais pas trop 
+
+	vider_tab_pixels(&copie);
+
+	return 1;
 }

@@ -11,6 +11,11 @@ int symetrie_verticale (IMAGE *imageATransfo);
 
 int niveauGris(IMAGE *image);
 
-int redimensionnement(IMAGE *image, int absEntree, int ordEntree, int absSortie, int ordSortie);
+int redimensionnement(IMAGE *image, const int argc, const char *argv[]);
+
+int amelioration_du_contraste (IMAGE *imageATransfo);
+
+int lissage (IMAGE *imageATransfo);
+
 
 #endif
