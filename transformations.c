@@ -101,3 +101,90 @@ int symetrie_horizontale(IMAGE *image){
 	}
 	return 1;
 }
+
+
+int redimensionnement(IMAGE *image, int absEntree, int ordEntree, int absSortie, int ordSortie){
+	int lig, col;
+	IMAGE copieImage;
+	copieImage.mat = NULL;
+	copieImage.nb_lig = image->nb_lig;
+	copieImage.nb_col = image->nb_col;
+	copieImage.type = image->type;
+	copieImage.max_val = image->max_val;
+
+	copieImage.mat = malloc(copieImage.nb_lig * sizeof(PIXEL));
+
+	//Vérification de l'allocation de la première dimension du nouveau tableau
+	if(copieImage.mat == NULL){
+		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau copieImage de pixels dans redimensionnement\n");
+		return 0;
+	}
+
+	// Création de la deuxième dimension du nouveau tableau
+	for(lig=0; lig< copieImage.nb_lig; lig++){
+		copieImage.mat[lig]=malloc((copieImage.nb_col) * sizeof(PIXEL));
+		//Vérification de l'allocation de la deuxième dimension du nouveau
+		if(copieImage.mat[lig]==NULL){
+			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau copieImage de pixels dans redimensionnement\n");
+			for(lig=lig-1; lig>=0; lig--){
+				free(copieImage.mat[lig]);
+			}
+			free(copieImage.mat);
+			return 0;
+		}
+	}// Fin de la copie de l'image reçue
+
+
+
+	//Copie des valeurs de image dans copieImage
+	for(lig=0;lig<copieImage.nb_lig;lig++){
+		for(col=0;col<copieImage.nb_col;col++){
+			copieImage.mat[lig][col]=image->mat[lig][col];
+		}
+	}
+
+
+	//Libération de la mémoire de l'image reçue
+	vider_tab_pixels(image);
+	//Réallocation d'un nouveau tableau de taille réduite à image
+	image->mat=NULL;
+	image->nb_lig = ordSortie-ordEntree;
+	image->nb_col = absSortie-absEntree;
+	image->type = copieImage.type;
+	image->max_val = copieImage.max_val;
+	image->mat = malloc((image->nb_lig)* sizeof(PIXEL));
+
+
+	//Vérification de l'allocation de la première dimension du nouveau tableau
+	if(image->mat == NULL){
+		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau de pixels dans redimensionnement\n");
+		return 0;
+	}
+
+	// Création de la deuxième dimension du nouveau tableau
+	for(lig=0; lig< image->nb_lig +1; lig++){
+		image->mat[lig]=malloc((image->nb_col +1) * sizeof(PIXEL));
+		//Vérification de l'allocation de la deuxième dimension du nouveau
+		if(image->mat[lig]==NULL){
+			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau de pixels dans redimensionnement\n");
+			for(lig=lig-1; lig>=0; lig--){
+				free(image->mat[lig]);
+			}
+			free(image->mat);
+			return 0;
+		}
+	}//Fin de la réallocation du nouveau tableau de taille réduite à image
+
+
+	// Affectation des valeurs de copieImage dans image
+	for(lig=ordEntree; lig<=ordSortie; lig++){
+		for(col=absEntree; col<=absSortie;col++){
+			image->mat[lig-ordEntree][col-absEntree] = copieImage.mat[lig][col];
+		}
+	}
+
+	//Vidage copieImage
+	vider_tab_pixels(&copieImage);
+	return 0;
+
+}
