@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 	fclose(file_image);
 	file_image = NULL;
 
-	negatif(&tab_pixels);
+	symetrie_verticale(&tab_pixels);
 
 	file_image = ouverture_ecriture_fichier_image(nomImage,transformation);
 	if(file_image == NULL)

@@ -5,6 +5,7 @@
 
 int binarisation (IMAGE *imageATransfo){
 
+	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
 	if(imageATransfo->type == 3 || imageATransfo->type == 6){
 		niveauGris(imageATransfo);
 	}
@@ -36,29 +37,13 @@ int binarisation (IMAGE *imageATransfo){
 	return 1;
 }
 
-int symetrie_verticale (IMAGE *imageATransfo){
-	int i, j;
-	PIXEL tmp;
-
-
-	//Double boucle pour parcourir tout le tableau
-	for (i = 0; i < imageATransfo->nb_col / 2; i++)
-	{
-		for (j = 0; j < imageATransfo->nb_lig; j++)
-		{
-			//On créer une variable temporaire pour échanger les valeurs des pixels
-			tmp = imageATransfo->mat[i][j];
-			imageATransfo->mat[i][j] = imageATransfo->mat[imageATransfo->nb_col - i + 1][j];
-			imageATransfo->mat[imageATransfo->nb_col - i + 1][j] = tmp;
-		}
-	}
-	return 1;
-}
-
 int negatif(IMAGE *image){
 	int lig,col;
+
+	//Double boucle pour parcourir le tableau
 	for(lig=0;lig<image->nb_lig;lig++){
 		for(col=0;col<image->nb_col;col++){
+			//On applique la formule pour changer la valeur de chaque composante
 			image->mat[lig][col].r = 255 - (image->mat[lig][col].r);
 			image->mat[lig][col].g = 255 - (image->mat[lig][col].g);
 			image->mat[lig][col].b = 255 - (image->mat[lig][col].b);
@@ -67,8 +52,8 @@ int negatif(IMAGE *image){
 	return 1;
 }
 
-
 int niveauGris(IMAGE *image){
+	//On effectue la transformation seulement si l'image est en couleur
 	if(image->type == 3 || image->type == 6){
 		int gris, lig, col;
 		for(lig=0;lig<image->nb_lig;lig++){
@@ -83,8 +68,24 @@ int niveauGris(IMAGE *image){
 	return 1;
 }
 
+int symetrie_verticale (IMAGE *imageATransfo){
+	int lig, col;
+	PIXEL tmp;
 
-// Fonction qui fait la symétrie horizontale par rapport à l'axe central vertical
+	//Double boucle pour parcourir tout le tableau
+	for (lig = 0; lig < imageATransfo->nb_lig / 2; lig++)
+	{
+		for (col = 0; col < imageATransfo->nb_col; col++)
+		{
+			//On créer une variable temporaire pour échanger les valeurs des pixels
+			tmp = imageATransfo->mat[lig][col];
+			imageATransfo->mat[lig][col] = imageATransfo->mat[imageATransfo->nb_col - lig - 1][col];
+			imageATransfo->mat[imageATransfo->nb_col - lig - 1][col] = tmp;
+		}
+	}
+	return 1;
+}
+
 int symetrie_horizontale(IMAGE *image){
 	int lig, col;
 	PIXEL tmp;
@@ -99,5 +100,40 @@ int symetrie_horizontale(IMAGE *image){
 			image->mat[lig][ image->nb_col -col-1]	=tmp;
 		}
 	}
+	return 1;
+}
+
+int amelioration_du_contraste (IMAGE *imageATransfo){
+	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
+	if(imageATransfo->type == 3 || imageATransfo->type == 6){
+		niveauGris(imageATransfo);
+	}
+
+	if(imageATransfo->type != 1 && imageATransfo->type != 4){
+		int i,j, min = imageATransfo->mat[0][0].r, max = imageATransfo->mat[0][0].r;
+
+		//Recherche du Min et du Max
+		for (i = 0; i < imageATransfo->nb_lig; i++)
+		{
+			for (j = 0; j < imageATransfo->nb_col; j++)
+			{
+				if (imageATransfo->mat[i][j].r < min)
+					min = imageATransfo->mat[i][j].r;
+				if (imageATransfo->mat[i][j].r > max)
+					max = imageATransfo->mat[i][j].r;			
+			}
+		}
+
+		for (i = 0; i < imageATransfo->nb_lig; i++)
+		{
+			for (j = 0; j < imageATransfo->nb_col; j++)
+			{
+				imageATransfo->mat[i][j].r = (255/(max-min)) * (imageATransfo->mat[i][j].r - min);
+				imageATransfo->mat[i][j].g = (255/(max-min)) * (imageATransfo->mat[i][j].g - min);
+				imageATransfo->mat[i][j].b = (255/(max-min)) * (imageATransfo->mat[i][j].b - min);
+			}
+		}
+	}
+
 	return 1;
 }
