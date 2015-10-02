@@ -15,7 +15,7 @@
 
 //Idees de plus : 
 // Fonction de test si le fichier image est valide, bien forme
-
+// Fonction qui applique un masque recu en argument
 
 
 
