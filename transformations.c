@@ -110,52 +110,53 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 	}
 
 	if(imageATransfo->type != 1 && imageATransfo->type != 4){
-		int i,j, min = imageATransfo->mat[0][0].r, max = imageATransfo->mat[0][0].r;
+		int lig,col, min = imageATransfo->mat[0][0].r, max = imageATransfo->mat[0][0].r;
 		printf("min:%d ; max:%d\n", min, max );
 
 		//Recherche du Min et du Max
-		for (i = 0; i < imageATransfo->nb_lig; i++)
+		for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 		{
-			for (j = 0; j < imageATransfo->nb_col; j++)
+			for (col = 0; col < imageATransfo->nb_col; col++)
 			{
-				if (imageATransfo->mat[i][j].r < min)
-					min = imageATransfo->mat[i][j].r;
-				if (imageATransfo->mat[i][j].r > max)
-					max = imageATransfo->mat[i][j].r;			
+				if (imageATransfo->mat[lig][col].r < min)
+					min = imageATransfo->mat[lig][col].r;
+				if (imageATransfo->mat[lig][col].r > max)
+					max = imageATransfo->mat[lig][col].r;			
 			}
 		}
 				printf("min:%d ; max:%d\n", min, max );
 
 
-		//Double boucle pour parcourir tout le tableau
-		for (i = 0; i < imageATransfo->nb_lig; i++)
+		// On acoluste les valeurs sur l'echelle [0;max]
+		for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 		{
-			for (j = 0; j < imageATransfo->nb_col; j++)
+			for (col = 0; col < imageATransfo->nb_col; col++)
 			{
 				//On change toutes les composantes avec la formules trouvés dans l'etude theorique
-				imageATransfo->mat[i][j].r = (imageATransfo->max_val/(max-min)) * (imageATransfo->mat[i][j].r - min);
-				imageATransfo->mat[i][j].g = (imageATransfo->max_val/(max-min)) * (imageATransfo->mat[i][j].g - min);
-				imageATransfo->mat[i][j].b = (imageATransfo->max_val/(max-min)) * (imageATransfo->mat[i][j].b - min);
+				imageATransfo->mat[lig][col].r = (imageATransfo->max_val * (imageATransfo->mat[lig][col].r - min))/(max-min);
+				imageATransfo->mat[lig][col].g = (imageATransfo->max_val * (imageATransfo->mat[lig][col].g - min))/(max-min);
+				imageATransfo->mat[lig][col].b = (imageATransfo->max_val * (imageATransfo->mat[lig][col].b - min))/(max-min);
 			}
 		}
-
+//##########################
+//TEMPORAIRE
+min = imageATransfo->mat[0][0].r;
+ max = imageATransfo->mat[0][0].r;
 //Recherche du Min et du Max
-		for (i = 0; i < imageATransfo->nb_lig; i++)
+		for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 		{
-			for (j = 0; j < imageATransfo->nb_col; j++)
+			for (col = 0; col < imageATransfo->nb_col; col++)
 			{
-				if (imageATransfo->mat[i][j].r < min)
-					min = imageATransfo->mat[i][j].r;
-				if (imageATransfo->mat[i][j].r > max)
-					max = imageATransfo->mat[i][j].r;			
+				if (imageATransfo->mat[lig][col].r < min)
+					min = imageATransfo->mat[lig][col].r;
+				if (imageATransfo->mat[lig][col].r > max)
+					max = imageATransfo->mat[lig][col].r;			
 			}
 		}
 				printf("min:%d ; max:%d\n", min, max );
 
 	}
-
-
-
+//##########################
 
 	return 1;
 }
