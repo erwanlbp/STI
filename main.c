@@ -32,13 +32,6 @@ int main(int argc, char const *argv[])
 	file_image = NULL;
 
 	//negatif(&tab_pixels);
-	printf("Avant\n");
-	printf("Nombre colonnes : %d\n",tab_pixels.nb_col );
-	printf("Nombre lignes : %d\n",tab_pixels.nb_lig );
-	redimensionnement(&tab_pixels,50, 50, 500,150);
-	printf("Après\n");
-	printf("Nombre colonnes : %d\n",tab_pixels.nb_col );
-	printf("Nombre lignes : %d\n",tab_pixels.nb_lig );
 
 	file_image = ouverture_ecriture_fichier_image(nomImage,transformation);
 
