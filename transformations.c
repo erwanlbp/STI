@@ -77,7 +77,7 @@ int symetrie_verticale (IMAGE *imageATransfo){
 	{
 		for (col = 0; col < imageATransfo->nb_col; col++)
 		{
-			//On créer une variable temporaire pour échanger les valeurs des pixels
+			//On creer une variable temporaire pour echanger les valeurs des pixels
 			tmp = imageATransfo->mat[lig][col];
 			imageATransfo->mat[lig][col] = imageATransfo->mat[imageATransfo->nb_lig - lig - 1][col];
 			imageATransfo->mat[imageATransfo->nb_lig - lig - 1][col] = tmp;
@@ -94,9 +94,9 @@ int symetrie_horizontale(IMAGE *image){
 		for(col=0;col< image->nb_col /2;col++){
 			// On met dans une variable temporaire
 			tmp=image->mat[lig][col];
-			// On met dans le pixel actuel le pixel symétrique par raport à l'axe central vertical
+			// On met dans le pixel actuel le pixel symetrique par raport a l'axe central vertical
 			image->mat[lig][col] = image->mat[lig][image->nb_col -col-1];
-			// On met dans le pixel symétrique les valeurs dans le pixel temporaire
+			// On met dans le pixel symetrique les valeurs dans le pixel temporaire
 			image->mat[lig][ image->nb_col -col-1]	=tmp;
 		}
 	}
@@ -105,43 +105,47 @@ int symetrie_horizontale(IMAGE *image){
 
 
 int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
-	int absEntree=0, int ordEntree=0, int absSortie=image->nb_col-1, int ordSortie=image->nb_lig-1;
-
+	int absEntree=0, ordEntree=0, absSortie=image->nb_col-1, ordSortie=image->nb_lig-1;
 	int lig, col, tmp;
-	if(argc>=3) 
-		absEntree = argv[3];
-	if(argc>=4) 
-		ordEntree = argv[4];
-	if(argc>=5) 
-		absSortie = argv[5];
-	if(argc>=6) 
-		ordSortie = argv[6];
+	if(argc <=3){
+		printf("[X]\tRien n'a ete selectionne, l'image ne sera pas redimensionnee\n");
+		return 1;
+	}
 
-	//Vérification de l'abscisse d'entrée
+	if(argc>=4) 
+		absEntree = atoi(argv[3]);
+	if(argc>=5) 
+		ordEntree = atoi(argv[4]);
+	if(argc>=6) 
+		absSortie = atoi(argv[5]);
+	if(argc>=7) 
+		ordSortie = atoi(argv[6]);
+
+	//Verification de l'abscisse d'entree
 	if (absEntree<0)
 		absEntree = 0;
-	if(absEntree>image->nb_col)
-		absEntree = image->nb_col;
+	if(absEntree>=image->nb_col)
+		absEntree = image->nb_col-1;
 
-	//Vérification de l'ordonnée d'entrée
+	//Verification de l'ordonnee d'entree
 	if (ordEntree<0)
 		ordEntree = 0;
-	if(ordEntree>image->nb_lig)
-		ordEntree = image->nb_lig;
+	if(ordEntree>=image->nb_lig)
+		ordEntree = image->nb_lig-1;
 
-	//Vérification de l'abscisse de sortie
+	//Verification de l'abscisse de sortie
 	if (absSortie<0)
 		absSortie = 0;
-	if(absSortie>image->nb_col)
-		absSortie = image->nb_col;
+	if(absSortie>=image->nb_col)
+		absSortie = image->nb_col-1;
 
-	//Vérification de l'ordonnée de sortie
+	//Verification de l'ordonnee de sortie
 	if (ordSortie<0)
 		ordSortie = 0;
-	if(ordSortie>image->nb_lig)
-		ordSortie = image->nb_lig;
+	if(ordSortie>=image->nb_lig)
+		ordSortie = image->nb_lig-1;
 
-	//Remet les valeurs comme si on faisait un "crop" de en haut à gauche vers en bas à droite
+	//Remet les valeurs comme si on faisait un "crop" de en haut a gauche vers en bas a droite
 	if(absSortie<absEntree){
 		tmp = absSortie;
 		absSortie = absEntree;
@@ -163,16 +167,16 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 
 	copieImage.mat = malloc(copieImage.nb_lig * sizeof(PIXEL));
 
-	//Vérification de l'allocation de la première dimension du nouveau tableau
+	//Verification de l'allocation de la premiere dimension du nouveau tableau
 	if(copieImage.mat == NULL){
 		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau copieImage de pixels dans redimensionnement\n");
 		return 0;
 	}
 
-	// Création de la deuxième dimension du nouveau tableau
+	// Creation de la deuxieme dimension du nouveau tableau
 	for(lig=0; lig< copieImage.nb_lig; lig++){
 		copieImage.mat[lig]=malloc((copieImage.nb_col) * sizeof(PIXEL));
-		//Vérification de l'allocation de la deuxième dimension du nouveau
+		//Verification de l'allocation de la deuxieme dimension du nouveau
 		if(copieImage.mat[lig]==NULL){
 			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau copieImage de pixels dans redimensionnement\n");
 			for(lig=lig-1; lig>=0; lig--){
@@ -193,9 +197,9 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	}
 
 
-	//Libération de la mémoire de l'image reçue
+	//Liberation de la memoire de l'image reçue
 	vider_tab_pixels(image);
-	//Réallocation d'un nouveau tableau de taille réduite à image
+	//Reallocation d'un nouveau tableau de taille reduite a image
 	image->mat=NULL;
 	image->nb_lig = ordSortie-ordEntree;
 	image->nb_col = absSortie-absEntree;
@@ -204,16 +208,16 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	image->mat = malloc((image->nb_lig)* sizeof(PIXEL));
 
 
-	//Vérification de l'allocation de la première dimension du nouveau tableau
+	//Verification de l'allocation de la premiere dimension du nouveau tableau
 	if(image->mat == NULL){
 		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau de pixels dans redimensionnement\n");
 		return 0;
 	}
 
-	// Création de la deuxième dimension du nouveau tableau
+	// Creation de la deuxieme dimension du nouveau tableau
 	for(lig=0; lig< image->nb_lig +1; lig++){
 		image->mat[lig]=malloc((image->nb_col +1) * sizeof(PIXEL));
-		//Vérification de l'allocation de la deuxième dimension du nouveau
+		//Verification de l'allocation de la deuxieme dimension du nouveau
 		if(image->mat[lig]==NULL){
 			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau de pixels dans redimensionnement\n");
 			for(lig=lig-1; lig>=0; lig--){
@@ -222,7 +226,7 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 			free(image->mat);
 			return 0;
 		}
-	}//Fin de la réallocation du nouveau tableau de taille réduite à image
+	}//Fin de la reallocation du nouveau tableau de taille reduite a image
 
 
 	// Affectation des valeurs de copieImage dans image
@@ -263,7 +267,7 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 		{
 			for (j = 0; j < imageATransfo->nb_col; j++)
 			{
-				//On change toutes les composantes avec la formules trouvés dans l'etude theorique
+				//On change toutes les composantes avec la formules trouves dans l'etude theorique
 				imageATransfo->mat[i][j].r = (255/(max-min)) * (imageATransfo->mat[i][j].r - min);
 				imageATransfo->mat[i][j].g = (255/(max-min)) * (imageATransfo->mat[i][j].g - min);
 				imageATransfo->mat[i][j].b = (255/(max-min)) * (imageATransfo->mat[i][j].b - min);
@@ -298,7 +302,7 @@ int lissage (IMAGE *imageATransfo){
 		}
 	}
 
-	//On copie l'image de base dans la copie allouée dynamiquement
+	//On copie l'image de base dans la copie allouee dynamiquement
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 	{
 		for (col = 0; col < imageATransfo->nb_col; col++)
@@ -307,7 +311,7 @@ int lissage (IMAGE *imageATransfo){
 		}
 	}
 
-	//On commence les choses sérieuses on fait le lissage
+	//On commence les choses serieuses on fait le lissage
 	for (lig = 1; lig < imageATransfo->nb_lig - 2; lig++)
 	{
 		for (col = 1; col < imageATransfo->nb_col - 2; col++)
@@ -336,7 +340,7 @@ int lissage (IMAGE *imageATransfo){
 		}
 	}
 
-	//Il faut éventuellement normaliser on sais pas trop 
+	//Il faut eventuellement normaliser on sais pas trop 
 
 	vider_tab_pixels(&copie);
 

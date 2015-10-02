@@ -54,12 +54,11 @@ int main(int argc, char const *argv[])
 
 	if(file_image == NULL)
 		return 1;
-	printf("OK1\n");
 	if(ecriture_fichier(file_image,&tab_pixels,nomImage,transformation))
 		printf("[O]\tEcriture du fichier reussie, transformation sauvegardee\n");
 	else
 		printf("[X]\tEcriture du fichier rate, transformation non sauvegardee\n");
-	printf("OK2\n");
+
 	// On libère le tableau de pixels
 	vider_tab_pixels(&tab_pixels);
 
@@ -78,11 +77,6 @@ void vider_tab_pixels(IMAGE * tab){
 
 	// Puis on libere la memoire allouee pour la premiere dimension de la IMAGE
 	free(tab->mat);
-<<<<<<< HEAD
-	printf("[O]\tFin vidage");
-
-=======
->>>>>>> dd48b249b7ee8eb4e9f9a2da6b847ec59d996509
 }
 
 void afficher_tab_pixels(IMAGE * tab){
