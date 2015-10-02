@@ -15,4 +15,6 @@ int amelioration_du_contraste (IMAGE *imageATransfo);
 
 int lissage (IMAGE *imageATransfo);
 
+int laplacien (IMAGE *imageATransfo);
+
 #endif

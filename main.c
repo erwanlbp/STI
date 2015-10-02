@@ -45,6 +45,10 @@ int main(int argc, char const *argv[])
 		symetrie_verticale(&tab_pixels);
 	else if(strcmp(transformation, "negatif") == 0)
 		negatif(&tab_pixels);
+	else if(strcmp(transformation, "ameliorationContraste") == 0)
+		amelioration_du_contraste(&tab_pixels);
+	else if(strcmp(transformation, "lissage") == 0)
+		lissage(&tab_pixels);
 
 	// ###########################################
 

@@ -111,6 +111,7 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 
 	if(imageATransfo->type != 1 && imageATransfo->type != 4){
 		int i,j, min = imageATransfo->mat[0][0].r, max = imageATransfo->mat[0][0].r;
+		printf("min:%d ; max:%d\n", min, max );
 
 		//Recherche du Min et du Max
 		for (i = 0; i < imageATransfo->nb_lig; i++)
@@ -123,6 +124,8 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 					max = imageATransfo->mat[i][j].r;			
 			}
 		}
+				printf("min:%d ; max:%d\n", min, max );
+
 
 		//Double boucle pour parcourir tout le tableau
 		for (i = 0; i < imageATransfo->nb_lig; i++)
@@ -130,12 +133,29 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 			for (j = 0; j < imageATransfo->nb_col; j++)
 			{
 				//On change toutes les composantes avec la formules trouvés dans l'etude theorique
-				imageATransfo->mat[i][j].r = (255/(max-min)) * (imageATransfo->mat[i][j].r - min);
-				imageATransfo->mat[i][j].g = (255/(max-min)) * (imageATransfo->mat[i][j].g - min);
-				imageATransfo->mat[i][j].b = (255/(max-min)) * (imageATransfo->mat[i][j].b - min);
+				imageATransfo->mat[i][j].r = (imageATransfo->max_val/(max-min)) * (imageATransfo->mat[i][j].r - min);
+				imageATransfo->mat[i][j].g = (imageATransfo->max_val/(max-min)) * (imageATransfo->mat[i][j].g - min);
+				imageATransfo->mat[i][j].b = (imageATransfo->max_val/(max-min)) * (imageATransfo->mat[i][j].b - min);
 			}
 		}
+
+//Recherche du Min et du Max
+		for (i = 0; i < imageATransfo->nb_lig; i++)
+		{
+			for (j = 0; j < imageATransfo->nb_col; j++)
+			{
+				if (imageATransfo->mat[i][j].r < min)
+					min = imageATransfo->mat[i][j].r;
+				if (imageATransfo->mat[i][j].r > max)
+					max = imageATransfo->mat[i][j].r;			
+			}
+		}
+				printf("min:%d ; max:%d\n", min, max );
+
 	}
+
+
+
 
 	return 1;
 }
@@ -193,12 +213,12 @@ int lissage (IMAGE *imageATransfo){
 												//3eme ligne
 												(imageATransfo->mat[lig+1][col-1].g)+(imageATransfo->mat[lig+1][col].g)+(imageATransfo->mat[lig+1][col+1].g))/ 9;
 
-			imageATransfo->mat[lig][col].r = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col-1].r)+(imageATransfo->mat[lig-1][col].r)+(imageATransfo->mat[lig-1][col+1].r)+
+			imageATransfo->mat[lig][col].b = (  //1ere ligne
+												(imageATransfo->mat[lig-1][col-1].b)+(imageATransfo->mat[lig-1][col].b)+(imageATransfo->mat[lig-1][col+1].b)+
 												//2eme ligne
-												(imageATransfo->mat[lig][col-1].r)+(imageATransfo->mat[lig][col].r)+(imageATransfo->mat[lig][col+1].r)+
+												(imageATransfo->mat[lig][col-1].b)+(imageATransfo->mat[lig][col].b)+(imageATransfo->mat[lig][col+1].b)+
 												//3eme ligne
-												(imageATransfo->mat[lig+1][col-1].r)+(imageATransfo->mat[lig+1][col].r)+(imageATransfo->mat[lig+1][col+1].r))/ 9;
+												(imageATransfo->mat[lig+1][col-1].b)+(imageATransfo->mat[lig+1][col].b)+(imageATransfo->mat[lig+1][col+1].b))/ 9;
 		}
 	}
 
