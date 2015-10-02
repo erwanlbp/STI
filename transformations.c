@@ -248,29 +248,29 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 	}
 
 	if(imageATransfo->type != 1 && imageATransfo->type != 4){
-		int i,j, min = imageATransfo->mat[0][0].r, max = imageATransfo->mat[0][0].r;
-
+		int lig,col, min = imageATransfo->mat[0][0].r, max = imageATransfo->mat[0][0].r;
+		
 		//Recherche du Min et du Max
-		for (i = 0; i < imageATransfo->nb_lig; i++)
+		for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 		{
-			for (j = 0; j < imageATransfo->nb_col; j++)
+			for (col = 0; col < imageATransfo->nb_col; col++)
 			{
-				if (imageATransfo->mat[i][j].r < min)
-					min = imageATransfo->mat[i][j].r;
-				if (imageATransfo->mat[i][j].r > max)
-					max = imageATransfo->mat[i][j].r;			
+				if (imageATransfo->mat[lig][col].r < min)
+					min = imageATransfo->mat[lig][col].r;
+				if (imageATransfo->mat[lig][col].r > max)
+					max = imageATransfo->mat[lig][col].r;			
 			}
 		}
 
-		//Double boucle pour parcourir tout le tableau
-		for (i = 0; i < imageATransfo->nb_lig; i++)
+		// On acoluste les valeurs sur l'echelle [0;max]
+		for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 		{
-			for (j = 0; j < imageATransfo->nb_col; j++)
+			for (col = 0; col < imageATransfo->nb_col; col++)
 			{
-				//On change toutes les composantes avec la formules trouves dans l'etude theorique
-				imageATransfo->mat[i][j].r = (255/(max-min)) * (imageATransfo->mat[i][j].r - min);
-				imageATransfo->mat[i][j].g = (255/(max-min)) * (imageATransfo->mat[i][j].g - min);
-				imageATransfo->mat[i][j].b = (255/(max-min)) * (imageATransfo->mat[i][j].b - min);
+				//On change toutes les composantes avec la formules trouvés dans l'etude theorique
+				imageATransfo->mat[lig][col].r = (imageATransfo->max_val * (imageATransfo->mat[lig][col].r - min))/(max-min);
+				imageATransfo->mat[lig][col].g = (imageATransfo->max_val * (imageATransfo->mat[lig][col].g - min))/(max-min);
+				imageATransfo->mat[lig][col].b = (imageATransfo->max_val * (imageATransfo->mat[lig][col].b - min))/(max-min);
 			}
 		}
 	}
@@ -331,12 +331,12 @@ int lissage (IMAGE *imageATransfo){
 												//3eme ligne
 												(imageATransfo->mat[lig+1][col-1].g)+(imageATransfo->mat[lig+1][col].g)+(imageATransfo->mat[lig+1][col+1].g))/ 9;
 
-			imageATransfo->mat[lig][col].r = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col-1].r)+(imageATransfo->mat[lig-1][col].r)+(imageATransfo->mat[lig-1][col+1].r)+
+			imageATransfo->mat[lig][col].b = (  //1ere ligne
+												(imageATransfo->mat[lig-1][col-1].b)+(imageATransfo->mat[lig-1][col].b)+(imageATransfo->mat[lig-1][col+1].b)+
 												//2eme ligne
-												(imageATransfo->mat[lig][col-1].r)+(imageATransfo->mat[lig][col].r)+(imageATransfo->mat[lig][col+1].r)+
+												(imageATransfo->mat[lig][col-1].b)+(imageATransfo->mat[lig][col].b)+(imageATransfo->mat[lig][col+1].b)+
 												//3eme ligne
-												(imageATransfo->mat[lig+1][col-1].r)+(imageATransfo->mat[lig+1][col].r)+(imageATransfo->mat[lig+1][col+1].r))/ 9;
+												(imageATransfo->mat[lig+1][col-1].b)+(imageATransfo->mat[lig+1][col].b)+(imageATransfo->mat[lig+1][col+1].b))/ 9;
 		}
 	}
 

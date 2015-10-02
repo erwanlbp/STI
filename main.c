@@ -47,6 +47,10 @@ int main(int argc, char const *argv[])
 		negatif(&tab_pixels);
 	else if(strcmp(transformation, "redimensionnement") == 0)
 		redimensionnement(&tab_pixels, argc, argv);
+	else if(strcmp(transformation, "ameliorationContraste") == 0)
+		amelioration_du_contraste(&tab_pixels);
+	else if(strcmp(transformation, "lissage") == 0)
+		lissage(&tab_pixels);
 
 	// ###########################################
 
