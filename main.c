@@ -35,6 +35,16 @@ int main(int argc, char const *argv[])
 	//  Travail des fonctions des transformations
 	// ###########################################
 	
+	if(strcmp(transformation, "niveauGris") == 0)
+		niveauGris(&tab_pixels);
+	else if(strcmp(transformation, "binarisation") == 0)
+		binarisation(&tab_pixels);
+	else if(strcmp(transformation, "symetrieH") == 0)
+		symetrie_horizontale(&tab_pixels);
+	else if(strcmp(transformation, "symetrieV") == 0)
+		symetrie_verticale(&tab_pixels);
+	else if(strcmp(transformation, "negatif") == 0)
+		negatif(&tab_pixels);
 
 	// ###########################################
 
