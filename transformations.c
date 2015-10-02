@@ -79,8 +79,8 @@ int symetrie_verticale (IMAGE *imageATransfo){
 		{
 			//On créer une variable temporaire pour échanger les valeurs des pixels
 			tmp = imageATransfo->mat[lig][col];
-			imageATransfo->mat[lig][col] = imageATransfo->mat[imageATransfo->nb_col - lig - 1][col];
-			imageATransfo->mat[imageATransfo->nb_col - lig - 1][col] = tmp;
+			imageATransfo->mat[lig][col] = imageATransfo->mat[imageATransfo->nb_lig - lig - 1][col];
+			imageATransfo->mat[imageATransfo->nb_lig - lig - 1][col] = tmp;
 		}
 	}
 	return 1;
