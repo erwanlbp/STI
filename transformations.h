@@ -11,4 +11,8 @@ int symetrie_verticale (IMAGE *imageATransfo);
 
 int niveauGris(IMAGE *image);
 
+int amelioration_du_contraste (IMAGE *imageATransfo);
+
+int lissage (IMAGE *imageATransfo);
+
 #endif

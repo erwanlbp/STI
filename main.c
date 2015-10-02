@@ -48,7 +48,6 @@ int main(int argc, char const *argv[])
 
 	// ###########################################
 
-
 	file_image = ouverture_ecriture_fichier_image(nomImage,transformation);
 	if(file_image == NULL)
 		return 1;
