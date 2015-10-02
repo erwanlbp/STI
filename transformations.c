@@ -104,7 +104,53 @@ int symetrie_horizontale(IMAGE *image){
 
 
 int redimensionnement(IMAGE *image, int absEntree, int ordEntree, int absSortie, int ordSortie){
-	int lig, col;
+	int lig, col, tmp;
+
+	//Vérification de l'abscisse d'entrée
+	if (absEntree<0){
+		absEntree = 0;
+	}
+	if(absEntree>image->nb_col){
+		absEntree = image->nb_col;
+	}
+
+	//Vérification de l'ordonnée d'entrée
+	if (ordEntree<0){
+		ordEntree = 0;
+	}
+	if(ordEntree>image->nb_lig){
+		ordEntree = image->nb_lig;
+	}
+
+	//Vérification de l'abscisse de sortie
+	if (absSortie<0){
+		absSortie = 0;
+	}
+	if(absSortie>image->nb_col){
+		absSortie = image->nb_col;
+	}
+
+	//Vérification de l'ordonnée de sortie
+	if (ordSortie<0){
+		ordSortie = 0;
+	}
+	if(ordSortie>image->nb_lig){
+		ordSortie = image->nb_lig;
+	}
+
+	//Remet les valeurs comme si on faisait un "crop" de en haut à gauche vers en bas à droite
+	if(absSortie<absEntree){
+		tmp = absSortie;
+		absSortie = absEntree;
+		absEntree = tmp;
+	}
+	if(ordSortie<ordEntree){
+		tmp = ordSortie;
+		ordSortie = ordEntree;
+		ordEntree = tmp;
+	}
+
+	
 	IMAGE copieImage;
 	copieImage.mat = NULL;
 	copieImage.nb_lig = image->nb_lig;
