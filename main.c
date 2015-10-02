@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 	fclose(file_image);
 	file_image = NULL;
 
-	symetrie_verticale(&tab_pixels);
+	lissage(&tab_pixels);
 
 	file_image = ouverture_ecriture_fichier_image(nomImage,transformation);
 	if(file_image == NULL)
@@ -52,20 +52,13 @@ int main(int argc, char const *argv[])
 
 void vider_tab_pixels(IMAGE * tab){
 	int i;
-	printf("Entree vidage\n");
 	// Pour chaque case de la IMAGE
 	for (i=0; i<tab->nb_lig; i++){
 		// On libere la memoire allouee dynamiquement
 		free(tab->mat[i]);
-		printf("ligne %d ok\n",i);
-
 	}
-	printf("1D finie\n");
-
 	// Puis on libere la memoire allouee pour la premiere dimension de la IMAGE
 	free(tab->mat);
-	printf("2D finie\nFin vidage");
-
 }
 
 void afficher_tab_pixels(IMAGE * tab){
