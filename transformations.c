@@ -40,7 +40,6 @@ int symetrie_verticale (IMAGE *imageATransfo){
 	int i, j;
 	PIXEL tmp;
 
-
 	//Double boucle pour parcourir tout le tableau
 	for (i = 0; i < imageATransfo->nb_col / 2; i++)
 	{
