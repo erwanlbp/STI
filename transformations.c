@@ -124,10 +124,12 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 			}
 		}
 
+		//Double boucle pour parcourir tout le tableau
 		for (i = 0; i < imageATransfo->nb_lig; i++)
 		{
 			for (j = 0; j < imageATransfo->nb_col; j++)
 			{
+				//On change toutes les composantes avec la formules trouvés dans l'etude theorique
 				imageATransfo->mat[i][j].r = (255/(max-min)) * (imageATransfo->mat[i][j].r - min);
 				imageATransfo->mat[i][j].g = (255/(max-min)) * (imageATransfo->mat[i][j].g - min);
 				imageATransfo->mat[i][j].b = (255/(max-min)) * (imageATransfo->mat[i][j].b - min);
