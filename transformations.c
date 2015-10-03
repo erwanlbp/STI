@@ -397,10 +397,7 @@ int laplacien (IMAGE *imageATransfo){
 	return 1;
 }
 
-/*int creation_masque_lissage (int **masque){
 
-
-}*/
 
 int alloc_tableau (IMAGE *imageAlloc){
 	int i;
@@ -427,4 +424,17 @@ int alloc_tableau (IMAGE *imageAlloc){
 	}
 	return 1;
 }
+
+void creation_masque (int **masque, int a, int b, int c, int d, int e, int f, int g, int h, int i){
+	masque[0][0] = a;
+	masque[0][1] = b;
+	masque[0][2] = c;
+	masque[1][0] = d;
+	masque[1][1] = e;
+	masque[1][2] = f;
+	masque[2][0] = g;
+	masque[2][1] = h;
+	masque[2][2] = i;
+}
+
 
