@@ -21,6 +21,8 @@ int laplacien (IMAGE *imageATransfo);
 
 int alloc_tableau (IMAGE *imageAlloc);
 
-void creation_masque (int **masque, int a, int b, int c, int d, int e, int f, int g, int h, int i);
+void creation_masque (int *masque, int a, int b, int c, int d, int e, int f, int g, int h, int i);
+
+void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur);
 
 #endif

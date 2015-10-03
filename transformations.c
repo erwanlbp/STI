@@ -287,10 +287,14 @@ int lissage (IMAGE *imageATransfo){
 	IMAGE copie;
 	copie.nb_lig = imageATransfo->nb_lig;
 	copie.nb_col = imageATransfo->nb_col;
-
-	alloc_tableau(&copie);
 	
+	//On créer le masque, une matrice 3x3 contenant que des 1
+	int *masque=NULL;
+	masque = malloc(9 * sizeof(int));
+	creation_masque(masque,1,1,1,1,1,1,1,1,1);
+
 	//On copie l'image de base dans la copie allouee dynamiquement
+	alloc_tableau(&copie);
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 	{
 		for (col = 0; col < imageATransfo->nb_col; col++)
@@ -300,36 +304,8 @@ int lissage (IMAGE *imageATransfo){
 	}
 
 	//On commence les choses serieuses on fait le lissage
-	for (lig = 1; lig < imageATransfo->nb_lig - 2; lig++)
-	{
-		for (col = 1; col < imageATransfo->nb_col - 2; col++)
-		{
-
-			imageATransfo->mat[lig][col].r = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col-1].r)+(imageATransfo->mat[lig-1][col].r)+(imageATransfo->mat[lig-1][col+1].r)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].r)+(imageATransfo->mat[lig][col].r)+(imageATransfo->mat[lig][col+1].r)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col-1].r)+(imageATransfo->mat[lig+1][col].r)+(imageATransfo->mat[lig+1][col+1].r))/ 9;
-
-			imageATransfo->mat[lig][col].g = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col-1].g)+(imageATransfo->mat[lig-1][col].g)+(imageATransfo->mat[lig-1][col+1].g)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].g)+(imageATransfo->mat[lig][col].g)+(imageATransfo->mat[lig][col+1].g)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col-1].g)+(imageATransfo->mat[lig+1][col].g)+(imageATransfo->mat[lig+1][col+1].g))/ 9;
-
-			imageATransfo->mat[lig][col].b = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col-1].b)+(imageATransfo->mat[lig-1][col].b)+(imageATransfo->mat[lig-1][col+1].b)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].b)+(imageATransfo->mat[lig][col].b)+(imageATransfo->mat[lig][col+1].b)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col-1].b)+(imageATransfo->mat[lig+1][col].b)+(imageATransfo->mat[lig+1][col+1].b))/ 9;
-		}
-	}
-
-	//Il faut eventuellement normaliser on sais pas trop 
-
+	application_masque(imageATransfo, &copie, masque, 9);
+	
 	vider_tab_pixels(&copie);
 
 	return 1;
@@ -425,16 +401,47 @@ int alloc_tableau (IMAGE *imageAlloc){
 	return 1;
 }
 
-void creation_masque (int **masque, int a, int b, int c, int d, int e, int f, int g, int h, int i){
-	masque[0][0] = a;
-	masque[0][1] = b;
-	masque[0][2] = c;
-	masque[1][0] = d;
-	masque[1][1] = e;
-	masque[1][2] = f;
-	masque[2][0] = g;
-	masque[2][1] = h;
-	masque[2][2] = i;
+void creation_masque (int *masque, int a, int b, int c, int d, int e, int f, int g, int h, int i){
+	masque[0] = a;
+	masque[1] = b;
+	masque[2] = c;
+	masque[3] = d;
+	masque[4] = e;
+	masque[5] = f;
+	masque[6] = g;
+	masque[7] = h;
+	masque[8] = i;
 }
 
+void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur){
+	int lig, col;
 
+	for (lig = 1; lig < image->nb_lig - 2; lig++)
+	{
+		for (col = 1; col < image->nb_col - 2; col++)
+		{
+
+			image->mat[lig][col].r = (  //1ere ligne
+												(copie->mat[lig-1][col-1].r*masque[0])+(copie->mat[lig-1][col].r*masque[1])+(copie->mat[lig-1][col+1].r)*masque[2]+
+												//2eme ligne
+												(copie->mat[lig][col-1].r*masque[3])+(copie->mat[lig][col].r*masque[4])+(copie->mat[lig][col+1].r*masque[5])+
+												//3eme ligne
+												(copie->mat[lig+1][col-1].r*masque[6])+(copie->mat[lig+1][col].r*masque[7])+(copie->mat[lig+1][col+1].r*masque[8]))/ diviseur;
+
+			image->mat[lig][col].g = (  //1ere ligne
+												(copie->mat[lig-1][col-1].g*masque[0])+(copie->mat[lig-1][col].g*masque[1])+(copie->mat[lig-1][col+1].g*masque[2])+
+												//2eme ligne
+												(copie->mat[lig][col-1].g*masque[3])+(copie->mat[lig][col].g*masque[4])+(copie->mat[lig][col+1].g*masque[5])+
+												//3eme ligne
+												(copie->mat[lig+1][col-1].g*masque[6])+(copie->mat[lig+1][col].g*masque[7])+(copie->mat[lig+1][col+1].g*masque[8]))/ diviseur;
+
+			image->mat[lig][col].b = (  //1ere ligne
+												(copie->mat[lig-1][col-1].b*masque[0])+(copie->mat[lig-1][col].b*masque[1])+(copie->mat[lig-1][col+1].b*masque[2])+
+												//2eme ligne
+												(copie->mat[lig][col-1].b*masque[3])+(copie->mat[lig][col].b*masque[4])+(copie->mat[lig][col+1].b*masque[5])+
+												//3eme ligne
+												(copie->mat[lig+1][col-1].b*masque[6])+(copie->mat[lig+1][col].b*masque[7])+(copie->mat[lig+1][col+1].b*masque[8]))/ diviseur;
+		}
+	}
+
+}
