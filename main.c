@@ -51,6 +51,8 @@ int main(int argc, char const *argv[])
 		amelioration_du_contraste(&tab_pixels);
 	else if(strcmp(transformation, "lissage") == 0)
 		lissage(&tab_pixels);
+	else if(strcmp(transformation, "laplacien") == 0)
+		laplacien(&tab_pixels);
 
 	// ###########################################
 

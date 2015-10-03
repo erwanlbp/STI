@@ -103,7 +103,6 @@ int symetrie_horizontale(IMAGE *image){
 	return 1;
 }
 
-
 int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	int absEntree=0, ordEntree=0, absSortie=image->nb_col-1, ordSortie=image->nb_lig-1;
 	int lig, col, tmp;
@@ -341,6 +340,84 @@ int lissage (IMAGE *imageATransfo){
 	}
 
 	//Il faut eventuellement normaliser on sais pas trop 
+
+	vider_tab_pixels(&copie);
+
+	return 1;
+} 
+
+int laplacien (IMAGE *imageATransfo){
+	int lig, col;
+	IMAGE copie;
+	copie.nb_lig = imageATransfo->nb_lig;
+	copie.nb_col = imageATransfo->nb_col;
+
+	//Allocation dynamique de la copie de l'image 
+	copie.mat = malloc(copie.nb_lig * sizeof(PIXEL));
+	if(copie.mat == NULL){
+		printf("[X]\tErreur d'allocation sur la transformation laplacien\n");
+		return 0;
+	}
+	for (lig=0; lig<copie.nb_lig; lig++){
+		copie.mat[lig] = malloc(copie.nb_col * sizeof(PIXEL));
+		
+		if(copie.mat[lig] == NULL){
+			printf("[X]\tErreur d'allocation sur la transformation laplacien\n");
+			for(lig=lig-1; lig>=0; lig--)
+				free(copie.mat[lig]);
+			free(copie.mat);
+			return 0;
+		}
+	}
+
+	//On copie l'image de base dans la copie allouee dynamiquement
+	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
+	{
+		for (col = 0; col < imageATransfo->nb_col; col++)
+		{
+			copie.mat[lig][col] = imageATransfo->mat[lig][col];
+		}
+	}
+
+	//On commence les choses serieuses on fait le laplacien
+	for (lig = 1; lig < imageATransfo->nb_lig - 2; lig++)
+	{
+		for (col = 1; col < imageATransfo->nb_col - 2; col++)
+		{
+			imageATransfo->mat[lig][col].r = (  //1ere ligne
+												(imageATransfo->mat[lig-1][col].r)+
+												//2eme ligne
+												(imageATransfo->mat[lig][col-1].r) + (imageATransfo->mat[lig][col].r)*(-4) + (imageATransfo->mat[lig][col+1].r)+
+												//3eme ligne
+												(imageATransfo->mat[lig+1][col].r));
+			printf("%d\n", imageATransfo->mat[lig][col].r);
+
+			imageATransfo->mat[lig][col].g = (  //1ere ligne
+												(imageATransfo->mat[lig-1][col].g)+
+												//2eme ligne
+												(imageATransfo->mat[lig][col-1].g) + (imageATransfo->mat[lig][col].g)*(-4) + (imageATransfo->mat[lig][col+1].g)+
+												//3eme ligne
+												(imageATransfo->mat[lig+1][col].g));
+
+			imageATransfo->mat[lig][col].b = (  //1ere ligne
+												(imageATransfo->mat[lig-1][col].b)+
+												//2eme ligne
+												(imageATransfo->mat[lig][col-1].b) + (imageATransfo->mat[lig][col].b)*(-4) + (imageATransfo->mat[lig][col+1].b)+
+												//3eme ligne
+												(imageATransfo->mat[lig+1][col].b));
+		}
+	}
+
+	amelioration_du_contraste(imageATransfo);
+
+	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
+	{
+		for (col = 0; col < imageATransfo->nb_col; col++)
+		{
+			copie.mat[lig][col] = imageATransfo->mat[lig][col];
+			printf("%d\n", imageATransfo->mat[lig][col].r);
+		}
+	}
 
 	vider_tab_pixels(&copie);
 
