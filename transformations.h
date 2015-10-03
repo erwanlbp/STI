@@ -19,4 +19,6 @@ int lissage (IMAGE *imageATransfo);
 
 int laplacien (IMAGE *imageATransfo);
 
+int alloc_tableau (IMAGE *imageAlloc);
+
 #endif
