@@ -1,12 +1,18 @@
 #include "header.h"
 #include "inOutFichiers.h"
 
-FILE* ouverture_ecriture_fichier_image(char nomImage[255], char transformation[255]){
+FILE* ouverture_ecriture_fichier_image(const int * typeFichier, char nomImage[255], char transformation[255]){
 	char chemin[255] = "";
 
 	sprintf(chemin,"Images/%s_%s",transformation,nomImage);
  
-	FILE* fichier = fopen(chemin,"w");
+ 	FILE *fichier = NULL;
+ 	// Different types d'ouverture selon que le type soit binaire ou ASCII
+ 	if(*typeFichier <=3)
+		fichier = fopen(chemin,"w");
+	else
+		fichier = fopen(chemin,"wb");
+
 	if(fichier == NULL){
 		printf("[X]\tErreur ouverture fichier ecriture\n");
 	}
@@ -104,6 +110,10 @@ int ecriture_P4(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255
 }
 
 int ecriture_P5(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
+
+	fprintf(fichier, "P5\n%d %d\n%d\n", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
+
+
 
 	return 1;
 }

@@ -16,7 +16,7 @@ FILE* ouverture_lecture_fichier_image(const int *argc, char const *argv[], char 
 int lecture_fichier(FILE* file_image, IMAGE * tab_pixels);
 
 //Pour ouvrir le fichier de sauvegarde de la transformation de l'image en ecriture
-FILE* ouverture_ecriture_fichier_image(char nomImage[255], char transformation[255]);
+FILE* ouverture_ecriture_fichier_image(const int * typeFichier, char nomImage[255], char transformation[255]);
 //Pour appeler les fonctions d'ecriture du fichier en fonction du type du fichier
 int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[255]);
 
