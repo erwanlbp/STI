@@ -164,31 +164,8 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	copieImage.type = image->type;
 	copieImage.max_val = image->max_val;
 
-	
+	//Allocation de la copie de l'image
 	alloc_tableau(&copieImage);
-	/*copieImage.mat = malloc(copieImage.nb_lig * sizeof(PIXEL));
-
-	//Verification de l'allocation de la premiere dimension du nouveau tableau
-	if(copieImage.mat == NULL){
-		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau copieImage de pixels dans redimensionnement\n");
-		return 0;
-	}
-
-	// Creation de la deuxieme dimension du nouveau tableau
-	for(lig=0; lig< copieImage.nb_lig; lig++){
-		copieImage.mat[lig]=malloc((copieImage.nb_col) * sizeof(PIXEL));
-		//Verification de l'allocation de la deuxieme dimension du nouveau
-		if(copieImage.mat[lig]==NULL){
-			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau copieImage de pixels dans redimensionnement\n");
-			for(lig=lig-1; lig>=0; lig--){
-				free(copieImage.mat[lig]);
-			}
-			free(copieImage.mat);
-			return 0;
-		}
-	}*/
-
-
 
 	//Copie des valeurs de image dans copieImage
 	for(lig=0;lig<copieImage.nb_lig;lig++){
@@ -202,37 +179,15 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	vider_tab_pixels(image);
 	//Reallocation d'un nouveau tableau de taille reduite a image
 	image->mat=NULL;
-	image->nb_lig = ordSortie-ordEntree;
-	image->nb_col = absSortie-absEntree;
+	image->nb_lig = ordSortie-ordEntree +1;
+	image->nb_col = absSortie-absEntree +1;
 	image->type = copieImage.type;
 	image->max_val = copieImage.max_val;
 	
 
-
+	//Allocation de l'image redimensionnée
 	alloc_tableau(image);
-	/*image->mat = malloc((image->nb_lig)* sizeof(PIXEL));
-
-	//Verification de l'allocation de la premiere dimension du nouveau tableau
-	if(image->mat == NULL){
-		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau de pixels dans redimensionnement\n");
-		return 0;
-	}
-
-	// Creation de la deuxieme dimension du nouveau tableau
-	for(lig=0; lig< image->nb_lig +1; lig++){
-		image->mat[lig]=malloc((image->nb_col +1) * sizeof(PIXEL));
-		//Verification de l'allocation de la deuxieme dimension du nouveau
-		if(image->mat[lig]==NULL){
-			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau de pixels dans redimensionnement\n");
-			for(lig=lig-1; lig>=0; lig--){
-				free(image->mat[lig]);
-			}
-			free(image->mat);
-			return 0;
-		}
-	}*/
-
-
+	
 	// Affectation des valeurs de copieImage dans image
 	for(lig=ordEntree; lig<=ordSortie; lig++){
 		for(col=absEntree; col<=absSortie;col++){
@@ -372,11 +327,11 @@ int laplacien (IMAGE *imageATransfo){
 
 	return 1;
 }
-
-
-
 int alloc_tableau (IMAGE *imageAlloc){
 	int i;
+
+	printf("Debut 1ere alloc, nb ligne : %d, nb col : %d\n", imageAlloc->nb_lig, imageAlloc->nb_col);
+
 	// On alloue la premiere dimension du tableau
 	imageAlloc->mat = malloc(imageAlloc->nb_lig * sizeof(PIXEL));
 	if(imageAlloc->mat == NULL){ 
@@ -384,6 +339,8 @@ int alloc_tableau (IMAGE *imageAlloc){
 		printf("[X]\tErreur d'allocation sur la premiere dimension alloc_tableau\n");
 		return 0;
 	}
+
+	printf("Debut 2eme alloc\n");
 
 	// On alloue la deuxieme dimension
 	for (i=0; i<imageAlloc->nb_lig; i++){
@@ -398,6 +355,9 @@ int alloc_tableau (IMAGE *imageAlloc){
 			return 0;
 		}
 	}
+
+	printf("Fin alloc\n");
+
 	return 1;
 }
 
@@ -443,5 +403,4 @@ void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur){
 												(copie->mat[lig+1][col-1].b*masque[6])+(copie->mat[lig+1][col].b*masque[7])+(copie->mat[lig+1][col+1].b*masque[8]))/ diviseur;
 		}
 	}
-
 }

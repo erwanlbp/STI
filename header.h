@@ -18,7 +18,6 @@
 
 
 
-
 // Format lancement programme : 
 // ./STI [chemin image = img_test.ppm] [transformation = Aucune]
 // Donc si on met pas d'argument au programme il chargera l'image de test et fera rien
