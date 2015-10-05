@@ -3,6 +3,18 @@
 
 FILE* ouverture_ecriture_fichier_image(const int * typeFichier, char nomImage[255], char transformation[255]){
 	char chemin[255] = "";
+	char copieNom[255];
+	strcpy(copieNom,nomImage);
+	char extension[5] = "";
+
+	char *token = NULL;
+
+	token = strtok(nomImage, ".");
+
+	while(token != NULL){
+		sprintf(extension,"%s",token); 
+		token = strtok(NULL, ".");
+	}
 
 	sprintf(chemin,"Images/%s_%s",transformation,nomImage);
  
