@@ -2,7 +2,20 @@
 #include "inOutFichiers.h"
 #include "transformations.h"
 
+/**  
+ * \file transformation.c
+ * \brief Fichier dans lequel on à codé toutes les transformations
+ * \author Le Batard--Polès Erwan
+ 		   Vacheret Alex
+ 		   Romanet Vincent
+ * Toutes les transformations sont dans ce fichier, nous avons également coder certaines fonctions 
+ * pour éviter la dupplication de code telle que allo_tableau ou _creation_masque et applicatoin_masque 
+ */
 
+/**
+\fn int binarisation
+\return L'image transformée passer en paramètre donc 1 si tout va bien.
+ */
 int binarisation (IMAGE *imageATransfo){
 
 	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
@@ -272,6 +285,9 @@ int laplacien (IMAGE *imageATransfo){
 	copie.nb_lig = imageATransfo->nb_lig;
 	copie.nb_col = imageATransfo->nb_col;
 
+	int *masque=NULL;
+	masque = malloc(9 * sizeof(int));
+	creation_masque(masque,0,1,0,1,-4,1,0,1,0);
 	alloc_tableau(&copie);
 
 	//On copie l'image de base dans la copie allouee dynamiquement
@@ -283,45 +299,9 @@ int laplacien (IMAGE *imageATransfo){
 		}
 	}
 
-	//On commence les choses serieuses on fait le laplacien
-	for (lig = 1; lig < imageATransfo->nb_lig - 2; lig++)
-	{
-		for (col = 1; col < imageATransfo->nb_col - 2; col++)
-		{
-			imageATransfo->mat[lig][col].r = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col].r)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].r) + (imageATransfo->mat[lig][col].r)*(-4) + (imageATransfo->mat[lig][col+1].r)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col].r));
-			printf("%d\n", imageATransfo->mat[lig][col].r);
-
-			imageATransfo->mat[lig][col].g = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col].g)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].g) + (imageATransfo->mat[lig][col].g)*(-4) + (imageATransfo->mat[lig][col+1].g)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col].g));
-
-			imageATransfo->mat[lig][col].b = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col].b)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].b) + (imageATransfo->mat[lig][col].b)*(-4) + (imageATransfo->mat[lig][col+1].b)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col].b));
-		}
-	}
+	application_masque(imageATransfo, &copie, masque, 9);
 
 	amelioration_du_contraste(imageATransfo);
-
-	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
-	{
-		for (col = 0; col < imageATransfo->nb_col; col++)
-		{
-			copie.mat[lig][col] = imageATransfo->mat[lig][col];
-			printf("%d\n", imageATransfo->mat[lig][col].r);
-		}
-	}
 
 	vider_tab_pixels(&copie);
 
@@ -352,7 +332,7 @@ int alloc_tableau (IMAGE *imageAlloc){
 			return 0;
 		}
 	}
-	
+
 	return 1;
 }
 
