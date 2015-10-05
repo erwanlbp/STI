@@ -25,4 +25,8 @@ void creation_masque (int *masque, int a, int b, int c, int d, int e, int f, int
 
 void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur);
 
+void gradientSimple(IMAGE *image);
+
+void gradientSobel(IMAGE *image);
+
 #endif

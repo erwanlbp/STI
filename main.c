@@ -53,6 +53,10 @@ int main(int argc, char const *argv[])
 		lissage(&tab_pixels);
 	else if(strcmp(transformation, "laplacien") == 0)
 		laplacien(&tab_pixels);
+	else if(strcmp(transformation, "gradientSimple") == 0)
+		gradientSimple(&tab_pixels);
+	else if(strcmp(transformation, "gradientSobel") == 0)
+		gradientSobel(&tab_pixels);
 
 	// ###########################################
 

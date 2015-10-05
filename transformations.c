@@ -166,37 +166,6 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 
 	
 	alloc_tableau(&copieImage);
-	/*copieImage.mat = malloc(copieImage.nb_lig * sizeof(PIXEL));
-
-	//Verification de l'allocation de la premiere dimension du nouveau tableau
-	if(copieImage.mat == NULL){
-		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau copieImage de pixels dans redimensionnement\n");
-		return 0;
-	}
-
-	// Creation de la deuxieme dimension du nouveau tableau
-	for(lig=0; lig< copieImage.nb_lig; lig++){
-		copieImage.mat[lig]=malloc((copieImage.nb_col) * sizeof(PIXEL));
-		//Verification de l'allocation de la deuxieme dimension du nouveau
-		if(copieImage.mat[lig]==NULL){
-			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau copieImage de pixels dans redimensionnement\n");
-			for(lig=lig-1; lig>=0; lig--){
-				free(copieImage.mat[lig]);
-			}
-			free(copieImage.mat);
-			return 0;
-		}
-	}*/
-
-
-
-	//Copie des valeurs de image dans copieImage
-	for(lig=0;lig<copieImage.nb_lig;lig++){
-		for(col=0;col<copieImage.nb_col;col++){
-			copieImage.mat[lig][col]=image->mat[lig][col];
-		}
-	}
-
 
 	//Liberation de la memoire de l'image reçue
 	vider_tab_pixels(image);
@@ -206,32 +175,8 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	image->nb_col = absSortie-absEntree;
 	image->type = copieImage.type;
 	image->max_val = copieImage.max_val;
-	
-
 
 	alloc_tableau(image);
-	/*image->mat = malloc((image->nb_lig)* sizeof(PIXEL));
-
-	//Verification de l'allocation de la premiere dimension du nouveau tableau
-	if(image->mat == NULL){
-		printf("[X]\tErreur d'allocation sur la premiere dimension du tableau de pixels dans redimensionnement\n");
-		return 0;
-	}
-
-	// Creation de la deuxieme dimension du nouveau tableau
-	for(lig=0; lig< image->nb_lig +1; lig++){
-		image->mat[lig]=malloc((image->nb_col +1) * sizeof(PIXEL));
-		//Verification de l'allocation de la deuxieme dimension du nouveau
-		if(image->mat[lig]==NULL){
-			printf("[X]\tErreur d'allocation sur la deuxieme dimension du tableau de pixels dans redimensionnement\n");
-			for(lig=lig-1; lig>=0; lig--){
-				free(image->mat[lig]);
-			}
-			free(image->mat);
-			return 0;
-		}
-	}*/
-
 
 	// Affectation des valeurs de copieImage dans image
 	for(lig=ordEntree; lig<=ordSortie; lig++){
@@ -441,6 +386,141 @@ void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur){
 												(copie->mat[lig][col-1].b*masque[3])+(copie->mat[lig][col].b*masque[4])+(copie->mat[lig][col+1].b*masque[5])+
 												//3eme ligne
 												(copie->mat[lig+1][col-1].b*masque[6])+(copie->mat[lig+1][col].b*masque[7])+(copie->mat[lig+1][col+1].b*masque[8]))/ diviseur;
+		}
+	}
+}
+
+void gradientSimple( IMAGE *image){
+	int lig, col; 
+	IMAGE copieImageGx, copieImageGy;
+	int *masqueX=NULL;
+	int *masqueY=NULL;
+	//Allocation du masque
+	masqueX = malloc(9 * sizeof(int));
+	masqueY = malloc(9 * sizeof(int));
+	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
+	if(image->type == 3 || image->type == 6){
+		niveauGris(image);
+	}
+
+	//Création de la copieImage pour le gradient en X
+	copieImageGx.mat = NULL;
+	copieImageGx.nb_lig = image->nb_lig;
+	copieImageGx.nb_col = image->nb_col;
+	copieImageGx.type = image->type;
+	copieImageGx.max_val = image->max_val;
+
+	//Création de la copieImage pour le gradient en Y
+	copieImageGy.mat = NULL;
+	copieImageGy.nb_lig = image->nb_lig;
+	copieImageGy.nb_col = image->nb_col;
+	copieImageGy.type = image->type;
+	copieImageGy.max_val = image->max_val;
+
+	//Alocation du tableau copieImage pour le gradient en X
+	alloc_tableau(&copieImageGx);
+	//Alocation du tableau copieImage pour le gradient en Y
+	alloc_tableau(&copieImageGy);
+
+	// Affectation des valeurs de image dans copieImage pour le gradient en X
+	for(lig=0; lig<copieImageGx.nb_lig; lig++){
+		for(col=0; col<copieImageGx.nb_col;col++){
+			copieImageGx.mat[lig][col] = image->mat[lig][col];
+		}
+	}
+
+	// Affectation des valeurs de image dans copieImage pour le gradient en Y
+	for(lig=0; lig<copieImageGy.nb_lig; lig++){
+		for(col=0; col<copieImageGy.nb_col;col++){
+			copieImageGy.mat[lig][col] = image->mat[lig][col];
+		}
+	}
+
+	creation_masque(masqueX, 0, 0, 0, 0, -1, 1, 0, 0, 0);
+	creation_masque(masqueY, 0, 0, 0, 0, -1, 0, 0, 1, 0);
+
+	//Aplication du premier masque par rapport a l'axe X
+	application_masque(image, &copieImageGx, masqueX, 2);
+
+	//Application du second masque par rapport a l'axe Y
+	application_masque(&copieImageGy, &copieImageGx, masqueY, 2);
+
+	//On recupere image auquel on a applique le masqueX et copieImageGy auquel on a applique le masqueY
+
+	//On fait une double boucle pour recuperer l'image finale avec le gradient simple
+	for(lig=0; lig<image->nb_lig;lig++){
+		for(col=0; col<image->nb_col;col++){
+			image->mat[lig][col].r = abs(image->mat[lig][col].r) + abs(copieImageGy.mat[lig][col].r);
+			image->mat[lig][col].g = abs(image->mat[lig][col].g) + abs(copieImageGy.mat[lig][col].g);
+			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
+		}
+	}
+
+}
+
+void gradientSobel( IMAGE *image){
+	int lig, col; 
+	IMAGE copieImageGx, copieImageGy;
+	int *masqueX=NULL;
+	int *masqueY=NULL;
+	//Allocation du masque
+	masqueX = malloc(9 * sizeof(int));
+	masqueY = malloc(9 * sizeof(int));
+	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
+	if(image->type == 3 || image->type == 6){
+		niveauGris(image);
+	}
+
+	//Création de la copieImage pour le gradient en X
+	copieImageGx.mat = NULL;
+	copieImageGx.nb_lig = image->nb_lig;
+	copieImageGx.nb_col = image->nb_col;
+	copieImageGx.type = image->type;
+	copieImageGx.max_val = image->max_val;
+
+	//Création de la copieImage pour le gradient en Y
+	copieImageGy.mat = NULL;
+	copieImageGy.nb_lig = image->nb_lig;
+	copieImageGy.nb_col = image->nb_col;
+	copieImageGy.type = image->type;
+	copieImageGy.max_val = image->max_val;
+
+	//Alocation du tableau copieImage pour le gradient en X
+	alloc_tableau(&copieImageGx);
+	//Alocation du tableau copieImage pour le gradient en Y
+	alloc_tableau(&copieImageGy);
+
+	// Affectation des valeurs de image dans copieImage pour le gradient en X
+	for(lig=0; lig<copieImageGx.nb_lig; lig++){
+		for(col=0; col<copieImageGx.nb_col;col++){
+			copieImageGx.mat[lig][col] = image->mat[lig][col];
+		}
+	}
+
+	// Affectation des valeurs de image dans copieImage pour le gradient en Y
+	for(lig=0; lig<copieImageGy.nb_lig; lig++){
+		for(col=0; col<copieImageGy.nb_col;col++){
+			copieImageGy.mat[lig][col] = image->mat[lig][col];
+		}
+	}
+
+	creation_masque(masqueX, -1, 0, 1, -2, 0, 2, -1, 0, 1);
+	creation_masque(masqueY, 1, 2, 1, 0, 0, 0, -1, -2, -1);
+
+	//Aplication du premier masque par rapport a l'axe X
+	application_masque(image, &copieImageGx, masqueX, 2);
+
+	//Application du second masque par rapport a l'axe Y
+	application_masque(&copieImageGy, &copieImageGx, masqueY, 2);
+
+	//On recupere image auquel on a applique le masqueX et copieImageGy auquel on a applique le masqueY
+
+	//On fait une double boucle pour recuperer l'image finale avec le gradient simple
+	for(lig=0; lig<image->nb_lig;lig++){
+		for(col=0; col<image->nb_col;col++){
+			image->mat[lig][col].r = abs(image->mat[lig][col].r) + abs(copieImageGy.mat[lig][col].r);
+			image->mat[lig][col].g = abs(image->mat[lig][col].g) + abs(copieImageGy.mat[lig][col].g);
+			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
 		}
 	}
 
