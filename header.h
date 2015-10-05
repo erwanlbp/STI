@@ -4,7 +4,7 @@
 /**  
  * \file header.h
  * \brief Header principale
- * \author Le Batard--Polès Erwan
+ * \author Le Batard--Poles Erwan
  * \version 12
  */
 
@@ -16,7 +16,7 @@
 //Idees de plus : 
 // Fonction de test si le fichier image est valide, bien forme
 // Fonction qui applique un masque recu en argument
-
+// Adapter le type finale en fonctions des transformations effectuees
 
 
 // Format lancement programme : 
@@ -25,10 +25,10 @@
 
 /**
  * \struct PIXEL 
- * \brief Représentation d'un pixel
+ * \brief Representation d'un pixel
  *
- * PIXEL est une structure composée de 3 entiers.
- * Les 3 entiers représentent les 3 couleurs primaires.
+ * PIXEL est une structure composee de 3 entiers.
+ * Les 3 entiers representent les 3 couleurs primaires.
  * r : Rouge
  * v : Vert
  * b : Bleu
@@ -51,7 +51,7 @@ struct IMAGE
 	int max_val;
 };
 
-// Pour ecrire une ligne de séparation dans le terminal
+// Pour ecrire une ligne de separation dans le terminal
 void ligne_separation(const char separateur);
 
 //Pour effacer l'ecran selon l'OS

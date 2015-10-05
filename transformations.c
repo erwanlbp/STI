@@ -33,7 +33,13 @@ int binarisation (IMAGE *imageATransfo){
 			}
 			
 		}
+		// On change le type de fichier d'ecriture, pour economiser de la memoire
+		if(imageATransfo->type <= 3)
+			imageATransfo->type = 1;
+		else 
+			imageATransfo->type = 4;
 	}
+	
 	return 1;
 }
 
@@ -64,7 +70,13 @@ int niveauGris(IMAGE *image){
 				image->mat[lig][col].b = gris;
 			}
 		}
+		// On change le type de fichier d'ecriture, pour economiser de la memoire
+		if(image->type <= 3)
+			image->type = 2;
+		else 
+			image->type = 5;
 	}
+
 	return 1;
 }
 
@@ -277,6 +289,11 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 				imageATransfo->mat[lig][col].b = (imageATransfo->max_val * (imageATransfo->mat[lig][col].b - min))/(max-min);
 			}
 		}
+		// On change le type de fichier d'ecriture, pour economiser de la memoire
+		if(imageATransfo->type <= 3)
+			imageATransfo->type = 2;
+		else 
+			imageATransfo->type = 5;
 	}
 
 	return 1;
