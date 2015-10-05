@@ -2,6 +2,15 @@
 #include "inOutFichiers.h"
 #include "transformations.h"
 
+/**  
+ * \file main.c
+ * \brief Main
+ * \author Le Batard--Polès Erwan
+ 		   Vacheret Alex
+ 		   Romanet Vincent
+ * Main du programme dans lequel on va effectuer tous les appels de fonction
+ */
+
 int main(int argc, char const *argv[])
 { 
 	//Pour effacer l'ecran

@@ -5,7 +5,9 @@
  * \file header.h
  * \brief Header principale
  * \author Le Batard--Polès Erwan
- * \version 12
+ 		   Vacheret Alex
+ 		   Romanet Vincent
+ * Création des deux structures du programme et des fonctions principales
  */
 
 #include <stdio.h>
@@ -16,7 +18,6 @@
 
 //Idees de plus : 
 // Fonction de test si le fichier image est valide, bien forme
-
 
 
 

@@ -2,7 +2,20 @@
 #include "inOutFichiers.h"
 #include "transformations.h"
 
+/**  
+ * \file transformation.c
+ * \brief Fichier dans lequel on à codé toutes les transformations
+ * \author Le Batard--Polès Erwan
+ 		   Vacheret Alex
+ 		   Romanet Vincent
+ * Toutes les transformations sont dans ce fichier, nous avons également coder certaines fonctions 
+ * pour éviter la dupplication de code telle que allo_tableau ou _creation_masque et applicatoin_masque 
+ */
 
+/**
+\fn int binarisation
+\return L'image transformée passer en paramètre donc 1 si tout va bien.
+ */
 int binarisation (IMAGE *imageATransfo){
 
 	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
@@ -164,20 +177,30 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	copieImage.type = image->type;
 	copieImage.max_val = image->max_val;
 
-	
+	//Allocation de la copie de l'image
 	alloc_tableau(&copieImage);
+
+	//Copie des valeurs de image dans copieImage
+	for(lig=0;lig<copieImage.nb_lig;lig++){
+		for(col=0;col<copieImage.nb_col;col++){
+			copieImage.mat[lig][col]=image->mat[lig][col];
+		}
+	}
 
 	//Liberation de la memoire de l'image reçue
 	vider_tab_pixels(image);
 	//Reallocation d'un nouveau tableau de taille reduite a image
 	image->mat=NULL;
-	image->nb_lig = ordSortie-ordEntree;
-	image->nb_col = absSortie-absEntree;
+	image->nb_lig = ordSortie-ordEntree +1;
+	image->nb_col = absSortie-absEntree +1;
 	image->type = copieImage.type;
 	image->max_val = copieImage.max_val;
 
-	alloc_tableau(image);
+	alloc_tableau(image);	
 
+	//Allocation de l'image redimensionnée
+	alloc_tableau(image);
+	
 	// Affectation des valeurs de copieImage dans image
 	for(lig=ordEntree; lig<=ordSortie; lig++){
 		for(col=absEntree; col<=absSortie;col++){
@@ -262,6 +285,9 @@ int laplacien (IMAGE *imageATransfo){
 	copie.nb_lig = imageATransfo->nb_lig;
 	copie.nb_col = imageATransfo->nb_col;
 
+	int *masque=NULL;
+	masque = malloc(9 * sizeof(int));
+	creation_masque(masque,0,1,0,1,-4,1,0,1,0);
 	alloc_tableau(&copie);
 
 	//On copie l'image de base dans la copie allouee dynamiquement
@@ -273,55 +299,18 @@ int laplacien (IMAGE *imageATransfo){
 		}
 	}
 
-	//On commence les choses serieuses on fait le laplacien
-	for (lig = 1; lig < imageATransfo->nb_lig - 2; lig++)
-	{
-		for (col = 1; col < imageATransfo->nb_col - 2; col++)
-		{
-			imageATransfo->mat[lig][col].r = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col].r)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].r) + (imageATransfo->mat[lig][col].r)*(-4) + (imageATransfo->mat[lig][col+1].r)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col].r));
-			printf("%d\n", imageATransfo->mat[lig][col].r);
-
-			imageATransfo->mat[lig][col].g = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col].g)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].g) + (imageATransfo->mat[lig][col].g)*(-4) + (imageATransfo->mat[lig][col+1].g)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col].g));
-
-			imageATransfo->mat[lig][col].b = (  //1ere ligne
-												(imageATransfo->mat[lig-1][col].b)+
-												//2eme ligne
-												(imageATransfo->mat[lig][col-1].b) + (imageATransfo->mat[lig][col].b)*(-4) + (imageATransfo->mat[lig][col+1].b)+
-												//3eme ligne
-												(imageATransfo->mat[lig+1][col].b));
-		}
-	}
+	application_masque(imageATransfo, &copie, masque, 9);
 
 	amelioration_du_contraste(imageATransfo);
-
-	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
-	{
-		for (col = 0; col < imageATransfo->nb_col; col++)
-		{
-			copie.mat[lig][col] = imageATransfo->mat[lig][col];
-			printf("%d\n", imageATransfo->mat[lig][col].r);
-		}
-	}
 
 	vider_tab_pixels(&copie);
 
 	return 1;
 }
 
-
-
 int alloc_tableau (IMAGE *imageAlloc){
 	int i;
+
 	// On alloue la premiere dimension du tableau
 	imageAlloc->mat = malloc(imageAlloc->nb_lig * sizeof(PIXEL));
 	if(imageAlloc->mat == NULL){ 
@@ -343,6 +332,7 @@ int alloc_tableau (IMAGE *imageAlloc){
 			return 0;
 		}
 	}
+
 	return 1;
 }
 
@@ -455,7 +445,6 @@ void gradientSimple( IMAGE *image){
 			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
 		}
 	}
-
 }
 
 void gradientSobel( IMAGE *image){
@@ -523,5 +512,4 @@ void gradientSobel( IMAGE *image){
 			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
 		}
 	}
-
 }

@@ -1,6 +1,16 @@
 #include "header.h"
 #include "inOutFichiers.h"
 
+/**  
+ * \file Lecture fichier.c
+ * \brief Lecture des fichiers P1 à P6
+ * \author Le Batard--Polès Erwan
+ 		   Vacheret Alex
+ 		   Romanet Vincent
+ * Ensemble des fonctions de lecture des fichiers en fonction de leur type
+ */
+
+
 FILE* ouverture_lecture_fichier_image(const int *argc, char const *argv[], char nomImage[255], char transformation[255]){
 
 	char cheminImage[255] = "";
