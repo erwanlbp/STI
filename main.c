@@ -45,17 +45,21 @@ int main(int argc, char const *argv[])
 		symetrie_verticale(&tab_pixels);
 	else if(strcmp(transformation, "negatif") == 0)
 		negatif(&tab_pixels);
+	else if(strcmp(transformation, "redimensionnement") == 0)
+		redimensionnement(&tab_pixels, argc, argv);
 	else if(strcmp(transformation, "ameliorationContraste") == 0)
 		amelioration_du_contraste(&tab_pixels);
 	else if(strcmp(transformation, "lissage") == 0)
 		lissage(&tab_pixels);
+	else if(strcmp(transformation, "laplacien") == 0)
+		laplacien(&tab_pixels);
 
 	// ###########################################
 
 	file_image = ouverture_ecriture_fichier_image(nomImage,transformation);
+
 	if(file_image == NULL)
 		return 1;
-
 	if(ecriture_fichier(file_image,&tab_pixels,nomImage,transformation))
 		printf("[O]\tEcriture du fichier reussie, transformation sauvegardee\n");
 	else
