@@ -327,10 +327,9 @@ int laplacien (IMAGE *imageATransfo){
 
 	return 1;
 }
+
 int alloc_tableau (IMAGE *imageAlloc){
 	int i;
-
-	printf("Debut 1ere alloc, nb ligne : %d, nb col : %d\n", imageAlloc->nb_lig, imageAlloc->nb_col);
 
 	// On alloue la premiere dimension du tableau
 	imageAlloc->mat = malloc(imageAlloc->nb_lig * sizeof(PIXEL));
@@ -339,8 +338,6 @@ int alloc_tableau (IMAGE *imageAlloc){
 		printf("[X]\tErreur d'allocation sur la premiere dimension alloc_tableau\n");
 		return 0;
 	}
-
-	printf("Debut 2eme alloc\n");
 
 	// On alloue la deuxieme dimension
 	for (i=0; i<imageAlloc->nb_lig; i++){
@@ -355,9 +352,7 @@ int alloc_tableau (IMAGE *imageAlloc){
 			return 0;
 		}
 	}
-
-	printf("Fin alloc\n");
-
+	
 	return 1;
 }
 
