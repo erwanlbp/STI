@@ -24,11 +24,11 @@ int binarisation (IMAGE *imageATransfo){
 					imageATransfo->mat[lig][col].g = 0;
 					imageATransfo->mat[lig][col].b = 0;
 				}
-				//Si la valeur est en dessous du seuil il prend la valeur 255
+				//Si la valeur est en dessous du seuil il prend la valeur 1
 				else {
-					imageATransfo->mat[lig][col].r = 255;
-					imageATransfo->mat[lig][col].g = 255;
-					imageATransfo->mat[lig][col].b = 255;
+					imageATransfo->mat[lig][col].r = 1;
+					imageATransfo->mat[lig][col].g = 1;
+					imageATransfo->mat[lig][col].b = 1;
 				}
 			}
 			
