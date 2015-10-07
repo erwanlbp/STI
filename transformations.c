@@ -12,10 +12,17 @@
  * pour éviter la dupplication de code telle que allo_tableau ou _creation_masque et applicatoin_masque 
  */
 
+
 /**
-\fn int binarisation
-\return L'image transformée passer en paramètre donc 1 si tout va bien.
- */
+* \fn int binarisation
+* \brief Fonction pour faire la binarisation d'une image
+* Si l'image est en couleur alors la passe en niveau de gris avant de faire d'autre opération
+* On compare chaque valeur des pixels avec une valeur seuil.
+* Si la valeur du pixel est supérieur alors elle prend la valeur 255.
+* Sinon la valeur prend la valeur 0.
+*
+* \return L'image transformée passer en paramètre donc 1 si tout va bien.
+*/
 int binarisation (IMAGE *imageATransfo){
 
 	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
@@ -50,6 +57,14 @@ int binarisation (IMAGE *imageATransfo){
 	return 1;
 }
 
+/**
+* \fn int négatif
+* \brief Fonction pour renvoyer le complémentaire de l'image par rapport aux couleurs de bases
+* Cette fonction marche avec des images couleurs ou en niveau de gris
+* On remplace les valeurs de chaque composante par (255 - la valeur du pixel)
+*
+* \return L'image transformée passer en paramètre donc 1 si tout va bien.
+*/
 int negatif(IMAGE *image){
 	int lig,col;
 
@@ -65,6 +80,14 @@ int negatif(IMAGE *image){
 	return 1;
 }
 
+/**
+* \fn int négatif
+* \brief Fonction pour mettre en niveau de gris 
+* Cette fonction marche seulement si l'image de base est en couleur 
+* On effectue la formule suivante pour changer la valeur de chaque pixel : (0.3*valeur.r + 0.59*valeur.g + 0.11*valeur.b)
+*
+* \return L'image transformée passer en paramètre donc 1 si tout va bien.
+*/
 int niveauGris(IMAGE *image){
 	//On effectue la transformation seulement si l'image est en couleur
 	if(image->type == 3 || image->type == 6){
@@ -81,6 +104,14 @@ int niveauGris(IMAGE *image){
 	return 1;
 }
 
+/**
+* \fn int symétrie_verticale
+* \brief Fonction faire une symétrie verticale de l'image
+* Cette fonction marche pour n'importe quelle image 
+* On effectue une symétrie de l'image verticalement par rapport à l'axe horizontal
+*
+* \return L'image transformée passer en paramètre donc 1 si tout va bien.
+*/
 int symetrie_verticale (IMAGE *imageATransfo){
 	int lig, col;
 	PIXEL tmp;
@@ -99,6 +130,14 @@ int symetrie_verticale (IMAGE *imageATransfo){
 	return 1;
 }
 
+/**
+* \fn int symétrie_horizontale
+* \brief Fonction faire une symétrie horizontale de l'image
+* Cette fonction marche pour n'importe quelle image 
+* On effectue une symétrie de l'image horizontalement par rapport à l'axe vertical
+*
+* \return L'image transformée passer en paramètre donc 1 si tout va bien.
+*/
 int symetrie_horizontale(IMAGE *image){
 	int lig, col;
 	PIXEL tmp;
@@ -116,6 +155,15 @@ int symetrie_horizontale(IMAGE *image){
 	return 1;
 }
 
+/**
+* \fn int redimensionnement
+* \brief Fonction redimensionner une image
+* Cette fonction marche pour n'importe quelle image en couleur ou niveau de gris
+* L'utilisateur rentre les coordonnées de deux points et l'image est réduite selon ces points
+* Si l'utilisateur rentre des points hors de l'image elles sont remises à 0 ou a 255.
+*
+* \return L'image transformée passer en paramètre donc 1 si tout va bien.
+*/
 int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	int absEntree=0, ordEntree=0, absSortie=image->nb_col-1, ordSortie=image->nb_lig-1;
 	int lig, col, tmp;
