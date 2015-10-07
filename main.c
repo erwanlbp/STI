@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
 		return 1;
 	
 	IMAGE tab_pixels;
-	if(lecture_fichier(file_image, &tab_pixels)){
+	if(lecture_fichier(file_image, &tab_pixels, nomImage)){
 		printf("\tNombre de Colonnes:\t%d\n\tNombre de Lignes:\t%d\n\tValeur Maximal:\t\t%d\n",tab_pixels.nb_col,tab_pixels.nb_lig,tab_pixels.max_val);
 		printf("[O]\tLecture complete du fichier image reussie\n");
 	}
