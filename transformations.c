@@ -497,10 +497,10 @@ void gradientSobel( IMAGE *image){
 	creation_masque(masqueY, 1, 2, 1, 0, 0, 0, -1, -2, -1);
 
 	//Aplication du premier masque par rapport a l'axe X
-	application_masque(image, &copieImageGx, masqueX, 2);
+	application_masque(image, &copieImageGx, masqueX, 6);
 
 	//Application du second masque par rapport a l'axe Y
-	application_masque(&copieImageGy, &copieImageGx, masqueY, 2);
+	application_masque(&copieImageGy, &copieImageGx, masqueY, 6);
 
 	//On recupere image auquel on a applique le masqueX et copieImageGy auquel on a applique le masqueY
 
