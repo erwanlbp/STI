@@ -430,10 +430,10 @@ void gradientSimple( IMAGE *image){
 	creation_masque(masqueY, 0, 0, 0, 0, -1, 0, 0, 1, 0);
 
 	//Aplication du premier masque par rapport a l'axe X
-	application_masque(image, &copieImageGx, masqueX, 2);
+	application_masque(image, &copieImageGx, masqueX, 1);
 
 	//Application du second masque par rapport a l'axe Y
-	application_masque(&copieImageGy, &copieImageGx, masqueY, 2);
+	application_masque(&copieImageGy, &copieImageGx, masqueY, 1);
 
 	//On recupere image auquel on a applique le masqueX et copieImageGy auquel on a applique le masqueY
 
@@ -497,10 +497,10 @@ void gradientSobel( IMAGE *image){
 	creation_masque(masqueY, 1, 2, 1, 0, 0, 0, -1, -2, -1);
 
 	//Aplication du premier masque par rapport a l'axe X
-	application_masque(image, &copieImageGx, masqueX, 6);
+	application_masque(image, &copieImageGx, masqueX, 1);
 
 	//Application du second masque par rapport a l'axe Y
-	application_masque(&copieImageGy, &copieImageGx, masqueY, 6);
+	application_masque(&copieImageGy, &copieImageGx, masqueY, 1);
 
 	//On recupere image auquel on a applique le masqueX et copieImageGy auquel on a applique le masqueY
 
@@ -512,4 +512,9 @@ void gradientSobel( IMAGE *image){
 			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
 		}
 	}
+}
+
+void detectionContours(IMAGE * image){
+	gradientSobel(image);
+	binarisation(image);
 }
