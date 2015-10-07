@@ -1,23 +1,21 @@
 #include "header.h"
 #include "inOutFichiers.h"
 
-FILE* ouverture_ecriture_fichier_image(const int * typeFichier, char nomImage[255], char transformation[255]){
+FILE* ouverture_ecriture_fichier_image(const int * typeFichier, const char nomImage[255], const char transformation[255]){
 	char chemin[255] = "";
-	char copieNom[255];
-	strcpy(copieNom,nomImage);
-	char extension[5] = "";
 
-	char *token = NULL;
-
-	token = strtok(nomImage, ".");
-
-	while(token != NULL){
-		sprintf(extension,"%s",token); 
-		token = strtok(NULL, ".");
-	}
-
-	sprintf(chemin,"Images/%s_%s",transformation,nomImage);
+	char nomSansExt[255] = "";
+	strncpy(nomSansExt,nomImage,strlen(nomImage)-4);
  
+	if(*typeFichier == 1 || *typeFichier == 4)
+		sprintf(chemin,"Images/%s_%s.pbm",transformation, nomSansExt);
+	if(*typeFichier == 2 || *typeFichier == 5)
+		sprintf(chemin,"Images/%s_%s.pgm",transformation, nomSansExt);
+	if(*typeFichier == 3 || *typeFichier == 6)
+		sprintf(chemin,"Images/%s_%s.ppm",transformation, nomSansExt);
+
+	printf("\tChemin du fichier d'ecriture : %s\n",chemin );
+
  	FILE *fichier = NULL;
  	// Different types d'ouverture selon que le type soit binaire ou ASCII
  	if(*typeFichier <=3)
@@ -25,14 +23,10 @@ FILE* ouverture_ecriture_fichier_image(const int * typeFichier, char nomImage[25
 	else
 		fichier = fopen(chemin,"wb");
 
-	if(fichier == NULL){
-		printf("[X]\tErreur ouverture fichier ecriture\n");
-	}
-
-	if(fichier != NULL)
-		printf("[O]\tOuverture du fichier d'ecriture reussie\n");
-	else 
+	if(fichier == NULL)
 		printf("[X]\tOuverture du fichier d'ecriture rate\n");
+	else 
+		printf("[O]\tOuverture du fichier d'ecriture reussie\n");
 
 	return fichier;
 }
@@ -46,9 +40,7 @@ int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char nomImag
 		case 4:	ecriture_P4(fichier, tab_pixels, nomImage, transformation); break;
 		case 5:	ecriture_P5(fichier, tab_pixels, nomImage, transformation); break;
 		case 6:	ecriture_P6(fichier, tab_pixels, nomImage, transformation); break;
-		default: 
-		printf("[X]\tNombre magique du fichier image inconnu\n");
-		break;
+		default: printf("[X]\tNombre magique du fichier image inconnu\n");  break;
 	}
 	
 	return 1;
@@ -60,7 +52,7 @@ int ecriture_P1(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255
 
 	int lig,col;
 	for(lig=0; lig<tab_pixels->nb_lig; lig++){
-		for(col=0; col<tab_pixels->nb_col; col++){ 			
+		for(col=0; col<tab_pixels->nb_col; col++){ 	
 			fprintf(fichier, "%d", tab_pixels->mat[lig][col].r);
 			if(col % 70 > 60)
 				fprintf(fichier,"\n");

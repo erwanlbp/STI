@@ -17,7 +17,8 @@
 // Fonction de test si le fichier image est valide, bien forme
 // Fonction qui applique un masque recu en argument
 // Adapter le type finale en fonctions des transformations effectuees
-
+// Eviter d'ecrire base base test si je reprend la meme image pour faire une transformation
+ 
 
 // Format lancement programme : 
 // ./STI [chemin image = img_test.ppm] [transformation = Aucune]
