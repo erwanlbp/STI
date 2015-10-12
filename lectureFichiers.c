@@ -32,7 +32,8 @@ FILE* ouverture_lecture_fichier_image(const int *argc, char const *argv[], char 
 		else
 			printf("[X]\tAucune transformation demandee, transformation par defaut : %s\n", transformation);
 	}
-	else{ //Sinon on dit qu'on a rien recu et on donne le chemin par defaut
+	else{ 
+	//Sinon on dit qu'on a rien recu et on donne le chemin par defaut
 		printf("[X]\tAucun chemin de fichier trouve, chemin par defaut : %s\n",cheminImage);
 		printf("[X]\tAucune transformation demandee, transformation par defaut : %s\n", transformation);
 	}
@@ -49,7 +50,7 @@ FILE* ouverture_lecture_fichier_image(const int *argc, char const *argv[], char 
 	return fichier;
 }
 
-int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
+int lecture_fichier(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]){
 	int i = 0;
 	
 	// On lit le 'P' mais on le garde pas
@@ -102,17 +103,17 @@ int lecture_fichier(FILE* file_image, IMAGE * tab_pixels){
 
 		case 4:
 		printf("\tFichier P4 : PBM Binaire\n");
-		lecture_P4(file_image, tab_pixels);
+		lecture_P4(file_image, tab_pixels, nomImage);
 		break;
 
 		case 5:
 		printf("\tFichier P5 : PGM Binaire\n");
-		lecture_P5(file_image, tab_pixels);
+		lecture_P5(file_image, tab_pixels, nomImage);
 		break;
 
 		case 6:
 		printf("\tFichier P6 : PPM Binaire\n");
-		lecture_P6(file_image, tab_pixels);
+		lecture_P6(file_image, tab_pixels, nomImage);
 		break;
 
 		default: 
@@ -131,15 +132,11 @@ int lecture_P1(FILE* file_image, IMAGE * tab_pixels){
 
 	int continuer = 1, lig=0, col=0;
 
-	do{
-		// On lit un entier, qu'on stocke dans les 3 sous variable du pixel
-		fscanf(file_image, "%d", &tab_pixels->mat[lig][col].r);
+	// On lit un entier jusqu'a la fin du fichier
+	while(continuer && fscanf(file_image, "%d", &tab_pixels->mat[lig][col].r) != EOF){
+		// On stocke l'entier dans les 3 sous variable du pixel
 		tab_pixels->mat[lig][col].g = tab_pixels->mat[lig][col].r;
 		tab_pixels->mat[lig][col].b = tab_pixels->mat[lig][col].r;
-
-		// Si on arrive à la fin du fichier on arrete
-		if(feof(file_image)) 
-			continuer = 0;
 
 		// On incremente l'indice des colonnes 
 		col++;  
@@ -152,9 +149,7 @@ int lecture_P1(FILE* file_image, IMAGE * tab_pixels){
 		// On arrete de lire si le fichier contient plus de pixels que ce qu'on a lu au debut
 		if(lig == tab_pixels->nb_lig)
 			continuer = 0;
-		
-	}while(continuer);
-
+	}
 	// On retourne 1 pour dire que la fonction s'est bien passe
 	return 1;
 }
@@ -166,15 +161,11 @@ int lecture_P2(FILE* file_image, IMAGE * tab_pixels){
 
 	int continuer = 1, lig=0, col=0;
 
-	do{
-		// On lit un entier, qu'on stocke dans les 3 sous variable du pixel
-		fscanf(file_image, "%d", &tab_pixels->mat[lig][col].r);
+	// On lit un entier jusqu'a la fin du fichier
+	while(continuer && fscanf(file_image, "%d", &tab_pixels->mat[lig][col].r) != EOF){
+		// On stocke l'entier dans les 3 sous variable du pixel
 		tab_pixels->mat[lig][col].g = tab_pixels->mat[lig][col].r;
 		tab_pixels->mat[lig][col].b = tab_pixels->mat[lig][col].r;
-
-		// Si on arrive à la fin du fichier on arrete
-		if(feof(file_image)) 
-			continuer = 0;
 
 		// On incremente l'indice des colonnes 
 		col++;  
@@ -187,9 +178,7 @@ int lecture_P2(FILE* file_image, IMAGE * tab_pixels){
 		// On arrete de lire si le fichier contient plus de pixels que ce qu'on a lu au debut
 		if(lig == tab_pixels->nb_lig)
 			continuer = 0;
-
-	}while(continuer);
-
+	}
 	// On retourne 1 pour dire que la fonction s'est bien passe
 	return 1;
 }
@@ -199,15 +188,10 @@ int lecture_P3(FILE* file_image, IMAGE * tab_pixels){
 	//On lit la valeur maximum de chaque pixel
 	fscanf(file_image,"%d",&tab_pixels->max_val);
 
-	int continuer = 1, lig=0, col=0;
+	int continuer=1, lig=0, col=0;
 
-	do{
-		// On lit 3 entiers, un pour chaque composantes du pixel
-		fscanf(file_image, "%d %d %d", &tab_pixels->mat[lig][col].r, &tab_pixels->mat[lig][col].g, &tab_pixels->mat[lig][col].b);
-
-		// Si on arrive à la fin du fichier on arrete
-		if(feof(file_image)) 
-			continuer = 0;
+	// On lit 3 entiers, un pour chaque composantes du pixel jusqu'a arriver a la fin du fichier
+	while(continuer && fscanf(file_image, "%d %d %d", &tab_pixels->mat[lig][col].r, &tab_pixels->mat[lig][col].g, &tab_pixels->mat[lig][col].b) != EOF){
 
 		// On incremente l'indice des colonnes 
 		col++;  
@@ -220,27 +204,114 @@ int lecture_P3(FILE* file_image, IMAGE * tab_pixels){
 		// On arrete de lire si le fichier contient plus de pixels que ce qu'on a lu au debut
 		if(lig == tab_pixels->nb_lig)
 			continuer = 0;
-
-	}while(continuer);
-
+	}
 	// On retourne 1 pour dire que la fonction s'est bien passe
 	return 1;
 }
 
-int lecture_P4(FILE* file_image, IMAGE * tab_pixels){
+int lecture_P4(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]){
 
+	int continuer = 1, lig=0, col=0;
+
+	int c;
+	// On lit un entier jusqu'a la fin du fichier
+	while(continuer){
+		c = fgetc(file_image);
+		if(c == EOF)
+			continuer = 0;
+		else{
+			// On stocke les entiers dans les 3 sous variable du pixel
+			tab_pixels->mat[lig][col].r = c;			
+			tab_pixels->mat[lig][col].g = c;
+			tab_pixels->mat[lig][col].b = c;
+		}
+
+		// On incremente l'indice des colonnes 
+		col++;  
+		// Si on a atteint le nombre de colonnes on la remet à 0 et on increment la ligne
+		if(col == tab_pixels->nb_col){
+			col = 0;
+			lig++;
+		}
+
+		// On arrete de lire si le fichier contient plus de pixels que ce qu'on a lu au debut
+		if(lig == tab_pixels->nb_lig)
+			continuer = 0;
+	}
 	// On retourne 1 pour dire que la fonction s'est bien passe
 	return 1;
 }
 
-int lecture_P5(FILE* file_image, IMAGE * tab_pixels){
+int lecture_P5(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]){
 
+	//On lit la valeur maximum de chaque pixel
+	fscanf(file_image,"%d",&tab_pixels->max_val);
+
+	int continuer = 1, lig=0, col=0;
+
+	int c;
+	// On lit un entier jusqu'a la fin du fichier
+	while(continuer){
+		c = fgetc(file_image);
+		if(c == EOF)
+			continuer = 0;
+		else{
+			// On stocke les entiers dans les 3 sous variable du pixel
+			tab_pixels->mat[lig][col].r = c;			
+			tab_pixels->mat[lig][col].g = c;
+			tab_pixels->mat[lig][col].b = c;
+		}
+
+		// On incremente l'indice des colonnes 
+		col++;  
+		// Si on a atteint le nombre de colonnes on la remet à 0 et on increment la ligne
+		if(col == tab_pixels->nb_col){
+			col = 0;
+			lig++;
+		}
+
+		// On arrete de lire si le fichier contient plus de pixels que ce qu'on a lu au debut
+		if(lig == tab_pixels->nb_lig)
+			continuer = 0;
+	}
 	// On retourne 1 pour dire que la fonction s'est bien passe
 	return 1;
 }
 
-int lecture_P6(FILE* file_image, IMAGE * tab_pixels){
+int lecture_P6(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]){
+	
+	//On lit la valeur maximum de chaque pixel
+	fscanf(file_image,"%d",&tab_pixels->max_val);
 
+	int continuer = 1, lig=0, col=0;
+
+	int r,g,b;
+	// On lit un entier jusqu'a la fin du fichier
+	while(continuer){
+		r = fgetc(file_image);
+		g = fgetc(file_image);
+		b = fgetc(file_image);
+		if(r == EOF || g == EOF || b == EOF)
+			continuer = 0;
+		else{
+			// On stocke les entiers dans les 3 sous variable du pixel
+			tab_pixels->mat[lig][col].r = r;			
+			tab_pixels->mat[lig][col].g = g;
+			tab_pixels->mat[lig][col].b = b;
+		}
+
+		// On incremente l'indice des colonnes 
+		col++;  
+		// Si on a atteint le nombre de colonnes on la remet à 0 et on increment la ligne
+		if(col == tab_pixels->nb_col){
+			col = 0;
+			lig++;
+		}
+
+		// On arrete de lire si le fichier contient plus de pixels que ce qu'on a lu au debut
+		if(lig == tab_pixels->nb_lig)
+			continuer = 0;
+	}
 	// On retourne 1 pour dire que la fonction s'est bien passe
 	return 1;
 }

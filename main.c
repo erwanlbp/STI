@@ -34,7 +34,7 @@ int main(int argc, char const *argv[])
 	// ###########################################
 	//  Travail des fonctions des transformations
 	// ###########################################
-	
+	int transfoOk = 1;
 	if(strcmp(transformation, "niveauGris") == 0)
 		niveauGris(&tab_pixels);
 	else if(strcmp(transformation, "binarisation") == 0)
@@ -53,17 +53,23 @@ int main(int argc, char const *argv[])
 		lissage(&tab_pixels);
 	else if(strcmp(transformation, "laplacien") == 0)
 		laplacien(&tab_pixels);
+	else if(strcmp(transformation, "base") != 0){
+		printf("[X]\tTransformation inexistante\n");
+		transfoOk = 0;
+	}
 
 	// ###########################################
 
-	file_image = ouverture_ecriture_fichier_image(&(tab_pixels.type),nomImage,transformation);
+	if(transfoOk){
+		file_image = ouverture_ecriture_fichier_image(&(tab_pixels.type),nomImage,transformation);
 
-	if(file_image == NULL)
-		return 1;
-	if(ecriture_fichier(file_image,&tab_pixels,nomImage,transformation))
-		printf("[O]\tEcriture du fichier reussie, transformation sauvegardee\n");
-	else
-		printf("[X]\tEcriture du fichier rate, transformation non sauvegardee\n");
+		if(file_image == NULL)
+			return 1;
+		if(ecriture_fichier(file_image,&tab_pixels,nomImage,transformation))
+			printf("[O]\tEcriture du fichier reussie, transformation sauvegardee\n");
+		else
+			printf("[X]\tEcriture du fichier rate, transformation non sauvegardee\n");
+	}
 
 	// On libère le tableau de pixels
 	vider_tab_pixels(&tab_pixels);
@@ -85,7 +91,7 @@ void vider_tab_pixels(IMAGE * tab){
 	free(tab->mat);
 }
 
-void afficher_tab_pixels(IMAGE * tab){
+void afficher_tab_pixels(const IMAGE * tab){
 	ligne_separation('-');
 	int lig,col;
 

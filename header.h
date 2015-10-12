@@ -57,7 +57,7 @@ void ligne_separation(const char separateur);
 void effacer_ecran();
 
 // Pour affichers les valeurs contenues dans la matrice de pixels
-void afficher_tab_pixels(IMAGE * tab);
+void afficher_tab_pixels(const IMAGE * tab);
 
 // Pour liberer la memoire allouee a la matrice de pixels
 void vider_tab_pixels(IMAGE * tab);

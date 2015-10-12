@@ -13,7 +13,7 @@
 FILE* ouverture_lecture_fichier_image(const int *argc, char const *argv[], char nomImage[255], char transformation[255]);
 // Pour scanner les caracteristiques de la matrice et
 // appeler les fonctions de lecture des fichiers en fonction du type du fichier
-int lecture_fichier(FILE* file_image, IMAGE * tab_pixels);
+int lecture_fichier(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]);
 
 //Pour ouvrir le fichier de sauvegarde de la transformation de l'image en ecriture
 FILE* ouverture_ecriture_fichier_image(const int * typeFichier, const char nomImage[255], const char transformation[255]);
@@ -24,9 +24,9 @@ int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char nomImag
 int lecture_P1(FILE* file_image, IMAGE * tab_pixels); // PBM ASCII
 int lecture_P2(FILE* file_image, IMAGE * tab_pixels); // PGM ASCII
 int lecture_P3(FILE* file_image, IMAGE * tab_pixels); // PPM ASCII
-int lecture_P4(FILE* file_image, IMAGE * tab_pixels); // PBM Binaire
-int lecture_P5(FILE* file_image, IMAGE * tab_pixels); // PGM Binaire
-int lecture_P6(FILE* file_image, IMAGE * tab_pixels); // PPM Binaire
+int lecture_P4(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]); // PBM Binaire
+int lecture_P5(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]); // PGM Binaire
+int lecture_P6(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]); // PPM Binaire
 
 // Fonctions d'ecriture, P<i> pour le type de fichier
 int ecriture_P1(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]); // PBM ASCII
