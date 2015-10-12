@@ -4,20 +4,28 @@
 /**  
  * \file header.h
  * \brief Header principale
+<<<<<<< HEAD
  * \author Le Batard--Poles Erwan
  * \version 12
+=======
+ * \author Le Batard--Polès Erwan
+ 		   Vacheret Alex
+ 		   Romanet Vincent
+ * Création des deux structures du programme et des fonctions principales
+>>>>>>> 30708ffff3f8b57455a322b7e27bf24c7c8ab375
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 
 //Idees de plus : 
 // Fonction de test si le fichier image est valide, bien forme
 // Eviter d'ecrire base base test si je reprend la meme image pour faire une transformation
  
-
+ 
 // Format lancement programme : 
 // ./STI [chemin image = img_test.ppm] [transformation = Aucune]
 // Donc si on met pas d'argument au programme il chargera l'image de test et fera rien

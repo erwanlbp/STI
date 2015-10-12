@@ -1,7 +1,16 @@
 #include "header.h"
 #include "inOutFichiers.h"
 
+/**  
+ * \file ecritureFichier.c
+ * \brief Ecriture des fichiers P1 à P6
+ * \author Le Batard--Polès Erwan
+ 		   Vacheret Alex
+ 		   Romanet Vincent
+ * Ensemble des fonctions d'écriture des fichiers en fonction de leur type
+ */
 FILE* ouverture_ecriture_fichier_image(const int * typeFichier, const char nomImage[255], const char transformation[255]){
+
 	char chemin[255] = "";
 
 	char nomSansExt[255] = "";
