@@ -66,8 +66,10 @@ int main(int argc, char const *argv[])
 		gradientSimple(&tab_pixels);
 	else if(strcmp(transformation, "gradientSobel") == 0)
 		gradientSobel(&tab_pixels);
-	else if(strcmp(transformation, "detectionContours") == 0)
-		detectionContours(&tab_pixels);
+	else if(strcmp(transformation, "detectionContoursSobel") == 0)
+		detectionContoursSobel(&tab_pixels);
+	else if(strcmp(transformation, "detectionContoursLaplacien") == 0)
+		detectionContoursLaplacien(&tab_pixels);
 
 
 

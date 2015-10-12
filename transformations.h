@@ -29,6 +29,8 @@ void gradientSimple(IMAGE *image);
 
 void gradientSobel(IMAGE *image);
 
-void detectionContours( IMAGE * image);
+void detectionContoursSobel( IMAGE * image);
+
+int detectionContoursLaplacien (IMAGE *imageATransfo);
 
 #endif

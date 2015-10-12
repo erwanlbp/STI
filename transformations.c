@@ -493,6 +493,9 @@ void gradientSimple( IMAGE *image){
 			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
 		}
 	}
+
+	vider_tab_pixels(&copieImageGx);
+	vider_tab_pixels(&copieImageGy);
 }
 
 void gradientSobel( IMAGE *image){
@@ -560,9 +563,69 @@ void gradientSobel( IMAGE *image){
 			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
 		}
 	}
+
+	vider_tab_pixels(&copieImageGx);
+	vider_tab_pixels(&copieImageGy);
 }
 
-void detectionContours(IMAGE * image){
+void detectionContoursSobel(IMAGE * image){
 	gradientSobel(image);
 	binarisation(image);
+}
+
+int detectionContoursLaplacien (IMAGE *imageATransfo){
+	int col, lig, L0 = 160, G0 = 55;
+
+	IMAGE copieLaplacien;
+	copieLaplacien.mat = NULL;
+	copieLaplacien.nb_lig = imageATransfo->nb_lig;
+	copieLaplacien.nb_col = imageATransfo->nb_col;
+	copieLaplacien.type = imageATransfo->type;
+	copieLaplacien.max_val = imageATransfo->max_val;
+
+	IMAGE copieGradient;
+	copieGradient.mat = NULL;
+	copieGradient.nb_lig = imageATransfo->nb_lig;
+	copieGradient.nb_col = imageATransfo->nb_col;
+	copieGradient.type = imageATransfo->type;
+	copieGradient.max_val = imageATransfo->max_val;
+
+	//Allocation de la copie de l'imageATransfo
+	alloc_tableau(&copieLaplacien);
+	alloc_tableau(&copieGradient);
+
+	//L'image doit être lissée avant de pouvoir en détecter ses contours
+	lissage(imageATransfo);
+
+	//Copie des valeurs de image dans copieLaplacien et copieGradient
+	for(lig=0;lig<copieLaplacien.nb_lig;lig++){
+		for(col=0;col<copieLaplacien.nb_col;col++){
+			copieLaplacien.mat[lig][col]=imageATransfo->mat[lig][col];
+			copieGradient.mat[lig][col]=imageATransfo->mat[lig][col];
+		}
+	}
+
+	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
+	{
+		for (col = 0; col < imageATransfo->nb_col; col++)
+		{
+			if ((copieLaplacien.mat[lig][col].r < L0) && (copieGradient.mat[lig][col].r > G0))
+			{
+				imageATransfo->mat[lig][col].r = 255;
+				imageATransfo->mat[lig][col].g = 255;
+				imageATransfo->mat[lig][col].b = 255;
+			}
+			else
+			{
+				imageATransfo->mat[lig][col].r = 0;
+				imageATransfo->mat[lig][col].g = 0;
+				imageATransfo->mat[lig][col].b = 0;
+			}
+		}
+	}
+
+	vider_tab_pixels(&copieLaplacien);
+	vider_tab_pixels(&copieGradient);
+
+	return 1;
 }
