@@ -78,16 +78,9 @@ int negatif(IMAGE *image){
 	for(lig=0;lig<image->nb_lig;lig++){
 		for(col=0;col<image->nb_col;col++){
 			//On applique la formule pour changer la valeur de chaque composante selon le type de fichier
-			if(image->type == 1 || image->type == 4){
-				image->mat[lig][col].r = 1 - (image->mat[lig][col].r);
-				image->mat[lig][col].g = 1 - (image->mat[lig][col].g);
-				image->mat[lig][col].b = 1 - (image->mat[lig][col].b);
-			}
-			else{
-				image->mat[lig][col].r = 255 - (image->mat[lig][col].r);
-				image->mat[lig][col].g = 255 - (image->mat[lig][col].g);
-				image->mat[lig][col].b = 255 - (image->mat[lig][col].b);
-			}
+			image->mat[lig][col].r = image->max_val - (image->mat[lig][col].r);
+			image->mat[lig][col].g = image->max_val - (image->mat[lig][col].g);
+			image->mat[lig][col].b = image->max_val - (image->mat[lig][col].b);
 		}
 	}
 	return 1;
