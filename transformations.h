@@ -33,4 +33,8 @@ void detectionContoursSobel( IMAGE * image);
 
 int detectionContoursLaplacien (IMAGE *imageATransfo);
 
+int reductionBruit(IMAGE *image);
+
+int triTab (int *masque, int taille);
+
 #endif

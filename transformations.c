@@ -651,3 +651,49 @@ int detectionContoursLaplacien (IMAGE *imageATransfo){
 
 	return 1;
 }
+
+int reductionBruit(IMAGE *image){
+	int lig,col;
+	int masqueLumi[9]={0};
+
+	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
+	if(image->type == 3 || image->type == 6){
+		niveauGris(image);
+	}
+
+	//Double boucle for ou l'on prend les valeurs autour du pixel actuel pour trouver la valeur 
+	// la plus petite. 
+	for(lig=1;lig<image->nb_lig-2;lig++){
+		for(col=1;col<image->nb_col-2;col++){
+			//On crée le masque a chaque tour de boucle
+			creation_masque(masqueLumi,
+				image->mat[lig-1][col-1].r,image->mat[lig-1][col].r,image->mat[lig-1][col+1].r,
+				image->mat[lig][col-1].r,image->mat[lig][col].r,image->mat[lig][col+1].r,
+				image->mat[lig+1][col-1].r,image->mat[lig+1][col].r,image->mat[lig+1][col+1].r);
+			//On trie le masque
+			triTab(masqueLumi, 9);
+			//On associe le pixel actuel à la valeur mediane du masque
+			image->mat[lig][col].r = masqueLumi[4];
+			image->mat[lig][col].g = masqueLumi[4];
+			image->mat[lig][col].b = masqueLumi[4];
+		}
+	}
+	return 1;
+}
+
+int triTab (int *masque, int taille){
+	int tmp = 0, i, j;
+
+	for (i = 0; i < taille; ++i)
+	{
+		tmp = masque[i];
+		j = i;
+		while ((j > 0) && (masque[j-1] > tmp))
+		{
+			masque[j] = masque[j-1];
+			j --;
+		} 
+		masque[j] = tmp;
+	}
+	return 1;
+}

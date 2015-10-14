@@ -43,6 +43,7 @@
 	// ###########################################
 	//  Travail des fonctions des transformations
 	// ###########################################
+	
  	int transfoOk = 1;
  	if(strcmp(transformation, "niveauGris") == 0)
  		niveauGris(&tab_pixels);
@@ -70,6 +71,8 @@
  		detectionContoursSobel(&tab_pixels);
  	else if(strcmp(transformation, "detectionContoursLaplacien") == 0)
  		detectionContoursLaplacien(&tab_pixels);
+ 	else if(strcmp(transformation, "reductionBruit") == 0)
+		reductionBruit(&tab_pixels);
  	else if(strcmp(transformation, "base") != 0){
  		printf("[X]\tTransformation inexistante\n");
  		transfoOk = 0;
