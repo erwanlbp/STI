@@ -306,7 +306,7 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 				imageATransfo->mat[lig][col].b = (imageATransfo->max_val * (imageATransfo->mat[lig][col].b - min))/(max - min);
 			}
 		}
-		
+
 		// On change le type de fichier d'ecriture, pour economiser de la memoire
 		if(imageATransfo->type <= 3)
 			imageATransfo->type = 2;
@@ -418,32 +418,48 @@ void creation_masque (int *masque, int a, int b, int c, int d, int e, int f, int
 }
 
 void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur){
-	int lig, col, tmp;
+	int lig, col;
+	PIXEL tmp;
 
 	for (lig = 0; lig < image->nb_lig; lig++){
 		for (col = 0; col < image->nb_col; col++){
-			tmp = 0;
-			if(lig-1 >=0 && col-1 >=0)
-				tmp += copie->mat[lig-1][col-1].r * masque[0];
-			if(lig-1 >=0)
-				tmp += copie->mat[lig-1][col].r * masque[1];
-			if(lig-1 >=0 && col+1 <image->nb_col)
-				tmp += copie->mat[lig-1][col+1].r * masque[2];
-			if(col-1 >=0)
-				tmp += copie->mat[lig][col-1].r * masque[3];
-			tmp += copie->mat[lig][col].r * masque[4];
-			if(col+1 <image->nb_col)
-				tmp += copie->mat[lig][col+1].r * masque[5];
-			if(lig+1 <image->nb_lig && col-1 >=0)
-				tmp += copie->mat[lig+1][col-1].r * masque[6];
-			if(lig+1 <image->nb_lig)
-				tmp += copie->mat[lig+1][col].r * masque[7];
-			if(lig+1 <image->nb_lig && col+1 <image->nb_col)
-				tmp += copie->mat[lig+1][col+1].r * masque[8];
+			tmp.r = 0;
+			tmp.g = 0;
+			tmp.b = 0;
 
-			image->mat[lig][col].r = tmp / diviseur;
-			image->mat[lig][col].g = tmp / diviseur;
-			image->mat[lig][col].b = tmp / diviseur; 
+			if(lig-1 >=0 && col-1 >=0) 							tmp.r += copie->mat[lig-1][col-1].r * masque[0];
+			if(lig-1 >=0) 										tmp.r += copie->mat[lig-1][col].r * masque[1];
+			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp.r += copie->mat[lig-1][col+1].r * masque[2];
+			if(col-1 >=0) 										tmp.r += copie->mat[lig][col-1].r * masque[3];
+																tmp.r += copie->mat[lig][col].r * masque[4];
+			if(col+1 <image->nb_col) 							tmp.r += copie->mat[lig][col+1].r * masque[5];
+			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp.r += copie->mat[lig+1][col-1].r * masque[6];
+			if(lig+1 <image->nb_lig) 							tmp.r += copie->mat[lig+1][col].r * masque[7];
+			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp.r += copie->mat[lig+1][col+1].r * masque[8];
+			image->mat[lig][col].r = tmp.r / diviseur;
+
+
+			if(lig-1 >=0 && col-1 >=0) 							tmp.g += copie->mat[lig-1][col-1].g * masque[0];
+			if(lig-1 >=0) 										tmp.g += copie->mat[lig-1][col].g * masque[1];
+			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp.g += copie->mat[lig-1][col+1].g * masque[2];
+			if(col-1 >=0) 										tmp.g += copie->mat[lig][col-1].g * masque[3];
+																tmp.g += copie->mat[lig][col].g * masque[4];
+			if(col+1 <image->nb_col) 							tmp.g += copie->mat[lig][col+1].g * masque[5];
+			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp.g += copie->mat[lig+1][col-1].g * masque[6];
+			if(lig+1 <image->nb_lig) 							tmp.g += copie->mat[lig+1][col].g * masque[7];
+			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp.g += copie->mat[lig+1][col+1].g * masque[8];
+			image->mat[lig][col].g = tmp.g / diviseur;
+
+			if(lig-1 >=0 && col-1 >=0) 							tmp.b += copie->mat[lig-1][col-1].b * masque[0];
+			if(lig-1 >=0) 										tmp.b += copie->mat[lig-1][col].b * masque[1];
+			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp.b += copie->mat[lig-1][col+1].b * masque[2];
+			if(col-1 >=0) 										tmp.b += copie->mat[lig][col-1].b * masque[3];
+																tmp.b += copie->mat[lig][col].b * masque[4];
+			if(col+1 <image->nb_col) 							tmp.b += copie->mat[lig][col+1].b * masque[5];
+			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp.b += copie->mat[lig+1][col-1].b * masque[6];
+			if(lig+1 <image->nb_lig) 							tmp.b += copie->mat[lig+1][col].b * masque[7];
+			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp.b += copie->mat[lig+1][col+1].b * masque[8];
+			image->mat[lig][col].b = tmp.b / diviseur;
 		}
 	}
 }
