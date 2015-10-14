@@ -95,9 +95,11 @@ int negatif(IMAGE *image){
 * \return L'image transformée passer en paramètre donc 1 si tout va bien.
 */
 int niveauGris(IMAGE *image){
+
 	//On effectue la transformation seulement si l'image est en couleur
 	if(image->type == 3 || image->type == 6){
-		int gris, lig, col;
+		float gris;
+		int lig, col;
 		for(lig=0;lig<image->nb_lig;lig++){
 			for(col=0;col<image->nb_col;col++){
 				gris = (0.3*(image->mat[lig][col].r)) + (0.59*(image->mat[lig][col].g))+(0.11*(image->mat[lig][col].b));
@@ -290,15 +292,17 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 			}
 		}
 
+		printf("\tValeur max : %d\n\tValeur min : %d\n", max, min);
 		// On acoluste les valeurs sur l'echelle [0;max]
 		for (lig = 0; lig < imageATransfo->nb_lig; lig++){
 			for (col = 0; col < imageATransfo->nb_col; col++){
 				//On change toutes les composantes avec la formules trouvés dans l'etude theorique
-				imageATransfo->mat[lig][col].r = (imageATransfo->max_val * (imageATransfo->mat[lig][col].r - min))/(max-min);
-				imageATransfo->mat[lig][col].g = (imageATransfo->max_val * (imageATransfo->mat[lig][col].g - min))/(max-min);
-				imageATransfo->mat[lig][col].b = (imageATransfo->max_val * (imageATransfo->mat[lig][col].b - min))/(max-min);
+				imageATransfo->mat[lig][col].r = (imageATransfo->max_val * (imageATransfo->mat[lig][col].r - min))/(max - min);
+				imageATransfo->mat[lig][col].g = (imageATransfo->max_val * (imageATransfo->mat[lig][col].g - min))/(max - min);
+				imageATransfo->mat[lig][col].b = (imageATransfo->max_val * (imageATransfo->mat[lig][col].b - min))/(max - min);
 			}
 		}
+		
 		// On change le type de fichier d'ecriture, pour economiser de la memoire
 		if(imageATransfo->type <= 3)
 			imageATransfo->type = 2;
@@ -386,33 +390,32 @@ void creation_masque (int *masque, int a, int b, int c, int d, int e, int f, int
 }
 
 void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur){
-	int lig, col;
+	int lig, col, tmp;
 
-	for (lig = 1; lig < image->nb_lig - 2; lig++)
-	{
-		for (col = 1; col < image->nb_col - 2; col++)
-		{
+	for (lig = 0; lig < image->nb_lig; lig++){
+		for (col = 0; col < image->nb_col; col++){
+			tmp = 0;
+			if(lig-1 >=0 && col-1 >=0)
+				tmp += copie->mat[lig-1][col-1].r * masque[0];
+			if(lig-1 >=0)
+				tmp += copie->mat[lig-1][col].r * masque[1];
+			if(lig-1 >=0 && col+1 <image->nb_col)
+				tmp += copie->mat[lig-1][col+1].r * masque[2];
+			if(col-1 >=0)
+				tmp += copie->mat[lig][col-1].r * masque[3];
+			tmp += copie->mat[lig][col].r * masque[4];
+			if(col+1 <image->nb_col)
+				tmp += copie->mat[lig][col+1].r * masque[5];
+			if(lig+1 <image->nb_lig && col-1 >=0)
+				tmp += copie->mat[lig+1][col-1].r * masque[6];
+			if(lig+1 <image->nb_lig)
+				tmp += copie->mat[lig+1][col].r * masque[7];
+			if(lig+1 <image->nb_lig && col+1 <image->nb_col)
+				tmp += copie->mat[lig+1][col+1].r * masque[8];
 
-			image->mat[lig][col].r = (  //1ere ligne
-				(copie->mat[lig-1][col-1].r*masque[0])+(copie->mat[lig-1][col].r*masque[1])+(copie->mat[lig-1][col+1].r)*masque[2]+
-												//2eme ligne
-				(copie->mat[lig][col-1].r*masque[3])+(copie->mat[lig][col].r*masque[4])+(copie->mat[lig][col+1].r*masque[5])+
-												//3eme ligne
-				(copie->mat[lig+1][col-1].r*masque[6])+(copie->mat[lig+1][col].r*masque[7])+(copie->mat[lig+1][col+1].r*masque[8]))/ diviseur;
-
-			image->mat[lig][col].g = (  //1ere ligne
-				(copie->mat[lig-1][col-1].g*masque[0])+(copie->mat[lig-1][col].g*masque[1])+(copie->mat[lig-1][col+1].g*masque[2])+
-												//2eme ligne
-				(copie->mat[lig][col-1].g*masque[3])+(copie->mat[lig][col].g*masque[4])+(copie->mat[lig][col+1].g*masque[5])+
-												//3eme ligne
-				(copie->mat[lig+1][col-1].g*masque[6])+(copie->mat[lig+1][col].g*masque[7])+(copie->mat[lig+1][col+1].g*masque[8]))/ diviseur;
-
-			image->mat[lig][col].b = (  //1ere ligne
-				(copie->mat[lig-1][col-1].b*masque[0])+(copie->mat[lig-1][col].b*masque[1])+(copie->mat[lig-1][col+1].b*masque[2])+
-												//2eme ligne
-				(copie->mat[lig][col-1].b*masque[3])+(copie->mat[lig][col].b*masque[4])+(copie->mat[lig][col+1].b*masque[5])+
-												//3eme ligne
-				(copie->mat[lig+1][col-1].b*masque[6])+(copie->mat[lig+1][col].b*masque[7])+(copie->mat[lig+1][col+1].b*masque[8]))/ diviseur;
+			image->mat[lig][col].r = tmp / diviseur;
+			image->mat[lig][col].g = tmp / diviseur;
+			image->mat[lig][col].b = tmp / diviseur; 
 		}
 	}
 }
