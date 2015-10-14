@@ -324,7 +324,7 @@ int lissage (IMAGE *imageATransfo){
 	creation_masque(masque,1,1,1,1,1,1,1,1,1);
 
 	//On commence les choses serieuses on fait le lissage
-	application_masque(imageATransfo, &copie, masque, 5);
+	application_masque(imageATransfo, &copie, masque, 9);
 
 	vider_tab_pixels(&copie);
 
