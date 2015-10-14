@@ -292,6 +292,7 @@ int lecture_P6(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]){
 	
 	//On lit la valeur maximum de chaque pixel
 	fscanf(file_image,"%d",&tab_pixels->max_val);
+	fgetc(file_image);
 
 	int continuer = 1, lig=0, col=0;
 
@@ -301,6 +302,7 @@ int lecture_P6(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]){
 		r = fgetc(file_image);
 		g = fgetc(file_image);
 		b = fgetc(file_image);
+
 		if(r == EOF || g == EOF || b == EOF)
 			continuer = 0;
 		else{

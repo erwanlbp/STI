@@ -323,7 +323,7 @@ int lissage (IMAGE *imageATransfo){
 	masque = malloc(9 * sizeof(int));
 	creation_masque(masque,1,1,1,1,1,1,1,1,1);
 
-	//On commence les choses serieuses on fait le lissage
+	//On fait le lissage
 	application_masque(imageATransfo, &copie, masque, 9);
 
 	vider_tab_pixels(&copie);
@@ -377,7 +377,7 @@ int alloc_tableau (IMAGE *imageAlloc){
 	return 1;
 }
 
-void creation_masque (int *masque, int a, int b, int c, int d, int e, int f, int g, int h, int i){
+void creation_masque (int *masque, const int a, const int b, const int c, const int d, const int e, const int f, const int g, const int h, const int i){
 	masque[0] = a;
 	masque[1] = b;
 	masque[2] = c;
@@ -391,47 +391,46 @@ void creation_masque (int *masque, int a, int b, int c, int d, int e, int f, int
 
 void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur){
 	int lig, col;
-	PIXEL tmp;
+	int tmp;
 
 	for (lig = 0; lig < image->nb_lig; lig++){
 		for (col = 0; col < image->nb_col; col++){
-			tmp.r = 0;
-			tmp.g = 0;
-			tmp.b = 0;
+			tmp = 0;
 
-			if(lig-1 >=0 && col-1 >=0) 							tmp.r += copie->mat[lig-1][col-1].r * masque[0];
-			if(lig-1 >=0) 										tmp.r += copie->mat[lig-1][col].r * masque[1];
-			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp.r += copie->mat[lig-1][col+1].r * masque[2];
-			if(col-1 >=0) 										tmp.r += copie->mat[lig][col-1].r * masque[3];
-																tmp.r += copie->mat[lig][col].r * masque[4];
-			if(col+1 <image->nb_col) 							tmp.r += copie->mat[lig][col+1].r * masque[5];
-			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp.r += copie->mat[lig+1][col-1].r * masque[6];
-			if(lig+1 <image->nb_lig) 							tmp.r += copie->mat[lig+1][col].r * masque[7];
-			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp.r += copie->mat[lig+1][col+1].r * masque[8];
-			image->mat[lig][col].r = tmp.r / diviseur;
+			if(lig-1 >=0 && col-1 >=0) 							tmp += copie->mat[lig-1][col-1].r 	* masque[0];
+			if(lig-1 >=0) 										tmp += copie->mat[lig-1][col].r 	* masque[1];
+			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp += copie->mat[lig-1][col+1].r 	* masque[2];
+			if(col-1 >=0) 										tmp += copie->mat[lig][col-1].r 	* masque[3];
+																tmp += copie->mat[lig][col].r 		* masque[4];
+			if(col+1 <image->nb_col) 							tmp += copie->mat[lig][col+1].r 	* masque[5];
+			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp += copie->mat[lig+1][col-1].r 	* masque[6];
+			if(lig+1 <image->nb_lig) 							tmp += copie->mat[lig+1][col].r 	* masque[7];
+			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp += copie->mat[lig+1][col+1].r 	* masque[8];
+			image->mat[lig][col].r = tmp / diviseur;
+			tmp = 0;
 
+			if(lig-1 >=0 && col-1 >=0) 							tmp += copie->mat[lig-1][col-1].g 	* masque[0];
+			if(lig-1 >=0) 										tmp += copie->mat[lig-1][col].g 	* masque[1];
+			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp += copie->mat[lig-1][col+1].g 	* masque[2];
+			if(col-1 >=0) 										tmp += copie->mat[lig][col-1].g 	* masque[3];
+																tmp += copie->mat[lig][col].g 		* masque[4];
+			if(col+1 <image->nb_col) 							tmp += copie->mat[lig][col+1].g 	* masque[5];
+			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp += copie->mat[lig+1][col-1].g 	* masque[6];
+			if(lig+1 <image->nb_lig) 							tmp += copie->mat[lig+1][col].g 	* masque[7];
+			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp += copie->mat[lig+1][col+1].g 	* masque[8];
+			image->mat[lig][col].g = tmp / diviseur;
+			tmp = 0;
 
-			if(lig-1 >=0 && col-1 >=0) 							tmp.g += copie->mat[lig-1][col-1].g * masque[0];
-			if(lig-1 >=0) 										tmp.g += copie->mat[lig-1][col].g * masque[1];
-			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp.g += copie->mat[lig-1][col+1].g * masque[2];
-			if(col-1 >=0) 										tmp.g += copie->mat[lig][col-1].g * masque[3];
-																tmp.g += copie->mat[lig][col].g * masque[4];
-			if(col+1 <image->nb_col) 							tmp.g += copie->mat[lig][col+1].g * masque[5];
-			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp.g += copie->mat[lig+1][col-1].g * masque[6];
-			if(lig+1 <image->nb_lig) 							tmp.g += copie->mat[lig+1][col].g * masque[7];
-			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp.g += copie->mat[lig+1][col+1].g * masque[8];
-			image->mat[lig][col].g = tmp.g / diviseur;
-
-			if(lig-1 >=0 && col-1 >=0) 							tmp.b += copie->mat[lig-1][col-1].b * masque[0];
-			if(lig-1 >=0) 										tmp.b += copie->mat[lig-1][col].b * masque[1];
-			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp.b += copie->mat[lig-1][col+1].b * masque[2];
-			if(col-1 >=0) 										tmp.b += copie->mat[lig][col-1].b * masque[3];
-																tmp.b += copie->mat[lig][col].b * masque[4];
-			if(col+1 <image->nb_col) 							tmp.b += copie->mat[lig][col+1].b * masque[5];
-			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp.b += copie->mat[lig+1][col-1].b * masque[6];
-			if(lig+1 <image->nb_lig) 							tmp.b += copie->mat[lig+1][col].b * masque[7];
-			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp.b += copie->mat[lig+1][col+1].b * masque[8];
-			image->mat[lig][col].b = tmp.b / diviseur;
+			if(lig-1 >=0 && col-1 >=0) 							tmp += copie->mat[lig-1][col-1].b 	* masque[0];
+			if(lig-1 >=0) 										tmp += copie->mat[lig-1][col].b 	* masque[1];
+			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp += copie->mat[lig-1][col+1].b 	* masque[2];
+			if(col-1 >=0) 										tmp += copie->mat[lig][col-1].b 	* masque[3];
+																tmp += copie->mat[lig][col].b 		* masque[4];
+			if(col+1 <image->nb_col) 							tmp += copie->mat[lig][col+1].b 	* masque[5];
+			if(lig+1 <image->nb_lig && col-1 >=0) 				tmp += copie->mat[lig+1][col-1].b 	* masque[6];
+			if(lig+1 <image->nb_lig) 							tmp += copie->mat[lig+1][col].b 	* masque[7];
+			if(lig+1 <image->nb_lig && col+1 <image->nb_col) 	tmp += copie->mat[lig+1][col+1].b 	* masque[8];
+			image->mat[lig][col].b = tmp / diviseur;
 		}
 	}
 }
@@ -642,8 +641,7 @@ int masqueCustom (IMAGE *imageATransfo, const int argc, const char *argv[]){
 	}
 
 	//On alloue de la mémoire pour le masque a appliquer
-	int *masque=NULL;
-	masque = malloc(9 * sizeof(int));
+	int masque[9] = {0};
 
 	creation_masque(masque ,atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]), atoi(argv[8]), atoi(argv[9]), atoi(argv[10]), atoi(argv[11]));
 
