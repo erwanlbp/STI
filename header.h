@@ -24,10 +24,10 @@
 //Idees de plus : 
 // Fonction de test si le fichier image est valide, bien forme
 // Eviter d'ecrire base base test si je reprend la meme image pour faire une transformation
- 
+// Il faut que tous les messages d'erreurs et tout soient ecrit dans un fichier pour les avoir sur le site
  
 // Format lancement programme : 
-// ./STI [chemin image = img_test.ppm] [transformation = Aucune]
+// ./STI [chemin image = img_test.ppm] [transformation = Aucune] [valeurs numeriques]
 // Donc si on met pas d'argument au programme il chargera l'image de test et fera rien
 
 /**
