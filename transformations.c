@@ -319,8 +319,7 @@ int lissage (IMAGE *imageATransfo){
 	creation_Copie(imageATransfo, &copie);
 
 	//On créer le masque, une matrice 3x3 contenant que des 1
-	int *masque=NULL;
-	masque = malloc(9 * sizeof(int));
+	int masque[9]={0};
 	creation_masque(masque,1,1,1,1,1,1,1,1,1);
 
 	//On commence les choses serieuses on fait le lissage
@@ -336,8 +335,8 @@ int laplacien (IMAGE *imageATransfo){
 	IMAGE copie;
 	creation_Copie(imageATransfo, &copie);
 
-	int *masque=NULL;
-	masque = malloc(9 * sizeof(int));
+	int masque[9]={0};
+
 	creation_masque(masque,0,1,0,1,-4,1,0,1,0);
 
 	application_masque(imageATransfo, &copie, masque, 9);
@@ -440,11 +439,9 @@ void creation_Copie(IMAGE *image, IMAGE *copie){
 void gradientSimple( IMAGE *image){
 	int lig, col; 
 	IMAGE copieImageGx, copieImageGy;
-	int *masqueX=NULL;
-	int *masqueY=NULL;
-	//Allocation du masque
-	masqueX = malloc(9 * sizeof(int));
-	masqueY = malloc(9 * sizeof(int));
+	int masqueX[9]={0};
+	int masqueY[9]={0};
+	
 	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
 	if(image->type == 3 || image->type == 6){
 		niveauGris(image);
@@ -485,11 +482,9 @@ void gradientSimple( IMAGE *image){
 void gradientSobel( IMAGE *image){
 	int lig, col; 
 	IMAGE copieImageGx, copieImageGy;
-	int *masqueX=NULL;
-	int *masqueY=NULL;
-	//Allocation du masque
-	masqueX = malloc(9 * sizeof(int));
-	masqueY = malloc(9 * sizeof(int));
+	int masqueX[9]={0};
+	int masqueY[9]={0};
+
 	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
 	if(image->type == 3 || image->type == 6){
 		niveauGris(image);
@@ -626,8 +621,7 @@ int masqueCustom (IMAGE *imageATransfo, const int argc, const char *argv[]){
 	}
 
 	//On alloue de la mémoire pour le masque a appliquer
-	int *masque=NULL;
-	masque = malloc(9 * sizeof(int));
+	int masque[9]={0};
 
 	creation_masque(masque ,atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]), atoi(argv[8]), atoi(argv[9]), atoi(argv[10]), atoi(argv[11]));
 
