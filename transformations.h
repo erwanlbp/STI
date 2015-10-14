@@ -39,4 +39,6 @@ int triTab (int *masque, int taille);
 
 int masqueCustom (IMAGE *image, const int argc, const char *argv[]);
 
+void creation_Copie(IMAGE *image, IMAGE *copie);
+
 #endif

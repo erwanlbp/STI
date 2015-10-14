@@ -316,16 +316,13 @@ int amelioration_du_contraste (IMAGE *imageATransfo){
 int lissage (IMAGE *imageATransfo){
 	int lig, col;
 	IMAGE copie;
-	copie.nb_lig = imageATransfo->nb_lig;
-	copie.nb_col = imageATransfo->nb_col;
+	creation_Copie(imageATransfo, &copie);
 
 	//On créer le masque, une matrice 3x3 contenant que des 1
 	int *masque=NULL;
 	masque = malloc(9 * sizeof(int));
 	creation_masque(masque,1,1,1,1,1,1,1,1,1);
 
-	//On copie l'image de base dans la copie allouee dynamiquement
-	alloc_tableau(&copie);
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 	{
 		for (col = 0; col < imageATransfo->nb_col; col++)
@@ -335,7 +332,7 @@ int lissage (IMAGE *imageATransfo){
 	}
 
 	//On commence les choses serieuses on fait le lissage
-	application_masque(imageATransfo, &copie, masque, 9);
+	application_masque(imageATransfo, &copie, masque, 5);
 
 	vider_tab_pixels(&copie);
 
@@ -345,20 +342,20 @@ int lissage (IMAGE *imageATransfo){
 int laplacien (IMAGE *imageATransfo){
 	int lig, col;
 	IMAGE copie;
-	copie.nb_lig = imageATransfo->nb_lig;
-	copie.nb_col = imageATransfo->nb_col;
+	creation_Copie(imageATransfo, &copie);
 
 	int *masque=NULL;
 	masque = malloc(9 * sizeof(int));
 	creation_masque(masque,0,1,0,1,-4,1,0,1,0);
-	alloc_tableau(&copie);
 
 	//On copie l'image de base dans la copie allouee dynamiquement
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
 	{
 		for (col = 0; col < imageATransfo->nb_col; col++)
 		{
-			copie.mat[lig][col] = imageATransfo->mat[lig][col];
+			copie.mat[lig][col].r = abs(imageATransfo->mat[lig][col].r);
+			copie.mat[lig][col].g = abs(imageATransfo->mat[lig][col].g);
+			copie.mat[lig][col].b = abs(imageATransfo->mat[lig][col].b);
 		}
 	}
 
@@ -443,6 +440,14 @@ void application_masque (IMAGE *image, IMAGE *copie, int *masque, int diviseur){
 	}
 }
 
+void creation_Copie(IMAGE *image, IMAGE *copie){
+	copie->nb_lig = image->nb_lig;
+	copie->nb_col = image->nb_col;
+	copie->type = image->type;
+	copie->max_val = image->max_val;
+	alloc_tableau(copie);
+}
+
 void gradientSimple( IMAGE *image){
 	int lig, col; 
 	IMAGE copieImageGx, copieImageGy;
@@ -458,22 +463,11 @@ void gradientSimple( IMAGE *image){
 
 	//Création de la copieImage pour le gradient en X
 	copieImageGx.mat = NULL;
-	copieImageGx.nb_lig = image->nb_lig;
-	copieImageGx.nb_col = image->nb_col;
-	copieImageGx.type = image->type;
-	copieImageGx.max_val = image->max_val;
+	creation_Copie(image, &copieImageGx);
 
 	//Création de la copieImage pour le gradient en Y
 	copieImageGy.mat = NULL;
-	copieImageGy.nb_lig = image->nb_lig;
-	copieImageGy.nb_col = image->nb_col;
-	copieImageGy.type = image->type;
-	copieImageGy.max_val = image->max_val;
-
-	//Alocation du tableau copieImage pour le gradient en X
-	alloc_tableau(&copieImageGx);
-	//Alocation du tableau copieImage pour le gradient en Y
-	alloc_tableau(&copieImageGy);
+	creation_Copie(image, &copieImageGy);
 
 	// Affectation des valeurs de image dans copieImage pour le gradient en X
 	for(lig=0; lig<copieImageGx.nb_lig; lig++){
@@ -493,10 +487,10 @@ void gradientSimple( IMAGE *image){
 	creation_masque(masqueY, 0, 0, 0, 0, -1, 0, 0, 1, 0);
 
 	//Aplication du premier masque par rapport a l'axe X
-	application_masque(image, &copieImageGx, masqueX, 1);
+	application_masque(image, &copieImageGx, masqueX, 9);
 
 	//Application du second masque par rapport a l'axe Y
-	application_masque(&copieImageGy, &copieImageGx, masqueY, 1);
+	application_masque(&copieImageGy, &copieImageGx, masqueY, 9);
 
 	//On recupere image auquel on a applique le masqueX et copieImageGy auquel on a applique le masqueY
 
@@ -528,22 +522,11 @@ void gradientSobel( IMAGE *image){
 
 	//Création de la copieImage pour le gradient en X
 	copieImageGx.mat = NULL;
-	copieImageGx.nb_lig = image->nb_lig;
-	copieImageGx.nb_col = image->nb_col;
-	copieImageGx.type = image->type;
-	copieImageGx.max_val = image->max_val;
+	creation_Copie(image, &copieImageGx);
 
 	//Création de la copieImage pour le gradient en Y
 	copieImageGy.mat = NULL;
-	copieImageGy.nb_lig = image->nb_lig;
-	copieImageGy.nb_col = image->nb_col;
-	copieImageGy.type = image->type;
-	copieImageGy.max_val = image->max_val;
-
-	//Alocation du tableau copieImage pour le gradient en X
-	alloc_tableau(&copieImageGx);
-	//Alocation du tableau copieImage pour le gradient en Y
-	alloc_tableau(&copieImageGy);
+	creation_Copie(image, &copieImageGy);
 
 	// Affectation des valeurs de image dans copieImage pour le gradient en X
 	for(lig=0; lig<copieImageGx.nb_lig; lig++){
@@ -593,21 +576,11 @@ int detectionContoursLaplacien (IMAGE *imageATransfo){
 
 	IMAGE copieLaplacien;
 	copieLaplacien.mat = NULL;
-	copieLaplacien.nb_lig = imageATransfo->nb_lig;
-	copieLaplacien.nb_col = imageATransfo->nb_col;
-	copieLaplacien.type = imageATransfo->type;
-	copieLaplacien.max_val = imageATransfo->max_val;
+	creation_Copie(imageATransfo, &copieLaplacien);
 
 	IMAGE copieGradient;
 	copieGradient.mat = NULL;
-	copieGradient.nb_lig = imageATransfo->nb_lig;
-	copieGradient.nb_col = imageATransfo->nb_col;
-	copieGradient.type = imageATransfo->type;
-	copieGradient.max_val = imageATransfo->max_val;
-
-	//Allocation des copies
-	alloc_tableau(&copieLaplacien);
-	alloc_tableau(&copieGradient);
+	creation_Copie(imageATransfo, &copieGradient);
 
 	//L'image doit être lissée avant de pouvoir en détecter ses contours
 	lissage(imageATransfo);
@@ -709,19 +682,11 @@ int masqueCustom (IMAGE *imageATransfo, const int argc, const char *argv[]){
 	//On créer une copie qui va contenir les valeurs afin d'appliquer le masque avec les valeurs d'origine
 	IMAGE copieImage;
 	copieImage.mat = NULL;
-	copieImage.nb_lig = imageATransfo->nb_lig;
-	copieImage.nb_col = imageATransfo->nb_col;
-	copieImage.type = imageATransfo->type;
-	copieImage.max_val = imageATransfo->max_val;
-
-	//Allocation de la copie de la copie
-	alloc_tableau(&copieImage);
+	creation_Copie(imageATransfo, &copieImage);
 
 	//On copie l'image de base dans la copie allouee dynamiquement
-	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
-	{
-		for (col = 0; col < imageATransfo->nb_col; col++)
-		{
+	for (lig = 0; lig < imageATransfo->nb_lig; lig++){
+		for (col = 0; col < imageATransfo->nb_col; col++){
 			copieImage.mat[lig][col] = imageATransfo->mat[lig][col];
 		}
 	}
@@ -733,4 +698,3 @@ int masqueCustom (IMAGE *imageATransfo, const int argc, const char *argv[]){
 
 	return 1;
 }
-
