@@ -31,4 +31,8 @@ void gradientSobel(IMAGE *image);
 
 void detectionContours( IMAGE * image);
 
+int reductionBruit(IMAGE *image);
+
+int triTab (int *masque, int taille);
+
 #endif

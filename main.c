@@ -68,6 +68,8 @@ int main(int argc, char const *argv[])
 		gradientSobel(&tab_pixels);
 	else if(strcmp(transformation, "detectionContours") == 0)
 		detectionContours(&tab_pixels);
+	else if(strcmp(transformation, "reductionBruit") == 0)
+		reductionBruit(&tab_pixels);
 
 
 
