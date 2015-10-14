@@ -33,4 +33,6 @@ void detectionContoursSobel( IMAGE * image);
 
 int detectionContoursLaplacien (IMAGE *imageATransfo);
 
+int masqueCustom (IMAGE *image, const int argc, const char *argv[]);
+
 #endif

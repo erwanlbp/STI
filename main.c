@@ -70,6 +70,8 @@
  		detectionContoursSobel(&tab_pixels);
  	else if(strcmp(transformation, "detectionContoursLaplacien") == 0)
  		detectionContoursLaplacien(&tab_pixels);
+ 	else if(strcmp(transformation, "masqueCustom") == 0)
+ 		masqueCustom(&tab_pixels, argc, argv);
  	else if(strcmp(transformation, "base") != 0){
  		printf("[X]\tTransformation inexistante\n");
  		transfoOk = 0;
