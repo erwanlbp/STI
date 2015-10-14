@@ -37,4 +37,6 @@ int reductionBruit(IMAGE *image);
 
 int triTab (int *masque, int taille);
 
+int masqueCustom (IMAGE *image, const int argc, const char *argv[]);
+
 #endif

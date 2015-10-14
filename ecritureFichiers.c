@@ -9,6 +9,7 @@
  		   Romanet Vincent
  * Ensemble des fonctions d'écriture des fichiers en fonction de leur type
  */
+
 FILE* ouverture_ecriture_fichier_image(const int * typeFichier, const char nomImage[255], const char transformation[255]){
 
 	char chemin[255] = "";
@@ -150,7 +151,7 @@ int ecriture_P5(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255
 
 int ecriture_P6(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
-	fprintf(fichier, "P6\n%d %d\n%d", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
+	fprintf(fichier, "P6\n%d %d\n%d\n", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
 	
 	int lig,col;
 	for(lig=0; lig<tab_pixels->nb_lig; lig++){
