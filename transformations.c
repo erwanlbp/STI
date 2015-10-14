@@ -612,7 +612,7 @@ int detectionContoursLaplacien (IMAGE *imageATransfo){
 	copieGradient.type = imageATransfo->type;
 	copieGradient.max_val = imageATransfo->max_val;
 
-	//Allocation de la copie de l'imageATransfo
+	//Allocation des copies
 	alloc_tableau(&copieLaplacien);
 	alloc_tableau(&copieGradient);
 
@@ -651,3 +651,47 @@ int detectionContoursLaplacien (IMAGE *imageATransfo){
 
 	return 1;
 }
+
+int masqueCustom (IMAGE *imageATransfo, const int argc, const char *argv[]){
+	int lig, col;
+
+	//On vérifie que tous les arguments sont envoyés
+	if(argc != 13){
+		printf("[X]\tMerci de rentrer toutes les valeurs du masque\n");
+		return 1;
+	}
+
+	//On alloue de la mémoire pour le masque a appliquer
+	int *masque=NULL;
+	masque = malloc(9 * sizeof(int));
+
+	creation_masque(masque ,atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]), atoi(argv[8]), atoi(argv[9]), atoi(argv[10]), atoi(argv[11]));
+
+	//On créer une copie qui va contenir les valeurs afin d'appliquer le masque avec les valeurs d'origine
+	IMAGE copieImage;
+	copieImage.mat = NULL;
+	copieImage.nb_lig = imageATransfo->nb_lig;
+	copieImage.nb_col = imageATransfo->nb_col;
+	copieImage.type = imageATransfo->type;
+	copieImage.max_val = imageATransfo->max_val;
+
+	//Allocation de la copie de la copie
+	alloc_tableau(&copieImage);
+
+	//On copie l'image de base dans la copie allouee dynamiquement
+	for (lig = 0; lig < imageATransfo->nb_lig; lig++)
+	{
+		for (col = 0; col < imageATransfo->nb_col; col++)
+		{
+			copieImage.mat[lig][col] = imageATransfo->mat[lig][col];
+		}
+	}
+
+	application_masque(imageATransfo, &copieImage, masque, atoi(argv[12]));
+
+	//On vide la copie alloué en mémoire
+	vider_tab_pixels(&copieImage);
+
+	return 1;
+}
+
