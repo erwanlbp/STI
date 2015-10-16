@@ -141,7 +141,6 @@ int lecture_P1(FILE* file_image, IMAGE * tab_pixels){
 	tab_pixels->max_val = 1;
 
 	int continuer = 1, lig=0, col=0;
-
 	// On lit un entier jusqu'a la fin du fichier
 	while(continuer && fscanf(file_image, "%d", &tab_pixels->mat[lig][col].r) != EOF){
 		// On stocke l'entier dans les 3 sous variable du pixel
@@ -220,10 +219,12 @@ int lecture_P3(FILE* file_image, IMAGE * tab_pixels){
 }
 
 int lecture_P4(FILE* file_image, IMAGE * tab_pixels, const char nomImage[255]){
+	
+	// Comme les valeurs des pixels sont soit 1 soit 0
+	// La valeur max n'est pas mise dans le fichier mais quand meme
+	tab_pixels->max_val = 1;
 
-	int continuer = 1, lig=0, col=0;
-
-	int c;
+	int continuer = 1, lig=0, col=0, c;
 	// On lit un entier jusqu'a la fin du fichier
 	while(continuer){
 		c = fgetc(file_image);
