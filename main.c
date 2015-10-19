@@ -64,9 +64,9 @@
  	else if(strcmp(transformation, "laplacien") == 0)
  		laplacien(&tab_pixels);
  	else if(strcmp(transformation, "gradientSimple") == 0)
- 		gradientSimple(&tab_pixels);
- 	else if(strcmp(transformation, "gradientSobel") == 0)
- 		gradientSobel(&tab_pixels);
+ 		gradient(&tab_pixels, transformation);
+  	else if(strcmp(transformation, "gradientSobel") == 0)
+ 		gradient(&tab_pixels, transformation);
  	else if(strcmp(transformation, "detectionContoursSobel") == 0)
  		detectionContoursSobel(&tab_pixels);
  	else if(strcmp(transformation, "detectionContoursLaplacien") == 0)

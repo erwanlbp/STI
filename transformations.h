@@ -25,9 +25,7 @@ void creation_masque (int *masque, const int a, const int b, const int c, const 
 
 void application_masque (IMAGE *image, IMAGE *copie, const int *masque, int diviseur);
 
-int gradientSimple(IMAGE *image);
-
-int gradientSobel(IMAGE *image);
+int gradient( IMAGE *image, const char *transformation);
 
 int detectionContoursSobel( IMAGE * image);
 

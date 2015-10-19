@@ -246,37 +246,50 @@ void amelioration_du_contraste (IMAGE *imageATransfo){
 		return;
 	}
 
-	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
-	if(imageATransfo->type == 3 || imageATransfo->type == 6)
-		niveauGris(imageATransfo);
+	int lig, col;
+	float alphaR, alphaG, alphaB, betaR, betaG, betaB;
+	PIXEL pixelMin, pixelMax;
+	pixelMin.r = imageATransfo->mat[0][0].r;
+	pixelMin.g = imageATransfo->mat[0][0].g;
+	pixelMin.b = imageATransfo->mat[0][0].b;
 
-	int lig, col, min = imageATransfo->mat[0][0].r, max = imageATransfo->mat[0][0].r;
+	pixelMax.r = imageATransfo->mat[0][0].r;
+	pixelMax.g = imageATransfo->mat[0][0].g;
+	pixelMax.b = imageATransfo->mat[0][0].b;
 
 	//Recherche du Min et du Max
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++){
 		for (col = 0; col < imageATransfo->nb_col; col++){
-			if (imageATransfo->mat[lig][col].r < min)
-				min = imageATransfo->mat[lig][col].r;
-			if (imageATransfo->mat[lig][col].r > max)
-				max = imageATransfo->mat[lig][col].r;			
+			if (imageATransfo->mat[lig][col].r < pixelMin.r && imageATransfo->mat[lig][col].g < pixelMin.g && imageATransfo->mat[lig][col].b < pixelMin.b){
+				pixelMin.r = imageATransfo->mat[lig][col].r;
+				pixelMin.g = imageATransfo->mat[lig][col].g;
+				pixelMin.b = imageATransfo->mat[lig][col].b;
+			}
+			if (imageATransfo->mat[lig][col].r > pixelMax.r && imageATransfo->mat[lig][col].g > pixelMax.g && imageATransfo->mat[lig][col].b > pixelMax.b){
+				pixelMax.r = imageATransfo->mat[lig][col].r;
+				pixelMax.g = imageATransfo->mat[lig][col].g;
+				pixelMax.b = imageATransfo->mat[lig][col].b;
+			}
 		}
 	}
+
+	//Affectation des coefficients
+	alphaR = 255.0 / (pixelMax.r - pixelMin.r);
+	alphaG = 255.0 / (pixelMax.g - pixelMin.g);
+	alphaB = 255.0 / (pixelMax.b - pixelMin.b);
+	betaR = -pixelMin.r * alphaR;
+	betaG = -pixelMin.g * alphaG;
+	betaB = -pixelMin.b * alphaB;
 
 	// On ajuste les valeurs sur l'echelle [0;max]
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++){
 		for (col = 0; col < imageATransfo->nb_col; col++){
-			//On change toutes les composantes avec la formules trouves dans l'etude theorique
-			imageATransfo->mat[lig][col].r = (imageATransfo->max_val * (imageATransfo->mat[lig][col].r - min))/(max - min);
-			imageATransfo->mat[lig][col].g = (imageATransfo->max_val * (imageATransfo->mat[lig][col].g - min))/(max - min);
-			imageATransfo->mat[lig][col].b = (imageATransfo->max_val * (imageATransfo->mat[lig][col].b - min))/(max - min);
+			//On change toutes les composantes avec la formules trouvees dans l'etude theorique
+			imageATransfo->mat[lig][col].r = (alphaR *imageATransfo->mat[lig][col].r+betaR);
+			imageATransfo->mat[lig][col].g = (alphaG *imageATransfo->mat[lig][col].g+betaG);
+			imageATransfo->mat[lig][col].b = (alphaB *imageATransfo->mat[lig][col].b+betaB);
 		}
 	}
-
-	// On change le type de fichier d'ecriture, pour economiser de la memoire
-	if(imageATransfo->type <= 3)
-		imageATransfo->type = 2;
-	else 
-		imageATransfo->type = 5;
 }
 
 int lissage (IMAGE *imageATransfo){
@@ -428,7 +441,7 @@ int creation_Copie(IMAGE *image, IMAGE *copie){
 	return 1;
 }
 
-int gradientSimple( IMAGE *image){
+int gradient( IMAGE *image, const char *transformation){
 	int lig, col; 
 	IMAGE copieImageGx, copieImageGy;
 	int masqueX[9]={0};
@@ -451,8 +464,14 @@ int gradientSimple( IMAGE *image){
 		return 0;
 	}
 
-	creation_masque(masqueX, 0, 0, 0, 0, -1, 1, 0, 0, 0);
-	creation_masque(masqueY, 0, 0, 0, 0, -1, 0, 0, 1, 0);
+	if(strcmp(transformation, "gradientSimple")){
+		creation_masque(masqueX, 0, 0, 0, 0, -1, 1, 0, 0, 0);
+		creation_masque(masqueY, 0, 0, 0, 0, -1, 0, 0, 1, 0);
+	}
+	else if(strcmp(transformation,"gradientSobel")){
+		creation_masque(masqueX, -1, 0, 1, -2, 0, 2, -1, 0, 1);
+		creation_masque(masqueY, 1, 2, 1, 0, 0, 0, -1, -2, -1);
+	}
 
 	//Aplication du premier masque par rapport a l'axe X
 	application_masque(image, &copieImageGx, masqueX, 9);
@@ -474,54 +493,8 @@ int gradientSimple( IMAGE *image){
 	return 1;
 }
 
-int gradientSobel( IMAGE *image){
-	int lig, col; 
-	IMAGE copieImageGx, copieImageGy;
-	int masqueX[9]={0};
-	int masqueY[9]={0};
-
-	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
-	if(image->type == 3 || image->type == 6)
-		niveauGris(image);
-
-	//Creation de la copieImage pour le gradient en X
-	if(! creation_Copie(image, &copieImageGx)){
-		printf("[X]\tErreur sur la copie en X dans la fonction gradientSimple\n");
-		return 0;
-	}
-
-	//Creation de la copieImage pour le gradient en Y
-	if(! creation_Copie(image, &copieImageGy)){
-		printf("[X]\tErreur sur la copie en Y dans la fonction gradientSimple\n");
-		vider_tab_pixels(&copieImageGx);
-		return 0;
-	}
-
-	creation_masque(masqueX, -1, 0, 1, -2, 0, 2, -1, 0, 1);
-	creation_masque(masqueY, 1, 2, 1, 0, 0, 0, -1, -2, -1);
-
-	//Aplication du premier masque par rapport a l'axe X
-	application_masque(image, &copieImageGx, masqueX, 1);
-
-	//Application du second masque par rapport a l'axe Y
-	application_masque(&copieImageGy, &copieImageGx, masqueY, 1);
-
-	//On fait une double boucle pour recuperer l'image finale avec le gradient simple
-	for(lig=0; lig<image->nb_lig;lig++){
-		for(col=0; col<image->nb_col;col++){
-			image->mat[lig][col].r = abs(image->mat[lig][col].r) + abs(copieImageGy.mat[lig][col].r);
-			image->mat[lig][col].g = abs(image->mat[lig][col].g) + abs(copieImageGy.mat[lig][col].g);
-			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
-		}
-	}
-
-	vider_tab_pixels(&copieImageGx);
-	vider_tab_pixels(&copieImageGy);
-	return 1;
-}
-
 int detectionContoursSobel(IMAGE * image){
-	if(! gradientSobel(image)){
+	if(! gradient(image, "gradientSobel")){
 		printf("[X]\tErreur dans la fonction detectionContoursSobel\n");
 		return 0;
 	}

@@ -4,15 +4,10 @@
 /**  
  * \file header.h
  * \brief Header principale
-<<<<<<< HEAD
- * \author Le Batard--Poles Erwan
- * \version 12
-=======
  * \author Le Batard--Polès Erwan
  		   Vacheret Alex
  		   Romanet Vincent
  * Création des deux structures du programme et des fonctions principales
->>>>>>> 30708ffff3f8b57455a322b7e27bf24c7c8ab375
  */
 
 #include <stdio.h>
