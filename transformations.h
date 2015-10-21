@@ -1,6 +1,15 @@
 #ifndef TRANSFORMATION
 #define TRANSFORMATION
 
+/**  
+ * \file Lecture trasnformation.h
+ * \brief Prototypes des fonctions de transformation
+ * \author Le Batard--Polès Erwan
+ 		   Vacheret Alex
+ 		   Romanet Vincent
+ * Ensemble des prototypes pour les fonctions de transformation qui sont dans transformation.c
+ */
+
 void binarisation (IMAGE *imageATransfo);
 
 void negatif(IMAGE *image);
