@@ -17,10 +17,7 @@
 
 
 //Idees de plus : 
-// Fonction de test si le fichier image est valide, bien forme
-// Eviter d'ecrire base base test si je reprend la meme image pour faire une transformation
 // Il faut que tous les messages d'erreurs et tout soient ecrit dans un fichier pour les avoir sur le site
-// Pour gradient simple et Sobel, faire une seule fonction, ca fait gagner 30 lignes
 
 // Format lancement programme : 
 // ./STI [chemin image = img_test.ppm] [transformation = Aucune] [valeurs numeriques]
