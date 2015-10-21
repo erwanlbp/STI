@@ -101,6 +101,13 @@
  	return 0;  
  } 
 
+/**
+* \fn void vider tab pixel
+* \brief Fonction pour faire la binarisation d'une image
+* Cette fonction sert à vider un tableau en mémoire afin d'éviter les fuite de mémoire dans le programme
+* On l'utilise pour détruire chaque copie par exemple.
+*
+*/
  void vider_tab_pixels(IMAGE * tab){
  	int i;
 	// Pour chaque case de la IMAGE
@@ -113,6 +120,12 @@
  	free(tab->mat);
  }
 
+/**
+* \fn void afficher tab pixel
+* \brief Fonction pour afficher une tableau
+* Cette fonction afficher un tableau à deux dimensions avec une simple double boucle
+*
+*/
  void afficher_tab_pixels(const IMAGE * tab){
  	ligne_separation('-');
  	int lig,col;
@@ -130,6 +143,12 @@
  	ligne_separation('-');
  }
 
+/**
+* \fn void ligne séparation
+* \brief Fonction de séparation
+* Simple fonction pour obtenir un résultat plus lisible dans la console ou on affiche les erreurs si il y en a
+*
+*/
  void ligne_separation(const char separateur){
 	// On ecrit 100 fois le caractere recu en argument
  	printf("\n");
@@ -141,6 +160,12 @@
  	printf("\n\n");
  }
 
+/**
+* \fn void effacer ecran
+* \brief Fonction clear screen
+* Petit clear screen au lancement du programme
+*
+*/
  void effacer_ecran(){
 	// Decide de l'OS a la compilation
 	#ifdef _WIN32
