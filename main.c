@@ -37,7 +37,6 @@
  	}
 
 	// On ferme le fichier quand on a finit de travailler dessus
- 	fclose(file_image);
  	file_image = NULL;
 
 	// ###########################################

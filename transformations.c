@@ -51,11 +51,9 @@ void binarisation (IMAGE *imageATransfo){
 		}		
 	}
 	imageATransfo->max_val = 1;
+
 	// On change le type de fichier d'ecriture, pour economiser de la memoire
-	if(imageATransfo->type <= 3)
-		imageATransfo->type = 1;
-	else 
-		imageATransfo->type = 4;
+	imageATransfo->type = 1;
 }
 
 /**
@@ -104,10 +102,7 @@ void niveauGris(IMAGE *image){
 		}
 	}
 	// On change le type de fichier d'ecriture, pour economiser de la memoire
-	if(image->type <= 3)
-		image->type = 2;
-	else 
-		image->type = 5;
+	image->type = 2;
 }
 
 /**
@@ -260,12 +255,12 @@ void amelioration_du_contraste (IMAGE *imageATransfo){
 	//Recherche du Min et du Max
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++){
 		for (col = 0; col < imageATransfo->nb_col; col++){
-			if (imageATransfo->mat[lig][col].r < pixelMin.r && imageATransfo->mat[lig][col].g < pixelMin.g && imageATransfo->mat[lig][col].b < pixelMin.b){
+			if (imageATransfo->mat[lig][col].r + imageATransfo->mat[lig][col].g +imageATransfo->mat[lig][col].b < pixelMin.r + pixelMin.g + pixelMin.b){
 				pixelMin.r = imageATransfo->mat[lig][col].r;
 				pixelMin.g = imageATransfo->mat[lig][col].g;
 				pixelMin.b = imageATransfo->mat[lig][col].b;
 			}
-			if (imageATransfo->mat[lig][col].r > pixelMax.r && imageATransfo->mat[lig][col].g > pixelMax.g && imageATransfo->mat[lig][col].b > pixelMax.b){
+			if (imageATransfo->mat[lig][col].r + imageATransfo->mat[lig][col].g +imageATransfo->mat[lig][col].b > pixelMax.r + pixelMax.g + pixelMax.b){
 				pixelMax.r = imageATransfo->mat[lig][col].r;
 				pixelMax.g = imageATransfo->mat[lig][col].g;
 				pixelMax.b = imageATransfo->mat[lig][col].b;
@@ -274,9 +269,9 @@ void amelioration_du_contraste (IMAGE *imageATransfo){
 	}
 
 	//Affectation des coefficients
-	alphaR = 255.0 / (pixelMax.r - pixelMin.r);
-	alphaG = 255.0 / (pixelMax.g - pixelMin.g);
-	alphaB = 255.0 / (pixelMax.b - pixelMin.b);
+	alphaR = imageATransfo->max_val / (pixelMax.r - pixelMin.r);
+	alphaG = imageATransfo->max_val / (pixelMax.g - pixelMin.g);
+	alphaB = imageATransfo->max_val / (pixelMax.b - pixelMin.b);
 	betaR = -pixelMin.r * alphaR;
 	betaG = -pixelMin.g * alphaG;
 	betaB = -pixelMin.b * alphaB;
@@ -285,9 +280,15 @@ void amelioration_du_contraste (IMAGE *imageATransfo){
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++){
 		for (col = 0; col < imageATransfo->nb_col; col++){
 			//On change toutes les composantes avec la formules trouvees dans l'etude theorique
-			imageATransfo->mat[lig][col].r = (alphaR *imageATransfo->mat[lig][col].r+betaR);
-			imageATransfo->mat[lig][col].g = (alphaG *imageATransfo->mat[lig][col].g+betaG);
-			imageATransfo->mat[lig][col].b = (alphaB *imageATransfo->mat[lig][col].b+betaB);
+			imageATransfo->mat[lig][col].r = (alphaR * imageATransfo->mat[lig][col].r + betaR);
+			imageATransfo->mat[lig][col].g = (alphaG * imageATransfo->mat[lig][col].g + betaG);
+			imageATransfo->mat[lig][col].b = (alphaB * imageATransfo->mat[lig][col].b + betaB);
+			if(imageATransfo->mat[lig][col].r < 0) imageATransfo->mat[lig][col].r = 0;
+			if(imageATransfo->mat[lig][col].g < 0) imageATransfo->mat[lig][col].g = 0;
+			if(imageATransfo->mat[lig][col].b < 0) imageATransfo->mat[lig][col].b = 0;
+			if(imageATransfo->mat[lig][col].r > 255) imageATransfo->mat[lig][col].r = 255;
+			if(imageATransfo->mat[lig][col].g > 255) imageATransfo->mat[lig][col].g = 255;
+			if(imageATransfo->mat[lig][col].b > 255) imageATransfo->mat[lig][col].b = 255;
 		}
 	}
 }
@@ -314,6 +315,12 @@ int lissage (IMAGE *imageATransfo){
 
 int laplacien (IMAGE *imageATransfo){
 
+	// Si l'image est binarisee on n'applique pas la transformation
+	if(imageATransfo->type == 1 || imageATransfo->type == 4){
+		printf("[X]\tImage binarise, laplacien impossible\n");
+		return 0;
+	}
+
 	IMAGE copieImage;
 	if(! creation_Copie(imageATransfo, &copieImage)){
 		printf("[X]\tErreur dans la fonction laplacien\n");
@@ -327,6 +334,8 @@ int laplacien (IMAGE *imageATransfo){
 	application_masque(imageATransfo, &copieImage, masque, 9);
 
 	amelioration_du_contraste(imageATransfo);
+
+	niveauGris(imageATransfo);
 
 	vider_tab_pixels(&copieImage);
 
@@ -442,24 +451,27 @@ int creation_Copie(IMAGE *image, IMAGE *copie){
 }
 
 int gradient( IMAGE *image, const char *transformation){
+
+	// Si l'image est binarisee on n'applique pas la transformation
+	if(image->type == 1 || image->type == 4){
+		printf("[X]\tImage binarise, gradient impossible\n");
+		return 0;
+	}
+
 	int lig, col; 
 	IMAGE copieImageGx, copieImageGy;
 	int masqueX[9]={0};
 	int masqueY[9]={0};
-	
-	//Si l'image est en couleur il y a besoin de la passer en niveau de gris
-	if(image->type == 3 || image->type == 6)
-		niveauGris(image);
 
 	//Creation de la copieImage pour le gradient en X
 	if(! creation_Copie(image, &copieImageGx)){
-		printf("[X]\tErreur sur la copie en X dans la fonction gradientSimple\n");
+		printf("[X]\tErreur sur la copie en X dans la fonction gradient\n");
 		return 0;
 	}
 
 	//Creation de la copieImage pour le gradient en Y
 	if(! creation_Copie(image, &copieImageGy)){
-		printf("[X]\tErreur sur la copie en Y dans la fonction gradientSimple\n");
+		printf("[X]\tErreur sur la copie en Y dans la fonction gradient\n");
 		vider_tab_pixels(&copieImageGx);
 		return 0;
 	}
@@ -487,6 +499,8 @@ int gradient( IMAGE *image, const char *transformation){
 			image->mat[lig][col].b = abs(image->mat[lig][col].b) + abs(copieImageGy.mat[lig][col].b);
 		}
 	}
+	
+	amelioration_du_contraste(image);
 
 	vider_tab_pixels(&copieImageGx);
 	vider_tab_pixels(&copieImageGy);
@@ -494,6 +508,7 @@ int gradient( IMAGE *image, const char *transformation){
 }
 
 int detectionContoursSobel(IMAGE * image){
+	niveauGris(image);
 	if(! gradient(image, "gradientSobel")){
 		printf("[X]\tErreur dans la fonction detectionContoursSobel\n");
 		return 0;
@@ -543,10 +558,7 @@ int detectionContoursLaplacien (IMAGE *imageATransfo){
 	}
 	imageATransfo->max_val = 1;
 	// On change le type de fichier d'ecriture, pour economiser de la memoire
-	if(imageATransfo->type <= 3)
-		imageATransfo->type = 1;
-	else 
-		imageATransfo->type = 4;
+	imageATransfo->type = 1;
 
 	vider_tab_pixels(&copieLaplacien);
 	vider_tab_pixels(&copieGradient);
