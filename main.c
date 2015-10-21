@@ -36,7 +36,6 @@
  		return 1;
  	}
 
-	// On ferme le fichier quand on a finit de travailler dessus
  	file_image = NULL;
 
 	// ###########################################
