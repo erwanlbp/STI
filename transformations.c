@@ -59,12 +59,11 @@ void binarisation (IMAGE *imageATransfo){
 }
 
 /**
-* \fn int negatif
+* \fn void negatif
 * \brief Fonction pour renvoyer le complementaire de l'image par rapport aux couleurs de bases
 * Cette fonction marche avec des images couleurs ou en niveau de gris
 * On remplace les valeurs de chaque composante par (255 - la valeur du pixel)
 *
-* \return L'image transformee passer en parametre donc 1 si tout va bien.
 */
 void negatif(IMAGE *image){
 	
@@ -81,12 +80,11 @@ void negatif(IMAGE *image){
 }
 
 /**
-* \fn int negatif
+* \fn void negatif
 * \brief Fonction pour mettre en niveau de gris 
 * Cette fonction marche seulement si l'image de base est en couleur 
 * On effectue la formule suivante pour changer la valeur de chaque pixel : (0.3*valeur.r + 0.59*valeur.g + 0.11*valeur.b)
 *
-* \return L'image transformee passer en parametre donc 1 si tout va bien.
 */
 void niveauGris(IMAGE *image){
 
@@ -111,12 +109,11 @@ void niveauGris(IMAGE *image){
 }
 
 /**
-* \fn int symetrie_verticale
-* \brief Fonction faire une symetrie verticale de l'image
+* \fn void symetrie_verticale
+* \brief Fonction pour faire une symetrie verticale de l'image
 * Cette fonction marche pour n'importe quelle image 
 * On effectue une symetrie de l'image verticalement par rapport a l'axe horizontal
 *
-* \return L'image transformee passer en parametre donc 1 si tout va bien.
 */
 void symetrie_verticale (IMAGE *imageATransfo){
 	int lig, col;
@@ -133,12 +130,11 @@ void symetrie_verticale (IMAGE *imageATransfo){
 }
 
 /**
-* \fn int symetrie_horizontale
-* \brief Fonction faire une symetrie horizontale de l'image
+* \fn void symetrie_horizontale
+* \brief Fonction pour faire une symetrie horizontale de l'image
 * Cette fonction marche pour n'importe quelle image 
 * On effectue une symetrie de l'image horizontalement par rapport a l'axe vertical
 *
-* \return L'image transformee passer en parametre donc 1 si tout va bien.
 */
 void symetrie_horizontale(IMAGE *image){
 	int lig, col;
@@ -156,7 +152,7 @@ void symetrie_horizontale(IMAGE *image){
 
 /**
 * \fn int redimensionnement
-* \brief Fonction redimensionner une image
+* \brief Fonction pour redimensionner une image
 * Cette fonction marche pour n'importe quelle image en couleur ou niveau de gris
 * L'utilisateur rentre les coordonnees de deux points et l'image est reduite selon ces points
 * Si l'utilisateur rentre des points hors de l'image elles sont remises a 0 ou a 255.
@@ -238,6 +234,16 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 	return 1;
 }
 
+/**
+* \fn void amélioration du contraste
+* \brief Fonction pour améliorer le contraste d'une image
+* Cette fonction marche pour n'importe quelle image en couleur ou niveau de gris mais pas les images binarisées
+* La fonction prend le maximum et le minimum des valeurs de l'image
+* Puis elle normalise toutes les valeurs en foncitons du min et max trouvé
+* Ainsi, on peut constater une amélioration du contraste sur l'image.
+*
+* \return 1 si tout va bien, 0 si c'est une image binarisée.
+*/
 void amelioration_du_contraste (IMAGE *imageATransfo){
 
 	// Si l'image est binarisee on ne peut ameliorer le contraste
@@ -292,6 +298,15 @@ void amelioration_du_contraste (IMAGE *imageATransfo){
 	}
 }
 
+/**
+* \fn int lissage
+* \brief Fonction pour lisser une image
+* Cette fonction effectue une convolution d'image avec un masque pour lisser l'image
+* Cela peut marcher pour toutes les images
+* On obtiendra à la fin une image un peu plus "flou" que celle de départ.
+*
+* \return 1 si tout va bien, 0 si il y a une erreur sur la copie.
+*/
 int lissage (IMAGE *imageATransfo){
 
 	IMAGE copieImage;
@@ -312,6 +327,15 @@ int lissage (IMAGE *imageATransfo){
 	return 1;
 } 
 
+/**
+* \fn int laplacien
+* \brief Fonction pour faire la transformation du laplacien
+* Cette fonction effectue une convolution d'image avec un masque pour faire la transformation du laplacien
+* Cela peut marcher pour toutes les images, couleurs et niveau de gris
+* On obtiendra une image beaucoup plus terne
+*
+* \return 1 si tout va bien, 0 si il y a une erreur sur la copie.
+*/
 int laplacien (IMAGE *imageATransfo){
 
 	IMAGE copieImage;
@@ -333,6 +357,13 @@ int laplacien (IMAGE *imageATransfo){
 	return 1;
 }
 
+/**
+* \fn int alloc_tableau
+* \brief Fonction pour allouer dynamiquement un tableau
+* Fonction de base pour allouer dynamiquement un tableau et éviter la duplication de code inutile.
+*
+* \return 1 si tout va bien, 0 si il y a une erreur sur l'allocation d'une dimension.
+*/
 int alloc_tableau (IMAGE *imageAlloc){
 	int i;
 
@@ -361,6 +392,12 @@ int alloc_tableau (IMAGE *imageAlloc){
 	return 1;
 }
 
+/**
+* \fn void creation masque
+* \brief Fonction pour créer un masque qui va être appliquer lors d'une convolution
+* Fonction de base pour créer une masque a partir de constante
+*
+*/
 void creation_masque (int *masque, const int a, const int b, const int c, const int d, const int e, const int f, const int g, const int h, const int i){
 	masque[0] = a;
 	masque[1] = b;
@@ -373,6 +410,14 @@ void creation_masque (int *masque, const int a, const int b, const int c, const 
 	masque[8] = i;
 }
 
+/**
+* \fn void application masque
+* \brief Fonction pour appliquer n'importe quel masque sur une image
+* Fonction pour appliquer une masque sur une image
+* Elle prend en compte les case particulier qui sont les quatres coins
+* Ainsi que les bords de l'image
+*
+*/
 void application_masque (IMAGE *image, IMAGE *copie, const int *masque, int diviseur){
 	int lig, col;
 	int tmp;
@@ -419,6 +464,16 @@ void application_masque (IMAGE *image, IMAGE *copie, const int *masque, int divi
 	}
 }
 
+/**
+* \fn int creation copie
+* \brief Fonction créer une copie d'une image
+* Fonction pour créer une copie d'une image qui nous est utile pour les convolutions*
+* En effet, lors d'une convolution il faut la valeur de tous les pixels voisins
+* Or si chaque pixel ne peut être modifer et réutilisé après s'il n'est pas copié
+* Donc pour chaque convolution on fait une copie de l'image.
+*
+* \return 1 si tout va bien, 0 si il y a une erreur sur la copie
+*/
 int creation_Copie(IMAGE *image, IMAGE *copie){
 
 	copie->mat = NULL;
@@ -493,6 +548,14 @@ int gradient( IMAGE *image, const char *transformation){
 	return 1;
 }
 
+/**
+* \fn int detection contour sobel
+* \brief Fonction pour detecter les contours à l'aide de l'opérateur de sobel
+* Cette fonction utilise l'opérateur de sobel afin d'obtenir une image dont 
+* les contours sont mis davantages en valeurs.
+*
+* \return 1 si tout va bien, 0 si il y a une erreur sur le gradient de sobel
+*/
 int detectionContoursSobel(IMAGE * image){
 	if(! gradient(image, "gradientSobel")){
 		printf("[X]\tErreur dans la fonction detectionContoursSobel\n");
@@ -502,6 +565,14 @@ int detectionContoursSobel(IMAGE * image){
 	return 1;
 }
 
+/**
+* \fn int detection contour sobel
+* \brief Fonction pour detecter les contours à l'aide de l'opérateur laplacien
+* Cette fonction utilise l'opérateur laplacien afin d'obtenir une image dont 
+* les contours sont mis davantages en valeurs.
+*
+* \return 1 si tout va bien, 0 si il y a une erreur les copies effectuées ou sur le lissage, car un lissage est nécessaire
+*/
 int detectionContoursLaplacien (IMAGE *imageATransfo){
 	int col, lig, L0 = 160, G0 = 55;
 
@@ -580,6 +651,12 @@ void reductionBruit(IMAGE *image){
 	}
 }
 
+/**
+* \fn void triTab
+* \brief Fonction trier un tableau
+* Fonction de base pour trier un tableau qui nous sert pour le filtre médian.
+*
+*/
 void triTab (int *masque){
 	int tmp, i, j;
 
@@ -594,6 +671,14 @@ void triTab (int *masque){
 	}
 }
 
+/**
+* \fn int masque custom
+* \brief Fonction créer n'importe quel masque par l'utilisateur
+* Cette fonction applique le masque customisé par l'utilisateur
+* Il peut rentrer n'importe quel masque 3X3 et il sera appliqué à l'image
+*
+* \return 1 si tout va bien, 0 si il y a une erreur sur le nombre de valeur du masque
+*/
 int masqueCustom(IMAGE *imageATransfo, const int argc, const char *argv[]){
 
 	//On verifie que tous les arguments sont envoyes
