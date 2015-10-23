@@ -1,0 +1,42 @@
+Notre programme a été ecrit sur Linux, la compilation et l'execution est simplifié sur cet OS
+
+Compilation : 
+	Pour compiler le programme il suffit de taper la commande "make" dans le terminal linux
+	
+Utilisation du programme :
+	Pour executer le programme :
+		./STI <image> <transformation> <valeur numerique 1> ... <valeur numerique 10> 
+	Exemple d'execution : 
+		./STI Lena.ppm reductionBruit
+		ou 
+		./STI clown.pgm redimensionnement 50 25 175 125
+
+	Il est possible d'exectuer le programme seulement en tapant "./STI", cela executera le programme sur l'image Lena.ppm et aucune transformation ne sera effectuée.
+	Si on veut rentrer une transformation il est obligatoire de rentrer le nom d'une image, sinon la transformation sera interpreté comme le nom d'image.
+	Les valeurs numériques sont utilisées pour la transformation du redimensionnement ou du masque personnalisé.
+		Redimensionnement :
+		./STI <image> redimensionnement <abscisse debut> <ordonnée debut> <abscisse fin> <ordonnée fin>
+		Masque custom :
+		./STI <image> masqueCustom <case 1;1> <case 2;1> ... <case 2;3> <case 3;3> <diviseur>
+
+Transformations implementees :
+	"niveauGris" --------------- : Mise en niveau de gris de l'image, changement du type de fichier de ppm en pgm
+	"binarisation" ------------- : Binarisation de l'image, changement du type de fichier vers pbm
+	"negatif" ------------------ : Inversement des couleurs de l'image
+	"symetrieH" ---------------- : Retournement de l'image selon l'axe vertical 
+	"symetrieV" ---------------- : Retournement de l'image selon l'axe horizontal
+	"redimensionnement" -------- : Redimensionne l'image selon les valeurs envoyées en argument au programme
+	"ameliorationContraste" ---- : Ameliore le contraste de l'image en normalisant les valeurs des pixels, marche aussi sur les images en couleurs
+	"lissage" ------------------ : Lisse l'image en appliquant la moyenne des pixels alentours
+	"laplacien" ---------------- : Applique le masque du laplacien sur l'image
+	"gradientSimple" ----------- : Applique le masque du gradient simple sur l'image
+	"gradientSobel" ------------ : Applique le masque du gradient de Sobel sur l'image
+	"detectionContoursSobel" --- : Met en évidence les contours de l'image à l'aide du gradient de Sobel
+	"detectionContoursLaplacien" : Met en évidence les contours de l'image à l'aide de l'opérateur Laplacien
+	"reductionBruit" ----------- : Reduit le bruit ambiant de l'image à l'aide du filtre médian
+	"masqueCustom" ------------- : Applique un masque personnalisé demandé par l'utilisateur, envoyé en argument au programme
+
+Entree/Sortie :
+	Les images utilisées doivent se trouver dans le dossier Images
+	L'image produite à la fin se trouvera dans le dossier Images
+	Le nom de l'image produite sera de la forme <transformation>_<nomImage>
