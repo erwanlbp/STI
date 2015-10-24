@@ -505,6 +505,13 @@ int creation_Copie(IMAGE *image, IMAGE *copie){
 	return 1;
 }
 
+/**
+* \fn int gradient
+* \brief Fonction pour créer l'image associée au gradient simple ou au gradient de Sobel.
+* Cette fonction sera utile pour la détection de contours avec l'opérateur de sobel.
+*
+* \return 1 si tout va bien, 0 si il y a une erreur sur le gradient 
+*/
 int gradient( IMAGE *image, const char *transformation){
 
 	// Si l'image est binarisee on n'applique pas la transformation
@@ -581,7 +588,7 @@ int detectionContoursSobel(IMAGE * image){
 }
 
 /**
-* \fn int detection contour sobel
+* \fn int detection contour laplacien
 * \brief Fonction pour detecter les contours à l'aide de l'opérateur laplacien
 * Cette fonction utilise l'opérateur laplacien afin d'obtenir une image dont 
 * les contours sont mis davantages en valeurs.
@@ -637,6 +644,13 @@ int detectionContoursLaplacien (IMAGE *imageATransfo){
 	return 1;
 }
 
+/**
+* \fn void reduction bruit
+* \brief Fonction pour réduire le bruit d'une image
+* Cette fonction trie un masque composé des pixels autour du pixel actuel  
+* pour affecter au pixel actuel la valeur médiance du filtre.
+*
+*/
 void reductionBruit(IMAGE *image){
 	int lig,col;
 	int masqueLumi[9]={0};
