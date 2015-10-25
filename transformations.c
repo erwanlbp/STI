@@ -91,8 +91,10 @@ void niveauGris(IMAGE *image){
 		return;
 
 	int lig, col, gris;
+	// On parcours tout le tableau ou sont stocké les valeurs des pixels
 	for(lig=0;lig<image->nb_lig;lig++){
 		for(col=0;col<image->nb_col;col++){
+			// On applique la formule du niveau de gris pour chaque composante du pixel
 			gris = (0.3*(image->mat[lig][col].r)) + (0.59*(image->mat[lig][col].g))+(0.11*(image->mat[lig][col].b));
 			image->mat[lig][col].r = gris;
 			image->mat[lig][col].g = gris;
@@ -198,7 +200,6 @@ int redimensionnement(IMAGE *image, const int argc, const char *argv[]){
 		ordEntree = tmp;
 	}
 
-	
 	IMAGE copieImage;
 	if(! creation_Copie(image, &copieImage)){
 		printf("[X]\tErreur dans la fonction redimensionnement\n");
@@ -258,7 +259,7 @@ void amelioration_du_contraste (IMAGE *imageATransfo){
 	pixelMax.g = imageATransfo->mat[0][0].g;
 	pixelMax.b = imageATransfo->mat[0][0].b;
 
-	//Recherche du Min et du Max
+	//Recherche du Min et du Max pour chaque composante
 	for (lig = 0; lig < imageATransfo->nb_lig; lig++){
 		for (col = 0; col < imageATransfo->nb_col; col++){
 			if (imageATransfo->mat[lig][col].r + imageATransfo->mat[lig][col].g +imageATransfo->mat[lig][col].b < pixelMin.r + pixelMin.g + pixelMin.b){
@@ -351,12 +352,14 @@ int laplacien (IMAGE *imageATransfo){
 		return 0;
 	}
 
+	// On créer le masque
 	int masque[9]={0};
 	creation_masque(masque,0,1,0,1,-4,1,0,1,0);
 
 	// On l'applique
 	application_masque(imageATransfo, &copieImage, masque, 9);
 
+	// On effectue ensuite deux traitements supplémentaires
 	amelioration_du_contraste(imageATransfo);
 
 	niveauGris(imageATransfo);
@@ -431,10 +434,12 @@ void application_masque (IMAGE *image, IMAGE *copie, const int *masque, int divi
 	int lig, col;
 	int tmp;
 
+	// Double boucle pour parcourir tout le tableau
 	for (lig = 0; lig < image->nb_lig; lig++){
 		for (col = 0; col < image->nb_col; col++){
 			tmp = 0;
 
+			// On traite tous les cas (9 au total) la composante r
 			if(lig-1 >=0 && col-1 >=0) 							tmp += copie->mat[lig-1][col-1].r 	* masque[0];
 			if(lig-1 >=0) 										tmp += copie->mat[lig-1][col].r 	* masque[1];
 			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp += copie->mat[lig-1][col+1].r 	* masque[2];
@@ -447,6 +452,7 @@ void application_masque (IMAGE *image, IMAGE *copie, const int *masque, int divi
 			image->mat[lig][col].r = tmp / diviseur;
 			tmp = 0;
 
+			// On traite tous les cas (9 au total) la composante g
 			if(lig-1 >=0 && col-1 >=0) 							tmp += copie->mat[lig-1][col-1].g 	* masque[0];
 			if(lig-1 >=0) 										tmp += copie->mat[lig-1][col].g 	* masque[1];
 			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp += copie->mat[lig-1][col+1].g 	* masque[2];
@@ -459,6 +465,7 @@ void application_masque (IMAGE *image, IMAGE *copie, const int *masque, int divi
 			image->mat[lig][col].g = tmp / diviseur;
 			tmp = 0;
 
+			// On traite tous les cas (9 au total) la composante b
 			if(lig-1 >=0 && col-1 >=0) 							tmp += copie->mat[lig-1][col-1].b 	* masque[0];
 			if(lig-1 >=0) 										tmp += copie->mat[lig-1][col].b 	* masque[1];
 			if(lig-1 >=0 && col+1 <image->nb_col) 				tmp += copie->mat[lig-1][col+1].b 	* masque[2];
@@ -485,6 +492,7 @@ void application_masque (IMAGE *image, IMAGE *copie, const int *masque, int divi
 */
 int creation_Copie(IMAGE *image, IMAGE *copie){
 
+	// On copie tous les attributs de la structure avant de l'allouer dynamiquement
 	copie->mat = NULL;
 	copie->nb_lig = image->nb_lig;
 	copie->nb_col = image->nb_col;
@@ -598,12 +606,14 @@ int detectionContoursSobel(IMAGE * image){
 int detectionContoursLaplacien (IMAGE *imageATransfo){
 	int col, lig, L0 = 160, G0 = 55;
 
+	// Création de la copie pour la transformaiton du laplacien
 	IMAGE copieLaplacien;
 	if(! creation_Copie(imageATransfo, &copieLaplacien)){
 		printf("[X]\tErreur sur la copieLaplacien dans la fonction detectionContoursLaplacien\n");
 		return 0;
 	}
 
+	// Création de la copie pour la transformaiton du Gradient
 	IMAGE copieGradient;
 	if(! creation_Copie(imageATransfo, &copieGradient)){
 		printf("[X]\tErreur sur la copieGradient dans la fonction detectionContoursLaplacien\n");

@@ -17,6 +17,7 @@ FILE* ouverture_ecriture_fichier_image(const int * typeFichier, const char nomIm
 	char nomSansExt[255] = "";
 	strncpy(nomSansExt,nomImage,strlen(nomImage)-4);
 
+	// On regarde le type du fichier pour l'ecrire
 	if(*typeFichier == 1 || *typeFichier == 4)
 		sprintf(chemin,"Images/%s_%s.pbm",transformation, nomSansExt);
 	if(*typeFichier == 2 || *typeFichier == 5)
@@ -24,14 +25,17 @@ FILE* ouverture_ecriture_fichier_image(const int * typeFichier, const char nomIm
 	if(*typeFichier == 3 || *typeFichier == 6)
 		sprintf(chemin,"Images/%s_%s.ppm",transformation, nomSansExt);
 
+	// On écrit le chemin auquel se trouve le fichier 
 	printf("\tChemin du fichier d'ecriture : %s\n",chemin );
 
+	// On ouvre le fichier une fois qu'il est trouvé 
 	FILE *fichier = NULL;
 	if(*typeFichier <= 3)
 		fichier = fopen(chemin,"w");
 	else 
 		fichier = fopen(chemin,"wb");
 
+	// On test si l'ouverture a bien fonctionné
 	if(fichier == NULL)
 		printf("[X]\tOuverture du fichier d'ecriture rate\n");
 	else 
@@ -42,6 +46,7 @@ FILE* ouverture_ecriture_fichier_image(const int * typeFichier, const char nomIm
 
 int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[255]){
 
+	// On appel la fonction d'écriture qui correspond au type de l'image
 	switch(tab_pixels->type){
 		case 1:	ecriture_P1(fichier, tab_pixels, nomImage, transformation); break;
 		case 2:	ecriture_P2(fichier, tab_pixels, nomImage, transformation); break;
@@ -57,6 +62,7 @@ int ecriture_fichier(FILE* fichier, const IMAGE * tab_pixels, const char nomImag
 
 int ecriture_P1(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
 
+	//On affiche le nombre de ligne et de colonne de l'image
 	fprintf(fichier, "P1\n%d %d\n", tab_pixels->nb_col, tab_pixels->nb_lig); 
 
 	int lig,col;
@@ -76,7 +82,8 @@ int ecriture_P1(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255
 }
 
 int ecriture_P2(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
-
+	
+	//On affiche le nombre de ligne et de colonne de l'image
 	fprintf(fichier, "P2\n%d %d\n%d\n", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
 
 	int lig,col;
@@ -97,7 +104,8 @@ int ecriture_P2(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255
 }
 
 int ecriture_P3(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
-
+	
+	//On affiche le nombre de ligne et de colonne de l'image
 	fprintf(fichier, "P3\n%d %d\n%d\n", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
 
 	int lig,col;
@@ -118,7 +126,8 @@ int ecriture_P3(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255
 }
 
 int ecriture_P4(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
-
+	
+	//On affiche le nombre de ligne et de colonne de l'image
 	fprintf(fichier, "P4\n%d %d\n", tab_pixels->nb_col, tab_pixels->nb_lig); 
 	
 	int lig,col;
@@ -134,7 +143,8 @@ int ecriture_P4(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255
 }
 
 int ecriture_P5(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
-
+	
+	//On affiche le nombre de ligne et de colonne de l'image
 	fprintf(fichier, "P5\n%d %d\n%d\n", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
 	
 	int lig,col;
@@ -150,7 +160,8 @@ int ecriture_P5(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255
 }
 
 int ecriture_P6(FILE* fichier, const IMAGE * tab_pixels, const char nomImage[255], const char transformation[100]){
-
+	
+	//On affiche le nombre de ligne et de colonne de l'image
 	fprintf(fichier, "P6\n%d %d\n%d\n", tab_pixels->nb_col, tab_pixels->nb_lig, tab_pixels->max_val); 
 	int lig,col;
 	for(lig=0; lig<tab_pixels->nb_lig; lig++){

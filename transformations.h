@@ -2,7 +2,7 @@
 #define TRANSFORMATION
 
 /**  
- * \file Lecture trasnformation.h
+ * \file transformation.h
  * \brief Prototypes des fonctions de transformation
  * \author Le Batard--Polès Erwan
  		   Vacheret Alex

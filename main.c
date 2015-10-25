@@ -42,6 +42,7 @@
 	//  Travail des fonctions des transformations
 	// ###########################################
 	
+ 	// Raccourcis pour que l'utilisateur rentre la transformation lors de l'execution en ligne de commande
  	int transfoOk = 1;
  	if(strcmp(transformation, "niveauGris") == 0)
  		niveauGris(&tab_pixels);
@@ -128,6 +129,7 @@
  	ligne_separation('-');
  	int lig,col;
 
+ 	// On parcours tout le tableau pour l'afficher
  	for (lig=0; lig<tab->nb_lig; lig++){
  		for (col=0; col<tab->nb_col; col++){
  			if(tab->type == 3 || tab->type == 6)
